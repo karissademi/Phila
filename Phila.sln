@@ -1,0 +1,97 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phila.Web.Api.Streets", "Web\Api\Streets\Phila.Web.Api.Streets\Phila.Web.Api.Streets.csproj", "{68C25B29-5675-45BD-AF2B-2A374254391A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phila.Web.Api.Streets.Tests", "Web\Api\Streets\Phila.Web.Api.Streets.Tests\Phila.Web.Api.Streets.Tests.csproj", "{B100E4F9-E171-4398-8F24-9C0CA650ACFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phila.Data.EntityModels.Streets", "Data\EntityModels\Streets\Phila.Data.EntityModels.Streets\Phila.Data.EntityModels.Streets.csproj", "{938862B2-7024-48D7-8857-945EB110DF33}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Phila.Web.App.Streets.Closures", "http://localhost:52563", "{0A33F518-5E69-4726-A12F-8324EC03E26D}"
+	ProjectSection(WebsiteProperties) = preProject
+		UseIISExpress = "true"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.1"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_52563"
+		Debug.AspNetCompiler.PhysicalPath = "Web\App\Streets\Phila.Web.App.Streets.Closures\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52563\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_52563"
+		Release.AspNetCompiler.PhysicalPath = "Web\App\Streets\Phila.Web.App.Streets.Closures\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52563\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "Web\App\Streets\Phila.Web.App.Streets.Closures\"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phila.Web.App.Streets", "Web\App\Streets\Phila.Web.App.Streets\Phila.Web.App.Streets.csproj", "{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phila.Web.App.Streets.Tests", "Web\App\Streets\Phila.Web.App.Streets.Tests\Phila.Web.App.Streets.Tests.csproj", "{8F0A8732-16B6-4B84-8B8B-B951F786730E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CityNetDev|Any CPU = CityNetDev|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Dev|Any CPU = Dev|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{68C25B29-5675-45BD-AF2B-2A374254391A}.CityNetDev|Any CPU.ActiveCfg = CityNetDev|Any CPU
+		{68C25B29-5675-45BD-AF2B-2A374254391A}.CityNetDev|Any CPU.Build.0 = CityNetDev|Any CPU
+		{68C25B29-5675-45BD-AF2B-2A374254391A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68C25B29-5675-45BD-AF2B-2A374254391A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68C25B29-5675-45BD-AF2B-2A374254391A}.Dev|Any CPU.ActiveCfg = Dev|Any CPU
+		{68C25B29-5675-45BD-AF2B-2A374254391A}.Dev|Any CPU.Build.0 = Dev|Any CPU
+		{68C25B29-5675-45BD-AF2B-2A374254391A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68C25B29-5675-45BD-AF2B-2A374254391A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B100E4F9-E171-4398-8F24-9C0CA650ACFD}.CityNetDev|Any CPU.ActiveCfg = CityNetDev|Any CPU
+		{B100E4F9-E171-4398-8F24-9C0CA650ACFD}.CityNetDev|Any CPU.Build.0 = CityNetDev|Any CPU
+		{B100E4F9-E171-4398-8F24-9C0CA650ACFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B100E4F9-E171-4398-8F24-9C0CA650ACFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B100E4F9-E171-4398-8F24-9C0CA650ACFD}.Dev|Any CPU.ActiveCfg = Dev|Any CPU
+		{B100E4F9-E171-4398-8F24-9C0CA650ACFD}.Dev|Any CPU.Build.0 = Dev|Any CPU
+		{B100E4F9-E171-4398-8F24-9C0CA650ACFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B100E4F9-E171-4398-8F24-9C0CA650ACFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{938862B2-7024-48D7-8857-945EB110DF33}.CityNetDev|Any CPU.ActiveCfg = CityNetDev|Any CPU
+		{938862B2-7024-48D7-8857-945EB110DF33}.CityNetDev|Any CPU.Build.0 = CityNetDev|Any CPU
+		{938862B2-7024-48D7-8857-945EB110DF33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{938862B2-7024-48D7-8857-945EB110DF33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{938862B2-7024-48D7-8857-945EB110DF33}.Dev|Any CPU.ActiveCfg = Dev|Any CPU
+		{938862B2-7024-48D7-8857-945EB110DF33}.Dev|Any CPU.Build.0 = Dev|Any CPU
+		{938862B2-7024-48D7-8857-945EB110DF33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{938862B2-7024-48D7-8857-945EB110DF33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A33F518-5E69-4726-A12F-8324EC03E26D}.CityNetDev|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A33F518-5E69-4726-A12F-8324EC03E26D}.CityNetDev|Any CPU.Build.0 = Debug|Any CPU
+		{0A33F518-5E69-4726-A12F-8324EC03E26D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A33F518-5E69-4726-A12F-8324EC03E26D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A33F518-5E69-4726-A12F-8324EC03E26D}.Dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A33F518-5E69-4726-A12F-8324EC03E26D}.Dev|Any CPU.Build.0 = Debug|Any CPU
+		{0A33F518-5E69-4726-A12F-8324EC03E26D}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A33F518-5E69-4726-A12F-8324EC03E26D}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}.CityNetDev|Any CPU.ActiveCfg = CityNetDev|Any CPU
+		{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}.CityNetDev|Any CPU.Build.0 = CityNetDev|Any CPU
+		{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}.Dev|Any CPU.ActiveCfg = Dev|Any CPU
+		{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}.Dev|Any CPU.Build.0 = Dev|Any CPU
+		{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F0A8732-16B6-4B84-8B8B-B951F786730E}.CityNetDev|Any CPU.ActiveCfg = CityNetDev|Any CPU
+		{8F0A8732-16B6-4B84-8B8B-B951F786730E}.CityNetDev|Any CPU.Build.0 = CityNetDev|Any CPU
+		{8F0A8732-16B6-4B84-8B8B-B951F786730E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F0A8732-16B6-4B84-8B8B-B951F786730E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F0A8732-16B6-4B84-8B8B-B951F786730E}.Dev|Any CPU.ActiveCfg = Dev|Any CPU
+		{8F0A8732-16B6-4B84-8B8B-B951F786730E}.Dev|Any CPU.Build.0 = Dev|Any CPU
+		{8F0A8732-16B6-4B84-8B8B-B951F786730E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F0A8732-16B6-4B84-8B8B-B951F786730E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{938862B2-7024-48D7-8857-945EB110DF33}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Phila.Data.EntityModels.Streets</RootNamespace>
+    <AssemblyName>Phila.Data.EntityModels.Streets</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Dev|AnyCPU'">
+    <OutputPath>bin\Dev\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'CityNetDev|AnyCPU'">
+    <OutputPath>bin\CityNetDev\</OutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Document.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Get_CrossStreetsAndOnStreetSegIDsFromStCode2_Result.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Get_CrossStreetsFromStCode_new_Result.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="get_OnStreetElementsBetweenOrderedPair_Result.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrderedNodesOnStcode_Result.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Role.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Sp_AllStreets_Result.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="STREETCL_ARC.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="STREETCL_NODE.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StreetsModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StreetsModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StreetsModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StreetsModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StreetsModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="tblCompany.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblCompanyType.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblContact.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblDecision.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblDistrict.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblDistrictRegion.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblDistrictType.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblEncroachmentType.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblNode.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblOccupancyType.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblOwner.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblPermit.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblPermitAudit.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblPermitType.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblPermit_CCs.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblPermit_Districts.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblPermit_Encroachment.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblPermit_Extensions.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblPermit_Fees.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblPermit_Locations.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblPermit_Location_GIS.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblPermit_Reasons.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblPermit_References.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblPermit_Remarks.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblProjectType.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblReferenceType.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblSpecialNode.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblStatusCode.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblStreet.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserToken.cs">
+      <DependentUpon>StreetsModel.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <EntityDeploy Include="StreetsModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>StreetsModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="packages.config" />
+    <None Include="StreetsModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>StreetsModel.edmx</DependentUpon>
+      <LastGenOutput>StreetsModel.Context.cs</LastGenOutput>
+    </None>
+    <None Include="StreetsModel.edmx.diagram">
+      <DependentUpon>StreetsModel.edmx</DependentUpon>
+    </None>
+    <None Include="StreetsModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>StreetsModel.edmx</DependentUpon>
+      <LastGenOutput>StreetsModel.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="README.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

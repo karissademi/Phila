@@ -1,0 +1,2704 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SCBPPSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ContactRoles">
+          <Key>
+            <PropertyRef Name="ContactId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="ContactId" Type="int" Nullable="false" />
+          <Property Name="RoleId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Documents">
+          <Key>
+            <PropertyRef Name="DocumentId" />
+          </Key>
+          <Property Name="DocumentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocumentName" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="DocumentShortDescription" Type="nvarchar" MaxLength="126" />
+          <Property Name="DocumentLongDescription" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="PermitDocuments">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="DocumentId" />
+          </Key>
+          <Property Name="Permit_Number" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="DocumentId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SCBPPS.dbo.STREETCL_ARC' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="STREETCL_ARC">
+          <Key>
+            <PropertyRef Name="OBJECTID" />
+          </Key>
+          <Property Name="OBJECTID" Type="int" Nullable="false" />
+          <Property Name="FNODE_" Type="int" />
+          <Property Name="TNODE_" Type="int" />
+          <Property Name="LPOLY_" Type="int" />
+          <Property Name="RPOLY_" Type="int" />
+          <Property Name="LENGTH" Type="numeric" Precision="38" Scale="8" />
+          <Property Name="STREETCL_" Type="int" />
+          <Property Name="STREETCL_ID" Type="int" />
+          <Property Name="PRE_DIR" Type="nvarchar" MaxLength="2" />
+          <Property Name="ST_NAME" Type="nvarchar" MaxLength="30" />
+          <Property Name="ST_TYPE" Type="nvarchar" MaxLength="4" />
+          <Property Name="SUF_DIR" Type="nvarchar" MaxLength="5" />
+          <Property Name="ZIP_LEFT" Type="int" />
+          <Property Name="ZIP_RIGHT" Type="int" />
+          <Property Name="L_F_ADD" Type="int" />
+          <Property Name="L_T_ADD" Type="int" />
+          <Property Name="R_F_ADD" Type="int" />
+          <Property Name="R_T_ADD" Type="int" />
+          <Property Name="ST_CODE" Type="int" />
+          <Property Name="L_HUNDRED" Type="int" />
+          <Property Name="R_HUNDRED" Type="int" />
+          <Property Name="SEG_ID" Type="int" />
+          <Property Name="ONEWAY" Type="nvarchar" MaxLength="2" />
+          <Property Name="CLASS" Type="smallint" />
+          <Property Name="RESPONSIBILITY" Type="nvarchar" MaxLength="15" />
+          <Property Name="UPDATE_" Type="datetime" />
+          <Property Name="NEWSEGDATE" Type="datetime" />
+          <Property Name="MULTI_REP" Type="smallint" />
+          <Property Name="ADDSTCODE" Type="nvarchar" MaxLength="29" />
+          <Property Name="STNAME" Type="nvarchar" MaxLength="41" />
+          <Property Name="Shape" Type="geometry" />
+          <Property Name="FacilityId" Type="nvarchar" MaxLength="10" />
+          <Property Name="Location" Type="nvarchar" MaxLength="100" />
+          <Property Name="WarrantyDate" Type="datetime" />
+          <Property Name="Condition" Type="nvarchar" MaxLength="10" />
+          <Property Name="ConditionDate" Type="datetime" />
+          <Property Name="fnode" Type="int" />
+          <Property Name="tnode" Type="int" />
+        </EntityType>
+        <EntityType Name="STREETCL_NODE">
+          <Key>
+            <PropertyRef Name="OBJECTID" />
+          </Key>
+          <Property Name="OBJECTID" Type="int" Nullable="false" />
+          <Property Name="Shape" Type="geometry" />
+          <Property Name="ARC_" Type="int" />
+          <Property Name="STREETCL_" Type="int" />
+          <Property Name="STREETCL_ID" Type="int" />
+          <Property Name="NODE_ID" Type="int" />
+          <Property Name="INT_ID" Type="int" />
+          <Property Name="UPDATE_" Type="datetime" />
+          <Property Name="INTERSECTION" Type="nvarchar" MaxLength="50" />
+          <Property Name="FacilityId" Type="nvarchar" MaxLength="10" />
+          <Property Name="Location" Type="nvarchar" MaxLength="100" />
+          <Property Name="WarrantyDate" Type="datetime" />
+          <Property Name="Condition" Type="nvarchar" MaxLength="10" />
+          <Property Name="ConditionDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblCompany">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+          </Key>
+          <Property Name="CompanyId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="CompanyTypeId" Type="smallint" />
+          <Property Name="Philadelphia_TaxId" Type="nvarchar" MaxLength="10" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address3" Type="nvarchar" MaxLength="50" />
+          <Property Name="City" Type="nvarchar" MaxLength="30" />
+          <Property Name="State" Type="nvarchar" MaxLength="2" />
+          <Property Name="PostalCode" Type="nvarchar" MaxLength="9" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="10" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="10" />
+          <Property Name="Website" Type="nvarchar" MaxLength="100" />
+          <Property Name="Note" Type="ntext" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="Subdivision_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="RecCreateUserId" Type="varchar" MaxLength="20" />
+          <Property Name="RecCreateDate" Type="datetime" />
+          <Property Name="RecEditUserId" Type="varchar" MaxLength="20" />
+          <Property Name="RecEditDate" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SCBPPS.dbo.tblCompanyTypes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tblCompanyTypes">
+          <Key>
+            <PropertyRef Name="CompanyTypeID" />
+            <PropertyRef Name="CompanyTypeName" />
+          </Key>
+          <Property Name="CompanyTypeID" Type="smallint" Nullable="false" />
+          <Property Name="CompanyTypeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="OT_Description" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="tblContact">
+          <Key>
+            <PropertyRef Name="ContactId" />
+          </Key>
+          <Property Name="ContactId" Type="int" Nullable="false" />
+          <Property Name="CompanyId" Type="int" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="15" />
+          <Property Name="MiddleName" Type="nvarchar" MaxLength="15" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="20" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="50" />
+          <Property Name="City" Type="nvarchar" MaxLength="30" />
+          <Property Name="State" Type="nvarchar" MaxLength="2" />
+          <Property Name="PostalCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="10" />
+          <Property Name="Ext" Type="nvarchar" MaxLength="15" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="10" />
+          <Property Name="Pager" Type="nvarchar" MaxLength="10" />
+          <Property Name="Pager_PIN" Type="nvarchar" MaxLength="10" />
+          <Property Name="Cell_Phone" Type="nvarchar" MaxLength="10" />
+          <Property Name="EMailAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="Note" Type="ntext" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="RecCreateUserId" Type="varchar" MaxLength="20" />
+          <Property Name="RecCreateDate" Type="datetime" />
+          <Property Name="RecEditUserId" Type="varchar" MaxLength="20" />
+          <Property Name="RecEditDate" Type="datetime" />
+          <Property Name="SecurityToken" Type="int" />
+          <Property Name="SecurityTokenCreateDate" Type="datetime" />
+          <Property Name="LastLoginDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblDecisions">
+          <Key>
+            <PropertyRef Name="DecisionID" />
+          </Key>
+          <Property Name="DecisionID" Type="smallint" Nullable="false" />
+          <Property Name="DecisionName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="RequireReason" Type="bit" />
+          <Property Name="DefaultSetting" Type="bit" />
+        </EntityType>
+        <EntityType Name="tblDistrictRegions">
+          <Key>
+            <PropertyRef Name="DistrictRegionId" />
+          </Key>
+          <Property Name="DistrictRegionId" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="DistrictOfficeId" Type="int" />
+        </EntityType>
+        <EntityType Name="tblDistricts">
+          <Key>
+            <PropertyRef Name="DistrictID" />
+          </Key>
+          <Property Name="DistrictID" Type="int" Nullable="false" />
+          <Property Name="DistrictName" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="Di_DistrictTypeID" Type="smallint" Nullable="false" />
+          <Property Name="Di_ManagerName" Type="nvarchar" MaxLength="75" />
+          <Property Name="Di_ManagerTitle" Type="nvarchar" MaxLength="75" />
+          <Property Name="Di_Phone" Type="nvarchar" MaxLength="15" />
+          <Property Name="Di_Fax" Type="nvarchar" MaxLength="15" />
+          <Property Name="Di_Address" Type="nvarchar" MaxLength="255" />
+          <Property Name="Di_PostalCode" Type="nvarchar" MaxLength="12" />
+          <Property Name="Di_RegionId" Type="varchar" MaxLength="5" />
+          <Property Name="Inactive" Type="bit" />
+        </EntityType>
+        <EntityType Name="tblDistrictTypes">
+          <Key>
+            <PropertyRef Name="DistrictTypeID" />
+          </Key>
+          <Property Name="DistrictTypeID" Type="smallint" Nullable="false" />
+          <Property Name="DistrictTypeName" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="DistrictTypeAbbrev" Type="nvarchar" MaxLength="15" />
+          <Property Name="DT_Description" Type="nvarchar" MaxLength="150" />
+          <Property Name="boundary_type_id" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SCBPPS.dbo.tblEncroachmentTypes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tblEncroachmentTypes">
+          <Key>
+            <PropertyRef Name="EncroachmentTypeID" />
+          </Key>
+          <Property Name="EncroachmentTypeID" Type="int" Nullable="false" />
+          <Property Name="EncroachmentTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Fields_Needed" Type="char" MaxLength="6" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SCBPPS.dbo.tblNodes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tblNodes">
+          <Key>
+            <PropertyRef Name="NODE_ID" />
+          </Key>
+          <Property Name="ARC_" Type="float" />
+          <Property Name="STREETCL_" Type="int" />
+          <Property Name="STREETCL_I" Type="float" />
+          <Property Name="NODE_ID" Type="int" Nullable="false" />
+          <Property Name="INT_ID" Type="float" />
+          <Property Name="UPDATE" Type="smalldatetime" />
+          <Property Name="INTERSECTI" Type="nvarchar" MaxLength="50" />
+          <Property Name="X_COORD" Type="float" />
+          <Property Name="Y_COORD" Type="float" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SCBPPS.dbo.tblOccupancyTypes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tblOccupancyTypes">
+          <Key>
+            <PropertyRef Name="OccupancyTypeID" />
+          </Key>
+          <Property Name="OccupancyTypeID" Type="smallint" Nullable="false" />
+          <Property Name="OccupancyTypeName" Type="nvarchar" MaxLength="30" />
+          <Property Name="OT_Description" Type="nvarchar" MaxLength="100" />
+          <Property Name="OT_DisplayColor" Type="int" />
+        </EntityType>
+        <EntityType Name="tblOwner">
+          <Key>
+            <PropertyRef Name="OwnerId" />
+          </Key>
+          <Property Name="OwnerId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="10" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="tblPermit_CCs">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="Seq_Num" />
+          </Key>
+          <Property Name="Permit_Number" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Seq_Num" Type="smallint" Nullable="false" />
+          <Property Name="CarbonCopyName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="10" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="tblPermit_Districts">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="Seq_Num" />
+          </Key>
+          <Property Name="Permit_Number" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Seq_Num" Type="smallint" Nullable="false" />
+          <Property Name="DistrictId" Type="int" />
+        </EntityType>
+        <EntityType Name="tblPermit_Encroachment">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="Seq_Num" />
+          </Key>
+          <Property Name="Permit_Number" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Seq_Num" Type="smallint" Nullable="false" />
+          <Property Name="EncroachmentTypeID" Type="int" Nullable="false" />
+          <Property Name="Length" Type="float" />
+          <Property Name="Width" Type="float" />
+          <Property Name="Height" Type="float" />
+          <Property Name="Weight" Type="float" />
+          <Property Name="Volume" Type="float" />
+          <Property Name="ProviderId" Type="int" />
+          <Property Name="Description" Type="varchar" MaxLength="75" />
+        </EntityType>
+        <EntityType Name="tblPermit_Extensions">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="Seq_Num" />
+          </Key>
+          <Property Name="Permit_Number" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Seq_Num" Type="int" Nullable="false" />
+          <Property Name="Init_ExpirationDate" Type="datetime" />
+          <Property Name="ExpirationDate" Type="datetime" />
+          <Property Name="Extend_Reason" Type="varchar" MaxLength="255" />
+          <Property Name="User_Id" Type="varchar" MaxLength="20" />
+          <Property Name="RCDCHGDT" Type="datetime" />
+          <Property Name="RCDSTATUS" Type="char" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="tblPermit_Fees">
+          <Key>
+            <PropertyRef Name="FeeTypeID" />
+          </Key>
+          <Property Name="FeeTypeID" Type="smallint" Nullable="false" />
+          <Property Name="FeeTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="HighTrafficArea" Type="varchar" MaxLength="50" />
+          <Property Name="Minimum ($)" Type="money" />
+          <Property Name="Minimum (/s)" Type="nvarchar" MaxLength="15" />
+          <Property Name="Minimum (/t)" Type="nvarchar" MaxLength="15" />
+          <Property Name="Rate ($)" Type="money" />
+          <Property Name="Rate (/s)" Type="nvarchar" MaxLength="15" />
+          <Property Name="Rate (/t)" Type="nvarchar" MaxLength="15" />
+          <Property Name="Maximum ($)" Type="money" />
+          <Property Name="Maximum (/s)" Type="nvarchar" MaxLength="15" />
+          <Property Name="Maximum (/t)" Type="nvarchar" MaxLength="15" />
+          <Property Name="Duration ($)" Type="money" />
+          <Property Name="Duration (#)" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="Duration (t)" Type="nvarchar" MaxLength="15" />
+          <Property Name="Unit (s)" Type="nvarchar" MaxLength="15" />
+          <Property Name="Unit (t)" Type="nvarchar" MaxLength="15" />
+          <Property Name="Active" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SCBPPS.dbo.tblPermit_Location_GIS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tblPermit_Location_GIS">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="Seq_Num" />
+            <PropertyRef Name="lElementTypeID" />
+            <PropertyRef Name="Element_Id" />
+          </Key>
+          <Property Name="Permit_Number" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Seq_Num" Type="smallint" Nullable="false" />
+          <Property Name="lElementTypeID" Type="int" Nullable="false" />
+          <Property Name="Element_Id" Type="int" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblPermit_Locations">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="Seq_Num" />
+          </Key>
+          <Property Name="Permit_Number" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Seq_Num" Type="smallint" Nullable="false" />
+          <Property Name="OccupancyTypeID" Type="smallint" />
+          <Property Name="OnSTCODE" Type="int" Nullable="false" />
+          <Property Name="FromSTCODE" Type="int" />
+          <Property Name="ToSTCODE" Type="int" />
+          <Property Name="sOnActual" Type="varchar" MaxLength="75" />
+          <Property Name="sFromActual" Type="varchar" MaxLength="75" />
+          <Property Name="sToActual" Type="varchar" MaxLength="75" />
+          <Property Name="sHighTrafficArea" Type="varchar" MaxLength="50" />
+          <Property Name="ReferenceTypeID" Type="int" />
+          <Property Name="ReferenceValue" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblPermit_Reasons">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="DecisionId" />
+            <PropertyRef Name="Seq_Num" />
+          </Key>
+          <Property Name="Permit_Number" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="DecisionId" Type="smallint" Nullable="false" />
+          <Property Name="Seq_Num" Type="tinyint" Nullable="false" />
+          <Property Name="Reason" Type="ntext" />
+          <Property Name="RecUserid" Type="varchar" MaxLength="20" />
+          <Property Name="RecDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblPermit_References">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="Seq_Num" />
+          </Key>
+          <Property Name="Permit_Number" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Seq_Num" Type="smallint" Nullable="false" />
+          <Property Name="ReferenceTypeID" Type="int" />
+          <Property Name="ReferenceValue" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblPermit_Remarks">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="Seq_Num" />
+          </Key>
+          <Property Name="Permit_Number" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Seq_Num" Type="smallint" Nullable="false" />
+          <Property Name="RemarkID" Type="int" />
+        </EntityType>
+        <EntityType Name="tblPermitAudit">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="RecTimeStamp" />
+          </Key>
+          <Property Name="Permit_Number" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="RecTimeStamp" Type="datetime" Nullable="false" />
+          <Property Name="EffectiveDate" Type="datetime" />
+          <Property Name="ExpirationDate" Type="datetime" />
+          <Property Name="GrantedToText" Type="ntext" />
+          <Property Name="TimeText" Type="ntext" />
+          <Property Name="Purpose" Type="ntext" />
+          <Property Name="Comments" Type="ntext" />
+          <Property Name="DecisionId" Type="smallint" />
+          <Property Name="Permit_UserId" Type="varchar" MaxLength="20" />
+          <Property Name="Permit_DateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblPermits">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+          </Key>
+          <Property Name="Permit_Number" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="PermitTypeId" Type="int" />
+          <Property Name="EntryDate" Type="datetime" />
+          <Property Name="ApplicationDate" Type="datetime" />
+          <Property Name="EffectiveDate" Type="datetime" />
+          <Property Name="ExpirationDate" Type="datetime" />
+          <Property Name="ContactId" Type="int" />
+          <Property Name="GrantedToText" Type="ntext" />
+          <Property Name="TimeText" Type="ntext" />
+          <Property Name="NightPermit" Type="bit" />
+          <Property Name="Purpose" Type="ntext" />
+          <Property Name="Comments" Type="ntext" />
+          <Property Name="IssueDate" Type="datetime" />
+          <Property Name="AuthorizedSignatureId" Type="int" />
+          <Property Name="DecisionId" Type="smallint" />
+          <Property Name="OwnerId" Type="int" />
+          <Property Name="InspectorStopDate" Type="datetime" />
+          <Property Name="ProjectType" Type="int" />
+          <Property Name="TNPDate" Type="smalldatetime" />
+          <Property Name="Rec_UserId" Type="varchar" MaxLength="20" />
+          <Property Name="Rec_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Contact_First_Name" Type="varchar" MaxLength="15" />
+          <Property Name="Contact_Mid_Name" Type="varchar" MaxLength="15" />
+          <Property Name="Contact_Last_Name" Type="varchar" MaxLength="20" />
+          <Property Name="CompanyId" Type="int" />
+          <Property Name="Company_Name" Type="varchar" MaxLength="100" />
+          <Property Name="Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Address2" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="30" />
+          <Property Name="State" Type="varchar" MaxLength="2" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="10" />
+          <Property Name="Phone" Type="varchar" MaxLength="10" />
+          <Property Name="Fax" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="tblPermitTypes">
+          <Key>
+            <PropertyRef Name="PermitTypeID" />
+          </Key>
+          <Property Name="PermitTypeID" Type="int" Nullable="false" />
+          <Property Name="PermitTypeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PermitTypeAbbrev" Type="nvarchar" MaxLength="20" />
+          <Property Name="EncroachmentRequired" Type="bit" />
+        </EntityType>
+        <EntityType Name="tblProjectTypes">
+          <Key>
+            <PropertyRef Name="ProjectTypeId" />
+          </Key>
+          <Property Name="ProjectTypeId" Type="int" Nullable="false" />
+          <Property Name="ProjectName" Type="varchar" MaxLength="35" />
+          <Property Name="PennDOTFlag" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblReferenceTypes">
+          <Key>
+            <PropertyRef Name="ReferenceTypeID" />
+          </Key>
+          <Property Name="ReferenceTypeID" Type="int" Nullable="false" />
+          <Property Name="ReferenceTypeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ReferenceTypeAbbrev" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="tblSpecialNodes">
+          <Key>
+            <PropertyRef Name="NODE_ID" />
+          </Key>
+          <Property Name="NODE_ID" Type="int" Nullable="false" />
+          <Property Name="TYPE" Type="nvarchar" MaxLength="3" />
+          <Property Name="Primary_StCode" Type="int" />
+          <Property Name="Primary_ST_Name" Type="varchar" MaxLength="30" />
+          <Property Name="Secondary_StCode" Type="int" />
+          <Property Name="Secondary_ST_Name" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SCBPPS.dbo.tblStatusCodes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tblStatusCodes">
+          <Key>
+            <PropertyRef Name="status_code_id" />
+            <PropertyRef Name="status_code_description" />
+            <PropertyRef Name="timestamp" />
+          </Key>
+          <Property Name="status_code_id" Type="int" Nullable="false" />
+          <Property Name="status_code_description" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="active" Type="bit" />
+          <Property Name="last_activity_date" Type="datetime" />
+          <Property Name="timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tblStreets">
+          <Key>
+            <PropertyRef Name="SEG_ID" />
+          </Key>
+          <Property Name="FNODE_" Type="int" />
+          <Property Name="TNODE_" Type="int" />
+          <Property Name="LPOLY_" Type="float" />
+          <Property Name="RPOLY_" Type="float" />
+          <Property Name="LENGTH" Type="float" />
+          <Property Name="STCL2_" Type="float" />
+          <Property Name="STCL2_ID" Type="float" />
+          <Property Name="PRE_DIR" Type="nvarchar" MaxLength="2" />
+          <Property Name="ST_NAME" Type="nvarchar" MaxLength="30" />
+          <Property Name="ST_TYPE" Type="nvarchar" MaxLength="4" />
+          <Property Name="SUF_DIR" Type="nvarchar" MaxLength="5" />
+          <Property Name="ZIP_LEFT" Type="float" />
+          <Property Name="ZIP_RIGHT" Type="float" />
+          <Property Name="L_F_ADD" Type="float" />
+          <Property Name="L_T_ADD" Type="float" />
+          <Property Name="R_F_ADD" Type="float" />
+          <Property Name="R_T_ADD" Type="float" />
+          <Property Name="ST_CODE" Type="int" />
+          <Property Name="L_HUNDRED" Type="float" />
+          <Property Name="R_HUNDRED" Type="float" />
+          <Property Name="SEG_ID" Type="int" Nullable="false" />
+          <Property Name="ONEWAY" Type="nvarchar" MaxLength="2" />
+          <Property Name="CLASS" Type="float" />
+          <Property Name="RESPONSIBL" Type="nvarchar" MaxLength="15" />
+          <Property Name="UPDATE" Type="datetime" />
+          <Property Name="NEWSEGDATE" Type="datetime" />
+          <Property Name="MULTI_REP" Type="float" />
+          <Property Name="STNAME" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="UserTokens">
+          <Key>
+            <PropertyRef Name="EmailAddress" />
+            <PropertyRef Name="CompanyId" />
+            <PropertyRef Name="Token" />
+          </Key>
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
+          <Property Name="Token" Type="nvarchar" MaxLength="126" Nullable="false" />
+          <Property Name="CreatedUtc" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdatedUtc" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ContactRoles_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="ContactRoles" Type="Self.ContactRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="ContactRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContactRoles_tblContact">
+          <End Role="tblContact" Type="Self.tblContact" Multiplicity="1" />
+          <End Role="ContactRoles" Type="Self.ContactRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblContact">
+              <PropertyRef Name="ContactId" />
+            </Principal>
+            <Dependent Role="ContactRoles">
+              <PropertyRef Name="ContactId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PermitDocuments_Documents">
+          <End Role="Documents" Type="Self.Documents" Multiplicity="1" />
+          <End Role="PermitDocuments" Type="Self.PermitDocuments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Documents">
+              <PropertyRef Name="DocumentId" />
+            </Principal>
+            <Dependent Role="PermitDocuments">
+              <PropertyRef Name="DocumentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PermitDocuments_tblPermits">
+          <End Role="tblPermits" Type="Self.tblPermits" Multiplicity="1" />
+          <End Role="PermitDocuments" Type="Self.PermitDocuments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermits">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="PermitDocuments">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblDistricts_tblDistrictTypes">
+          <End Role="tblDistrictTypes" Type="Self.tblDistrictTypes" Multiplicity="1" />
+          <End Role="tblDistricts" Type="Self.tblDistricts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDistrictTypes">
+              <PropertyRef Name="DistrictTypeID" />
+            </Principal>
+            <Dependent Role="tblDistricts">
+              <PropertyRef Name="Di_DistrictTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_CCs_tblPermits">
+          <End Role="tblPermits" Type="Self.tblPermits" Multiplicity="1" />
+          <End Role="tblPermit_CCs" Type="Self.tblPermit_CCs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermits">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="tblPermit_CCs">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_Districts_tblDistricts">
+          <End Role="tblDistricts" Type="Self.tblDistricts" Multiplicity="0..1" />
+          <End Role="tblPermit_Districts" Type="Self.tblPermit_Districts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDistricts">
+              <PropertyRef Name="DistrictID" />
+            </Principal>
+            <Dependent Role="tblPermit_Districts">
+              <PropertyRef Name="DistrictId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_Districts_tblPermits">
+          <End Role="tblPermits" Type="Self.tblPermits" Multiplicity="1" />
+          <End Role="tblPermit_Districts" Type="Self.tblPermit_Districts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermits">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="tblPermit_Districts">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_Encroachment_tblPermits">
+          <End Role="tblPermits" Type="Self.tblPermits" Multiplicity="1" />
+          <End Role="tblPermit_Encroachment" Type="Self.tblPermit_Encroachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermits">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="tblPermit_Encroachment">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_Extensions_tblPermits">
+          <End Role="tblPermits" Type="Self.tblPermits" Multiplicity="1" />
+          <End Role="tblPermit_Extensions" Type="Self.tblPermit_Extensions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermits">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="tblPermit_Extensions">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_Locations_tblPermits">
+          <End Role="tblPermits" Type="Self.tblPermits" Multiplicity="1" />
+          <End Role="tblPermit_Locations" Type="Self.tblPermit_Locations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermits">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="tblPermit_Locations">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_Reasons_tblPermits">
+          <End Role="tblPermits" Type="Self.tblPermits" Multiplicity="1" />
+          <End Role="tblPermit_Reasons" Type="Self.tblPermit_Reasons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermits">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="tblPermit_Reasons">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_References_tblPermits">
+          <End Role="tblPermits" Type="Self.tblPermits" Multiplicity="1" />
+          <End Role="tblPermit_References" Type="Self.tblPermit_References" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermits">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="tblPermit_References">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_References_tblReferenceTypes">
+          <End Role="tblReferenceTypes" Type="Self.tblReferenceTypes" Multiplicity="0..1" />
+          <End Role="tblPermit_References" Type="Self.tblPermit_References" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblReferenceTypes">
+              <PropertyRef Name="ReferenceTypeID" />
+            </Principal>
+            <Dependent Role="tblPermit_References">
+              <PropertyRef Name="ReferenceTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_Remarks_tblPermits">
+          <End Role="tblPermits" Type="Self.tblPermits" Multiplicity="1" />
+          <End Role="tblPermit_Remarks" Type="Self.tblPermit_Remarks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermits">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="tblPermit_Remarks">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermits_tblContact">
+          <End Role="tblContact" Type="Self.tblContact" Multiplicity="0..1" />
+          <End Role="tblPermits" Type="Self.tblPermits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblContact">
+              <PropertyRef Name="ContactId" />
+            </Principal>
+            <Dependent Role="tblPermits">
+              <PropertyRef Name="ContactId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermits_tblDecisions">
+          <End Role="tblDecisions" Type="Self.tblDecisions" Multiplicity="0..1" />
+          <End Role="tblPermits" Type="Self.tblPermits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDecisions">
+              <PropertyRef Name="DecisionID" />
+            </Principal>
+            <Dependent Role="tblPermits">
+              <PropertyRef Name="DecisionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermits_tblOwner">
+          <End Role="tblOwner" Type="Self.tblOwner" Multiplicity="0..1" />
+          <End Role="tblPermits" Type="Self.tblPermits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblOwner">
+              <PropertyRef Name="OwnerId" />
+            </Principal>
+            <Dependent Role="tblPermits">
+              <PropertyRef Name="OwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermits_tblPermitTypes">
+          <End Role="tblPermitTypes" Type="Self.tblPermitTypes" Multiplicity="0..1" />
+          <End Role="tblPermits" Type="Self.tblPermits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermitTypes">
+              <PropertyRef Name="PermitTypeID" />
+            </Principal>
+            <Dependent Role="tblPermits">
+              <PropertyRef Name="PermitTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Get_CrossStreetsAndOnStreetSegIDsFromStCode2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="St_Code" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Get_CrossStreetsFromStCode_new" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="St_Code" Type="int" Mode="In" />
+        </Function>
+        <Function Name="get_OnStreetElementsBetweenOrderedPair" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="St_Code" Type="int" Mode="In" />
+          <Parameter Name="FromNodeOrder" Type="int" Mode="In" />
+          <Parameter Name="ToNodeOrder" Type="int" Mode="In" />
+        </Function>
+        <Function Name="OrderedNodesOnStcode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="stcode" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Sp_AllStreets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_Get_HightrafficArea" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SegID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_SavePermitData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Permit_Number" Type="varchar" Mode="In" />
+          <Parameter Name="PermitTypeId" Type="int" Mode="In" />
+          <Parameter Name="EntryDate" Type="datetime" Mode="In" />
+          <Parameter Name="ApplicationDate" Type="datetime" Mode="In" />
+          <Parameter Name="EffectiveDate" Type="datetime" Mode="In" />
+          <Parameter Name="ExpirationDate" Type="datetime" Mode="In" />
+          <Parameter Name="ContactId" Type="int" Mode="In" />
+          <Parameter Name="GrantedToText" Type="ntext" Mode="In" />
+          <Parameter Name="TimeText" Type="ntext" Mode="In" />
+          <Parameter Name="NightPermit" Type="bit" Mode="In" />
+          <Parameter Name="Purpose" Type="ntext" Mode="In" />
+          <Parameter Name="Comments" Type="ntext" Mode="In" />
+          <Parameter Name="IssueDate" Type="datetime" Mode="In" />
+          <Parameter Name="AuthorizedSignatureId" Type="int" Mode="In" />
+          <Parameter Name="DecisionId" Type="smallint" Mode="In" />
+          <Parameter Name="OwnerId" Type="int" Mode="In" />
+          <Parameter Name="InspectStopDate" Type="datetime" Mode="In" />
+          <Parameter Name="UserId" Type="varchar" Mode="In" />
+          <Parameter Name="ProjectType" Type="int" Mode="In" />
+          <Parameter Name="TNPDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="ContactFName" Type="varchar" Mode="In" />
+          <Parameter Name="ContactMName" Type="varchar" Mode="In" />
+          <Parameter Name="ContactLName" Type="varchar" Mode="In" />
+          <Parameter Name="CompanyId" Type="int" Mode="In" />
+          <Parameter Name="CompanyName" Type="varchar" Mode="In" />
+          <Parameter Name="Address1" Type="varchar" Mode="In" />
+          <Parameter Name="Address2" Type="varchar" Mode="In" />
+          <Parameter Name="City" Type="varchar" Mode="In" />
+          <Parameter Name="State" Type="varchar" Mode="In" />
+          <Parameter Name="PostalCode" Type="varchar" Mode="In" />
+          <Parameter Name="Phone" Type="varchar" Mode="In" />
+          <Parameter Name="Fax" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_SavePermitEncroachment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Permit_Number" Type="varchar" Mode="In" />
+          <Parameter Name="Seq_Num" Type="smallint" Mode="In" />
+          <Parameter Name="EncroachmentTypeID" Type="int" Mode="In" />
+          <Parameter Name="Length" Type="float" Mode="In" />
+          <Parameter Name="Width" Type="float" Mode="In" />
+          <Parameter Name="Height" Type="float" Mode="In" />
+          <Parameter Name="Weight" Type="float" Mode="In" />
+          <Parameter Name="Volume" Type="float" Mode="In" />
+          <Parameter Name="ProviderId" Type="int" Mode="In" />
+          <Parameter Name="Description" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_SavePermitLocations" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Permit_Number" Type="varchar" Mode="In" />
+          <Parameter Name="Seq_Num" Type="int" Mode="In" />
+          <Parameter Name="OccupancyTypeID" Type="smallint" Mode="In" />
+          <Parameter Name="OnSTCODE" Type="int" Mode="In" />
+          <Parameter Name="FromSTCODE" Type="int" Mode="In" />
+          <Parameter Name="ToSTCODE" Type="int" Mode="In" />
+          <Parameter Name="OnActual" Type="varchar" Mode="In" />
+          <Parameter Name="FromActual" Type="varchar" Mode="In" />
+          <Parameter Name="ToActual" Type="varchar" Mode="In" />
+          <Parameter Name="High_Traffic_Area" Type="varchar" Mode="In" />
+          <Parameter Name="ReferenceTypeID" Type="int" Mode="In" />
+          <Parameter Name="ReferenceValue" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_SavePermitLocGIS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Permit_Number" Type="varchar" Mode="In" />
+          <Parameter Name="Seq_Num" Type="smallint" Mode="In" />
+          <Parameter Name="lElementTypeID" Type="int" Mode="In" />
+          <Parameter Name="Element_Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_SavePermitReferences" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Permit_Number" Type="varchar" Mode="In" />
+          <Parameter Name="Seq_Num" Type="smallint" Mode="In" />
+          <Parameter Name="ReferenceTypeID" Type="int" Mode="In" />
+          <Parameter Name="ReferenceValue" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="SCBPPSModelStoreContainer">
+          <EntitySet Name="ContactRoles" EntityType="Self.ContactRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Documents" EntityType="Self.Documents" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PermitDocuments" EntityType="Self.PermitDocuments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="STREETCL_NODE" EntityType="Self.STREETCL_NODE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblCompany" EntityType="Self.tblCompany" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblContact" EntityType="Self.tblContact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblDecisions" EntityType="Self.tblDecisions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblDistrictRegions" EntityType="Self.tblDistrictRegions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblDistricts" EntityType="Self.tblDistricts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblDistrictTypes" EntityType="Self.tblDistrictTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblOwner" EntityType="Self.tblOwner" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPermit_CCs" EntityType="Self.tblPermit_CCs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPermit_Districts" EntityType="Self.tblPermit_Districts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPermit_Encroachment" EntityType="Self.tblPermit_Encroachment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPermit_Extensions" EntityType="Self.tblPermit_Extensions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPermit_Fees" EntityType="Self.tblPermit_Fees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPermit_Locations" EntityType="Self.tblPermit_Locations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPermit_Reasons" EntityType="Self.tblPermit_Reasons" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPermit_References" EntityType="Self.tblPermit_References" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPermit_Remarks" EntityType="Self.tblPermit_Remarks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPermitAudit" EntityType="Self.tblPermitAudit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPermits" EntityType="Self.tblPermits" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPermitTypes" EntityType="Self.tblPermitTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblProjectTypes" EntityType="Self.tblProjectTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblReferenceTypes" EntityType="Self.tblReferenceTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblSpecialNodes" EntityType="Self.tblSpecialNodes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserTokens" EntityType="Self.UserTokens" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="STREETCL_ARC" EntityType="Self.STREETCL_ARC" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [STREETCL_ARC].[OBJECTID] AS [OBJECTID], 
+    [STREETCL_ARC].[FNODE_] AS [FNODE_], 
+    [STREETCL_ARC].[TNODE_] AS [TNODE_], 
+    [STREETCL_ARC].[LPOLY_] AS [LPOLY_], 
+    [STREETCL_ARC].[RPOLY_] AS [RPOLY_], 
+    [STREETCL_ARC].[LENGTH] AS [LENGTH], 
+    [STREETCL_ARC].[STREETCL_] AS [STREETCL_], 
+    [STREETCL_ARC].[STREETCL_ID] AS [STREETCL_ID], 
+    [STREETCL_ARC].[PRE_DIR] AS [PRE_DIR], 
+    [STREETCL_ARC].[ST_NAME] AS [ST_NAME], 
+    [STREETCL_ARC].[ST_TYPE] AS [ST_TYPE], 
+    [STREETCL_ARC].[SUF_DIR] AS [SUF_DIR], 
+    [STREETCL_ARC].[ZIP_LEFT] AS [ZIP_LEFT], 
+    [STREETCL_ARC].[ZIP_RIGHT] AS [ZIP_RIGHT], 
+    [STREETCL_ARC].[L_F_ADD] AS [L_F_ADD], 
+    [STREETCL_ARC].[L_T_ADD] AS [L_T_ADD], 
+    [STREETCL_ARC].[R_F_ADD] AS [R_F_ADD], 
+    [STREETCL_ARC].[R_T_ADD] AS [R_T_ADD], 
+    [STREETCL_ARC].[ST_CODE] AS [ST_CODE], 
+    [STREETCL_ARC].[L_HUNDRED] AS [L_HUNDRED], 
+    [STREETCL_ARC].[R_HUNDRED] AS [R_HUNDRED], 
+    [STREETCL_ARC].[SEG_ID] AS [SEG_ID], 
+    [STREETCL_ARC].[ONEWAY] AS [ONEWAY], 
+    [STREETCL_ARC].[CLASS] AS [CLASS], 
+    [STREETCL_ARC].[RESPONSIBILITY] AS [RESPONSIBILITY], 
+    [STREETCL_ARC].[UPDATE_] AS [UPDATE_], 
+    [STREETCL_ARC].[NEWSEGDATE] AS [NEWSEGDATE], 
+    [STREETCL_ARC].[MULTI_REP] AS [MULTI_REP], 
+    [STREETCL_ARC].[ADDSTCODE] AS [ADDSTCODE], 
+    [STREETCL_ARC].[STNAME] AS [STNAME], 
+    [STREETCL_ARC].[Shape] AS [Shape], 
+    [STREETCL_ARC].[FacilityId] AS [FacilityId], 
+    [STREETCL_ARC].[Location] AS [Location], 
+    [STREETCL_ARC].[WarrantyDate] AS [WarrantyDate], 
+    [STREETCL_ARC].[Condition] AS [Condition], 
+    [STREETCL_ARC].[ConditionDate] AS [ConditionDate], 
+    [STREETCL_ARC].[fnode] AS [fnode], 
+    [STREETCL_ARC].[tnode] AS [tnode]
+    FROM [dbo].[STREETCL_ARC] AS [STREETCL_ARC]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tblCompanyTypes" EntityType="Self.tblCompanyTypes" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tblCompanyTypes].[CompanyTypeID] AS [CompanyTypeID], 
+    [tblCompanyTypes].[CompanyTypeName] AS [CompanyTypeName], 
+    [tblCompanyTypes].[OT_Description] AS [OT_Description]
+    FROM [dbo].[tblCompanyTypes] AS [tblCompanyTypes]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tblEncroachmentTypes" EntityType="Self.tblEncroachmentTypes" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tblEncroachmentTypes].[EncroachmentTypeID] AS [EncroachmentTypeID], 
+    [tblEncroachmentTypes].[EncroachmentTypeName] AS [EncroachmentTypeName], 
+    [tblEncroachmentTypes].[Fields_Needed] AS [Fields_Needed]
+    FROM [dbo].[tblEncroachmentTypes] AS [tblEncroachmentTypes]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tblNodes" EntityType="Self.tblNodes" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tblNodes].[ARC_] AS [ARC_], 
+    [tblNodes].[STREETCL_] AS [STREETCL_], 
+    [tblNodes].[STREETCL_I] AS [STREETCL_I], 
+    [tblNodes].[NODE_ID] AS [NODE_ID], 
+    [tblNodes].[INT_ID] AS [INT_ID], 
+    [tblNodes].[UPDATE] AS [UPDATE], 
+    [tblNodes].[INTERSECTI] AS [INTERSECTI], 
+    [tblNodes].[X_COORD] AS [X_COORD], 
+    [tblNodes].[Y_COORD] AS [Y_COORD]
+    FROM [dbo].[tblNodes] AS [tblNodes]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tblOccupancyTypes" EntityType="Self.tblOccupancyTypes" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tblOccupancyTypes].[OccupancyTypeID] AS [OccupancyTypeID], 
+    [tblOccupancyTypes].[OccupancyTypeName] AS [OccupancyTypeName], 
+    [tblOccupancyTypes].[OT_Description] AS [OT_Description], 
+    [tblOccupancyTypes].[OT_DisplayColor] AS [OT_DisplayColor]
+    FROM [dbo].[tblOccupancyTypes] AS [tblOccupancyTypes]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tblPermit_Location_GIS" EntityType="Self.tblPermit_Location_GIS" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tblPermit_Location_GIS].[Permit_Number] AS [Permit_Number], 
+    [tblPermit_Location_GIS].[Seq_Num] AS [Seq_Num], 
+    [tblPermit_Location_GIS].[lElementTypeID] AS [lElementTypeID], 
+    [tblPermit_Location_GIS].[Element_Id] AS [Element_Id], 
+    [tblPermit_Location_GIS].[DateCreated] AS [DateCreated]
+    FROM [dbo].[tblPermit_Location_GIS] AS [tblPermit_Location_GIS]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tblStatusCodes" EntityType="Self.tblStatusCodes" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tblStatusCodes].[status_code_id] AS [status_code_id], 
+    [tblStatusCodes].[status_code_description] AS [status_code_description], 
+    [tblStatusCodes].[active] AS [active], 
+    [tblStatusCodes].[last_activity_date] AS [last_activity_date], 
+    [tblStatusCodes].[timestamp] AS [timestamp]
+    FROM [dbo].[tblStatusCodes] AS [tblStatusCodes]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tblStreets" EntityType="Self.tblStreets" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tblStreets].[FNODE_] AS [FNODE_], 
+    [tblStreets].[TNODE_] AS [TNODE_], 
+    [tblStreets].[LPOLY_] AS [LPOLY_], 
+    [tblStreets].[RPOLY_] AS [RPOLY_], 
+    [tblStreets].[LENGTH] AS [LENGTH], 
+    [tblStreets].[STCL2_] AS [STCL2_], 
+    [tblStreets].[STCL2_ID] AS [STCL2_ID], 
+    [tblStreets].[PRE_DIR] AS [PRE_DIR], 
+    [tblStreets].[ST_NAME] AS [ST_NAME], 
+    [tblStreets].[ST_TYPE] AS [ST_TYPE], 
+    [tblStreets].[SUF_DIR] AS [SUF_DIR], 
+    [tblStreets].[ZIP_LEFT] AS [ZIP_LEFT], 
+    [tblStreets].[ZIP_RIGHT] AS [ZIP_RIGHT], 
+    [tblStreets].[L_F_ADD] AS [L_F_ADD], 
+    [tblStreets].[L_T_ADD] AS [L_T_ADD], 
+    [tblStreets].[R_F_ADD] AS [R_F_ADD], 
+    [tblStreets].[R_T_ADD] AS [R_T_ADD], 
+    [tblStreets].[ST_CODE] AS [ST_CODE], 
+    [tblStreets].[L_HUNDRED] AS [L_HUNDRED], 
+    [tblStreets].[R_HUNDRED] AS [R_HUNDRED], 
+    [tblStreets].[SEG_ID] AS [SEG_ID], 
+    [tblStreets].[ONEWAY] AS [ONEWAY], 
+    [tblStreets].[CLASS] AS [CLASS], 
+    [tblStreets].[RESPONSIBL] AS [RESPONSIBL], 
+    [tblStreets].[UPDATE] AS [UPDATE], 
+    [tblStreets].[NEWSEGDATE] AS [NEWSEGDATE], 
+    [tblStreets].[MULTI_REP] AS [MULTI_REP], 
+    [tblStreets].[STNAME] AS [STNAME]
+    FROM [dbo].[tblStreets] AS [tblStreets]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_ContactRoles_Roles" Association="Self.FK_ContactRoles_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="ContactRoles" EntitySet="ContactRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContactRoles_tblContact" Association="Self.FK_ContactRoles_tblContact">
+            <End Role="tblContact" EntitySet="tblContact" />
+            <End Role="ContactRoles" EntitySet="ContactRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PermitDocuments_Documents" Association="Self.FK_PermitDocuments_Documents">
+            <End Role="Documents" EntitySet="Documents" />
+            <End Role="PermitDocuments" EntitySet="PermitDocuments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PermitDocuments_tblPermits" Association="Self.FK_PermitDocuments_tblPermits">
+            <End Role="tblPermits" EntitySet="tblPermits" />
+            <End Role="PermitDocuments" EntitySet="PermitDocuments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblDistricts_tblDistrictTypes" Association="Self.FK_tblDistricts_tblDistrictTypes">
+            <End Role="tblDistrictTypes" EntitySet="tblDistrictTypes" />
+            <End Role="tblDistricts" EntitySet="tblDistricts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_CCs_tblPermits" Association="Self.FK_tblPermit_CCs_tblPermits">
+            <End Role="tblPermits" EntitySet="tblPermits" />
+            <End Role="tblPermit_CCs" EntitySet="tblPermit_CCs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_Districts_tblDistricts" Association="Self.FK_tblPermit_Districts_tblDistricts">
+            <End Role="tblDistricts" EntitySet="tblDistricts" />
+            <End Role="tblPermit_Districts" EntitySet="tblPermit_Districts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_Districts_tblPermits" Association="Self.FK_tblPermit_Districts_tblPermits">
+            <End Role="tblPermits" EntitySet="tblPermits" />
+            <End Role="tblPermit_Districts" EntitySet="tblPermit_Districts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_Encroachment_tblPermits" Association="Self.FK_tblPermit_Encroachment_tblPermits">
+            <End Role="tblPermits" EntitySet="tblPermits" />
+            <End Role="tblPermit_Encroachment" EntitySet="tblPermit_Encroachment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_Extensions_tblPermits" Association="Self.FK_tblPermit_Extensions_tblPermits">
+            <End Role="tblPermits" EntitySet="tblPermits" />
+            <End Role="tblPermit_Extensions" EntitySet="tblPermit_Extensions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_Locations_tblPermits" Association="Self.FK_tblPermit_Locations_tblPermits">
+            <End Role="tblPermits" EntitySet="tblPermits" />
+            <End Role="tblPermit_Locations" EntitySet="tblPermit_Locations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_Reasons_tblPermits" Association="Self.FK_tblPermit_Reasons_tblPermits">
+            <End Role="tblPermits" EntitySet="tblPermits" />
+            <End Role="tblPermit_Reasons" EntitySet="tblPermit_Reasons" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_References_tblPermits" Association="Self.FK_tblPermit_References_tblPermits">
+            <End Role="tblPermits" EntitySet="tblPermits" />
+            <End Role="tblPermit_References" EntitySet="tblPermit_References" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_References_tblReferenceTypes" Association="Self.FK_tblPermit_References_tblReferenceTypes">
+            <End Role="tblReferenceTypes" EntitySet="tblReferenceTypes" />
+            <End Role="tblPermit_References" EntitySet="tblPermit_References" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_Remarks_tblPermits" Association="Self.FK_tblPermit_Remarks_tblPermits">
+            <End Role="tblPermits" EntitySet="tblPermits" />
+            <End Role="tblPermit_Remarks" EntitySet="tblPermit_Remarks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermits_tblContact" Association="Self.FK_tblPermits_tblContact">
+            <End Role="tblContact" EntitySet="tblContact" />
+            <End Role="tblPermits" EntitySet="tblPermits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermits_tblDecisions" Association="Self.FK_tblPermits_tblDecisions">
+            <End Role="tblDecisions" EntitySet="tblDecisions" />
+            <End Role="tblPermits" EntitySet="tblPermits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermits_tblOwner" Association="Self.FK_tblPermits_tblOwner">
+            <End Role="tblOwner" EntitySet="tblOwner" />
+            <End Role="tblPermits" EntitySet="tblPermits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermits_tblPermitTypes" Association="Self.FK_tblPermits_tblPermitTypes">
+            <End Role="tblPermitTypes" EntitySet="tblPermitTypes" />
+            <End Role="tblPermits" EntitySet="tblPermits" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SCBPPSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="SCBPPSEntities" annotation:LazyLoadingEnabled="false">
+          <EntitySet Name="tblContacts" EntityType="SCBPPSModel.tblContact" />
+          <EntitySet Name="tblDecisions" EntityType="SCBPPSModel.tblDecision" />
+          <EntitySet Name="tblDistrictRegions" EntityType="SCBPPSModel.tblDistrictRegion" />
+          <EntitySet Name="tblDistricts" EntityType="SCBPPSModel.tblDistrict" />
+          <EntitySet Name="tblDistrictTypes" EntityType="SCBPPSModel.tblDistrictType" />
+          <EntitySet Name="tblOwners" EntityType="SCBPPSModel.tblOwner" />
+          <EntitySet Name="tblPermit_CCs" EntityType="SCBPPSModel.tblPermit_CCs" />
+          <EntitySet Name="tblPermit_Districts" EntityType="SCBPPSModel.tblPermit_Districts" />
+          <EntitySet Name="tblPermit_Encroachment" EntityType="SCBPPSModel.tblPermit_Encroachment" />
+          <EntitySet Name="tblPermit_Locations" EntityType="SCBPPSModel.tblPermit_Locations" />
+          <EntitySet Name="tblPermit_Reasons" EntityType="SCBPPSModel.tblPermit_Reasons" />
+          <EntitySet Name="tblPermit_Remarks" EntityType="SCBPPSModel.tblPermit_Remarks" />
+          <EntitySet Name="tblPermitAudits" EntityType="SCBPPSModel.tblPermitAudit" />
+          <EntitySet Name="tblPermits" EntityType="SCBPPSModel.tblPermit" />
+          <EntitySet Name="tblPermitTypes" EntityType="SCBPPSModel.tblPermitType" />
+          <EntitySet Name="tblProjectTypes" EntityType="SCBPPSModel.tblProjectType" />
+          <EntitySet Name="tblPermit_Location_GIS" EntityType="SCBPPSModel.tblPermit_Location_GIS" />
+          <AssociationSet Name="FK_tblPermits_tblContact" Association="SCBPPSModel.FK_tblPermits_tblContact">
+            <End Role="tblContact" EntitySet="tblContacts" />
+            <End Role="tblPermit" EntitySet="tblPermits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermits_tblDecisions" Association="SCBPPSModel.FK_tblPermits_tblDecisions">
+            <End Role="tblDecision" EntitySet="tblDecisions" />
+            <End Role="tblPermit" EntitySet="tblPermits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblDistricts_tblDistrictTypes" Association="SCBPPSModel.FK_tblDistricts_tblDistrictTypes">
+            <End Role="tblDistrictType" EntitySet="tblDistrictTypes" />
+            <End Role="tblDistrict" EntitySet="tblDistricts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_Districts_tblDistricts" Association="SCBPPSModel.FK_tblPermit_Districts_tblDistricts">
+            <End Role="tblDistrict" EntitySet="tblDistricts" />
+            <End Role="tblPermit_Districts" EntitySet="tblPermit_Districts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermits_tblOwner" Association="SCBPPSModel.FK_tblPermits_tblOwner">
+            <End Role="tblOwner" EntitySet="tblOwners" />
+            <End Role="tblPermit" EntitySet="tblPermits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_CCs_tblPermits" Association="SCBPPSModel.FK_tblPermit_CCs_tblPermits">
+            <End Role="tblPermit" EntitySet="tblPermits" />
+            <End Role="tblPermit_CCs" EntitySet="tblPermit_CCs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_Districts_tblPermits" Association="SCBPPSModel.FK_tblPermit_Districts_tblPermits">
+            <End Role="tblPermit" EntitySet="tblPermits" />
+            <End Role="tblPermit_Districts" EntitySet="tblPermit_Districts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_Encroachment_tblPermits" Association="SCBPPSModel.FK_tblPermit_Encroachment_tblPermits">
+            <End Role="tblPermit" EntitySet="tblPermits" />
+            <End Role="tblPermit_Encroachment" EntitySet="tblPermit_Encroachment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_Locations_tblPermits" Association="SCBPPSModel.FK_tblPermit_Locations_tblPermits">
+            <End Role="tblPermit" EntitySet="tblPermits" />
+            <End Role="tblPermit_Locations" EntitySet="tblPermit_Locations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_Reasons_tblPermits" Association="SCBPPSModel.FK_tblPermit_Reasons_tblPermits">
+            <End Role="tblPermit" EntitySet="tblPermits" />
+            <End Role="tblPermit_Reasons" EntitySet="tblPermit_Reasons" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_Remarks_tblPermits" Association="SCBPPSModel.FK_tblPermit_Remarks_tblPermits">
+            <End Role="tblPermit" EntitySet="tblPermits" />
+            <End Role="tblPermit_Remarks" EntitySet="tblPermit_Remarks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermits_tblPermitTypes" Association="SCBPPSModel.FK_tblPermits_tblPermitTypes">
+            <End Role="tblPermitType" EntitySet="tblPermitTypes" />
+            <End Role="tblPermit" EntitySet="tblPermits" />
+          </AssociationSet>
+          <EntitySet Name="tblCompanies" EntityType="SCBPPSModel.tblCompany" />
+          <EntitySet Name="tblCompanyTypes" EntityType="SCBPPSModel.tblCompanyType" />
+          <EntitySet Name="tblStatusCodes" EntityType="SCBPPSModel.tblStatusCode" />
+          <EntitySet Name="Roles" EntityType="SCBPPSModel.Role" />
+          <AssociationSet Name="ContactRoles" Association="SCBPPSModel.ContactRoles">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="tblContact" EntitySet="tblContacts" />
+          </AssociationSet>
+          <EntitySet Name="tblOccupancyTypes" EntityType="SCBPPSModel.tblOccupancyType" />
+          <EntitySet Name="tblEncroachmentTypes" EntityType="SCBPPSModel.tblEncroachmentType" />
+          <EntitySet Name="tblStreets" EntityType="SCBPPSModel.tblStreet" />
+          <EntitySet Name="tblNodes" EntityType="SCBPPSModel.tblNode" />
+          <EntitySet Name="Documents" EntityType="SCBPPSModel.Document" />
+          <AssociationSet Name="PermitDocuments" Association="SCBPPSModel.PermitDocuments">
+            <End Role="Document" EntitySet="Documents" />
+            <End Role="tblPermit" EntitySet="tblPermits" />
+          </AssociationSet>
+          <EntitySet Name="UserTokens" EntityType="SCBPPSModel.UserToken" />
+          <EntitySet Name="tblPermit_References" EntityType="SCBPPSModel.tblPermit_References" />
+          <EntitySet Name="tblReferenceTypes" EntityType="SCBPPSModel.tblReferenceType" />
+          <AssociationSet Name="FK_tblPermit_References_tblPermits" Association="SCBPPSModel.FK_tblPermit_References_tblPermits">
+            <End Role="tblPermit" EntitySet="tblPermits" />
+            <End Role="tblPermit_References" EntitySet="tblPermit_References" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPermit_References_tblReferenceTypes" Association="SCBPPSModel.FK_tblPermit_References_tblReferenceTypes">
+            <End Role="tblReferenceType" EntitySet="tblReferenceTypes" />
+            <End Role="tblPermit_References" EntitySet="tblPermit_References" />
+          </AssociationSet>
+          <EntitySet Name="STREETCL_NODE" EntityType="SCBPPSModel.STREETCL_NODE" />
+          <EntitySet Name="tblPermit_Extensions" EntityType="SCBPPSModel.tblPermit_Extensions" />
+          <EntitySet Name="tblPermit_Fees" EntityType="SCBPPSModel.tblPermit_Fees" />
+          <EntitySet Name="tblSpecialNodes" EntityType="SCBPPSModel.tblSpecialNode" />
+          <EntitySet Name="STREETCL_ARC" EntityType="SCBPPSModel.STREETCL_ARC" />
+          <AssociationSet Name="FK_tblPermit_Extensions_tblPermits" Association="SCBPPSModel.FK_tblPermit_Extensions_tblPermits">
+            <End Role="tblPermit" EntitySet="tblPermits" />
+            <End Role="tblPermit_Extensions" EntitySet="tblPermit_Extensions" />
+          </AssociationSet>
+          <FunctionImport Name="Get_CrossStreetsAndOnStreetSegIDsFromStCode2" ReturnType="Collection(SCBPPSModel.Get_CrossStreetsAndOnStreetSegIDsFromStCode2_Result)">
+          <Parameter Name="St_Code" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Get_CrossStreetsFromStCode_new" ReturnType="Collection(SCBPPSModel.Get_CrossStreetsFromStCode_new_Result)">
+          <Parameter Name="St_Code" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="get_OnStreetElementsBetweenOrderedPair" ReturnType="Collection(SCBPPSModel.get_OnStreetElementsBetweenOrderedPair_Result)">
+            <Parameter Name="St_Code" Mode="In" Type="Int32" />
+            <Parameter Name="FromNodeOrder" Mode="In" Type="Int32" />
+            <Parameter Name="ToNodeOrder" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="OrderedNodesOnStcode" ReturnType="Collection(SCBPPSModel.OrderedNodesOnStcode_Result)">
+          <Parameter Name="stcode" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_AllStreets" ReturnType="Collection(SCBPPSModel.Sp_AllStreets_Result)" />
+          <FunctionImport Name="sp_Get_HightrafficArea">
+          <Parameter Name="SegID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_SavePermitData">
+            <Parameter Name="Permit_Number" Mode="In" Type="String" />
+            <Parameter Name="PermitTypeId" Mode="In" Type="Int32" />
+            <Parameter Name="EntryDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ApplicationDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EffectiveDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ExpirationDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ContactId" Mode="In" Type="Int32" />
+            <Parameter Name="GrantedToText" Mode="In" Type="String" />
+            <Parameter Name="TimeText" Mode="In" Type="String" />
+            <Parameter Name="NightPermit" Mode="In" Type="Boolean" />
+            <Parameter Name="Purpose" Mode="In" Type="String" />
+            <Parameter Name="Comments" Mode="In" Type="String" />
+            <Parameter Name="IssueDate" Mode="In" Type="DateTime" />
+            <Parameter Name="AuthorizedSignatureId" Mode="In" Type="Int32" />
+            <Parameter Name="DecisionId" Mode="In" Type="Int16" />
+            <Parameter Name="OwnerId" Mode="In" Type="Int32" />
+            <Parameter Name="InspectStopDate" Mode="In" Type="DateTime" />
+            <Parameter Name="UserId" Mode="In" Type="String" />
+            <Parameter Name="ProjectType" Mode="In" Type="Int32" />
+            <Parameter Name="TNPDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ContactFName" Mode="In" Type="String" />
+            <Parameter Name="ContactMName" Mode="In" Type="String" />
+            <Parameter Name="ContactLName" Mode="In" Type="String" />
+            <Parameter Name="CompanyId" Mode="In" Type="Int32" />
+            <Parameter Name="CompanyName" Mode="In" Type="String" />
+            <Parameter Name="Address1" Mode="In" Type="String" />
+            <Parameter Name="Address2" Mode="In" Type="String" />
+            <Parameter Name="City" Mode="In" Type="String" />
+            <Parameter Name="State" Mode="In" Type="String" />
+            <Parameter Name="PostalCode" Mode="In" Type="String" />
+            <Parameter Name="Phone" Mode="In" Type="String" />
+            <Parameter Name="Fax" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_SavePermitEncroachment">
+            <Parameter Name="Permit_Number" Mode="In" Type="String" />
+            <Parameter Name="Seq_Num" Mode="In" Type="Int16" />
+            <Parameter Name="EncroachmentTypeID" Mode="In" Type="Int32" />
+            <Parameter Name="Length" Mode="In" Type="Double" />
+            <Parameter Name="Width" Mode="In" Type="Double" />
+            <Parameter Name="Height" Mode="In" Type="Double" />
+            <Parameter Name="Weight" Mode="In" Type="Double" />
+            <Parameter Name="Volume" Mode="In" Type="Double" />
+            <Parameter Name="ProviderId" Mode="In" Type="Int32" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_SavePermitLocations">
+            <Parameter Name="Permit_Number" Mode="In" Type="String" />
+            <Parameter Name="Seq_Num" Mode="In" Type="Int32" />
+            <Parameter Name="OccupancyTypeID" Mode="In" Type="Int16" />
+            <Parameter Name="OnSTCODE" Mode="In" Type="Int32" />
+            <Parameter Name="FromSTCODE" Mode="In" Type="Int32" />
+            <Parameter Name="ToSTCODE" Mode="In" Type="Int32" />
+            <Parameter Name="OnActual" Mode="In" Type="String" />
+            <Parameter Name="FromActual" Mode="In" Type="String" />
+            <Parameter Name="ToActual" Mode="In" Type="String" />
+            <Parameter Name="High_Traffic_Area" Mode="In" Type="String" />
+            <Parameter Name="ReferenceTypeID" Mode="In" Type="Int32" />
+            <Parameter Name="ReferenceValue" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_SavePermitLocGIS">
+            <Parameter Name="Permit_Number" Mode="In" Type="String" />
+            <Parameter Name="Seq_Num" Mode="In" Type="Int16" />
+            <Parameter Name="lElementTypeID" Mode="In" Type="Int32" />
+            <Parameter Name="Element_Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_SavePermitReferences">
+            <Parameter Name="Permit_Number" Mode="In" Type="String" />
+            <Parameter Name="Seq_Num" Mode="In" Type="Int16" />
+            <Parameter Name="ReferenceTypeID" Mode="In" Type="Int32" />
+            <Parameter Name="ReferenceValue" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="tblContact">
+          <Key>
+            <PropertyRef Name="ContactId" />
+          </Key>
+          <Property Name="ContactId" Type="Int32" Nullable="false" />
+          <Property Name="CompanyId" Type="Int32" />
+          <Property Name="FirstName" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleName" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="PostalCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Ext" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Pager" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Pager_PIN" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Cell_Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="EMailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="RecCreateUserId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="RecCreateDate" Type="DateTime" Precision="3" />
+          <Property Name="RecEditUserId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="RecEditDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblPermits" Relationship="SCBPPSModel.FK_tblPermits_tblContact" FromRole="tblContact" ToRole="tblPermit" />
+          <Property Name="SecurityToken" Type="Int32" />
+          <Property Name="SecurityTokenCreateDate" Type="DateTime" Precision="3" />
+          <Property Name="LastLoginDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Roles" Relationship="SCBPPSModel.ContactRoles" FromRole="tblContact" ToRole="Role" />
+        </EntityType>
+        <EntityType Name="tblDecision">
+          <Key>
+            <PropertyRef Name="DecisionID" />
+          </Key>
+          <Property Name="DecisionID" Type="Int16" Nullable="false" />
+          <Property Name="DecisionName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RequireReason" Type="Boolean" />
+          <Property Name="DefaultSetting" Type="Boolean" />
+          <NavigationProperty Name="tblPermits" Relationship="SCBPPSModel.FK_tblPermits_tblDecisions" FromRole="tblDecision" ToRole="tblPermit" />
+        </EntityType>
+        <EntityType Name="tblDistrictRegion">
+          <Key>
+            <PropertyRef Name="DistrictRegionId" />
+          </Key>
+          <Property Name="DistrictRegionId" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="DistrictOfficeId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="tblDistrict">
+          <Key>
+            <PropertyRef Name="DistrictID" />
+          </Key>
+          <Property Name="DistrictID" Type="Int32" Nullable="false" />
+          <Property Name="DistrictName" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Di_DistrictTypeID" Type="Int16" Nullable="false" />
+          <Property Name="Di_ManagerName" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="Di_ManagerTitle" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="Di_Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Di_Fax" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Di_Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Di_PostalCode" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="Di_RegionId" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Inactive" Type="Boolean" />
+          <NavigationProperty Name="tblDistrictType" Relationship="SCBPPSModel.FK_tblDistricts_tblDistrictTypes" FromRole="tblDistrict" ToRole="tblDistrictType" />
+          <NavigationProperty Name="tblPermit_Districts" Relationship="SCBPPSModel.FK_tblPermit_Districts_tblDistricts" FromRole="tblDistrict" ToRole="tblPermit_Districts" />
+        </EntityType>
+        <EntityType Name="tblDistrictType">
+          <Key>
+            <PropertyRef Name="DistrictTypeID" />
+          </Key>
+          <Property Name="DistrictTypeID" Type="Int16" Nullable="false" />
+          <Property Name="DistrictTypeName" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="DistrictTypeAbbrev" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="DT_Description" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="boundary_type_id" Type="Int32" />
+          <NavigationProperty Name="tblDistricts" Relationship="SCBPPSModel.FK_tblDistricts_tblDistrictTypes" FromRole="tblDistrictType" ToRole="tblDistrict" />
+        </EntityType>
+        <EntityType Name="tblOwner">
+          <Key>
+            <PropertyRef Name="OwnerId" />
+          </Key>
+          <Property Name="OwnerId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblPermits" Relationship="SCBPPSModel.FK_tblPermits_tblOwner" FromRole="tblOwner" ToRole="tblPermit" />
+        </EntityType>
+        <EntityType Name="tblPermit_CCs">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="Seq_Num" />
+          </Key>
+          <Property Name="Permit_Number" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Seq_Num" Type="Int16" Nullable="false" />
+          <Property Name="CarbonCopyName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblPermit" Relationship="SCBPPSModel.FK_tblPermit_CCs_tblPermits" FromRole="tblPermit_CCs" ToRole="tblPermit" />
+        </EntityType>
+        <EntityType Name="tblPermit_Districts">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="Seq_Num" />
+          </Key>
+          <Property Name="Permit_Number" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Seq_Num" Type="Int16" Nullable="false" />
+          <Property Name="DistrictId" Type="Int32" />
+          <NavigationProperty Name="tblDistrict" Relationship="SCBPPSModel.FK_tblPermit_Districts_tblDistricts" FromRole="tblPermit_Districts" ToRole="tblDistrict" />
+          <NavigationProperty Name="tblPermit" Relationship="SCBPPSModel.FK_tblPermit_Districts_tblPermits" FromRole="tblPermit_Districts" ToRole="tblPermit" />
+        </EntityType>
+        <EntityType Name="tblPermit_Encroachment">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="Seq_Num" />
+          </Key>
+          <Property Name="Permit_Number" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Seq_Num" Type="Int16" Nullable="false" />
+          <Property Name="EncroachmentTypeID" Type="Int32" Nullable="false" />
+          <Property Name="Length" Type="Double" />
+          <Property Name="Width" Type="Double" />
+          <Property Name="Height" Type="Double" />
+          <Property Name="Weight" Type="Double" />
+          <Property Name="Volume" Type="Double" />
+          <Property Name="ProviderId" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblPermit" Relationship="SCBPPSModel.FK_tblPermit_Encroachment_tblPermits" FromRole="tblPermit_Encroachment" ToRole="tblPermit" />
+        </EntityType>
+        <EntityType Name="tblPermit_Locations">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="Seq_Num" />
+          </Key>
+          <Property Name="Permit_Number" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Seq_Num" Type="Int16" Nullable="false" />
+          <Property Name="OccupancyTypeID" Type="Int16" />
+          <Property Name="OnSTCODE" Type="Int32" Nullable="false" />
+          <Property Name="FromSTCODE" Type="Int32" />
+          <Property Name="ToSTCODE" Type="Int32" />
+          <Property Name="sOnActual" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="sFromActual" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="sToActual" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="sHighTrafficArea" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReferenceTypeID" Type="Int32" />
+          <Property Name="ReferenceValue" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblPermit" Relationship="SCBPPSModel.FK_tblPermit_Locations_tblPermits" FromRole="tblPermit_Locations" ToRole="tblPermit" />
+        </EntityType>
+        <EntityType Name="tblPermit_Reasons">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="DecisionId" />
+            <PropertyRef Name="Seq_Num" />
+          </Key>
+          <Property Name="Permit_Number" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="DecisionId" Type="Int16" Nullable="false" />
+          <Property Name="Seq_Num" Type="Byte" Nullable="false" />
+          <Property Name="Reason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RecUserid" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="RecDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblPermit" Relationship="SCBPPSModel.FK_tblPermit_Reasons_tblPermits" FromRole="tblPermit_Reasons" ToRole="tblPermit" />
+        </EntityType>
+        <EntityType Name="tblPermit_Remarks">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="Seq_Num" />
+          </Key>
+          <Property Name="Permit_Number" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Seq_Num" Type="Int16" Nullable="false" />
+          <Property Name="RemarkID" Type="Int32" />
+          <NavigationProperty Name="tblPermit" Relationship="SCBPPSModel.FK_tblPermit_Remarks_tblPermits" FromRole="tblPermit_Remarks" ToRole="tblPermit" />
+        </EntityType>
+        <EntityType Name="tblPermitAudit">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="RecTimeStamp" />
+          </Key>
+          <Property Name="Permit_Number" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="RecTimeStamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EffectiveDate" Type="DateTime" Precision="3" />
+          <Property Name="ExpirationDate" Type="DateTime" Precision="3" />
+          <Property Name="GrantedToText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TimeText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Purpose" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DecisionId" Type="Int16" />
+          <Property Name="Permit_UserId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Permit_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="tblPermit">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+          </Key>
+          <Property Name="Permit_Number" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="PermitTypeId" Type="Int32" />
+          <Property Name="EntryDate" Type="DateTime" Precision="3" />
+          <Property Name="ApplicationDate" Type="DateTime" Precision="3" />
+          <Property Name="EffectiveDate" Type="DateTime" Precision="3" />
+          <Property Name="ExpirationDate" Type="DateTime" Precision="3" />
+          <Property Name="ContactId" Type="Int32" />
+          <Property Name="GrantedToText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TimeText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NightPermit" Type="Boolean" />
+          <Property Name="Purpose" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IssueDate" Type="DateTime" Precision="3" />
+          <Property Name="AuthorizedSignatureId" Type="Int32" />
+          <Property Name="DecisionId" Type="Int16" />
+          <Property Name="OwnerId" Type="Int32" />
+          <Property Name="InspectorStopDate" Type="DateTime" Precision="3" />
+          <Property Name="ProjectType" Type="Int32" />
+          <Property Name="TNPDate" Type="DateTime" Precision="0" />
+          <Property Name="Rec_UserId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Rec_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Contact_First_Name" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Contact_Mid_Name" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Contact_Last_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CompanyId" Type="Int32" />
+          <Property Name="Company_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblContact" Relationship="SCBPPSModel.FK_tblPermits_tblContact" FromRole="tblPermit" ToRole="tblContact" />
+          <NavigationProperty Name="tblDecision" Relationship="SCBPPSModel.FK_tblPermits_tblDecisions" FromRole="tblPermit" ToRole="tblDecision" />
+          <NavigationProperty Name="tblOwner" Relationship="SCBPPSModel.FK_tblPermits_tblOwner" FromRole="tblPermit" ToRole="tblOwner" />
+          <NavigationProperty Name="tblPermit_CCs" Relationship="SCBPPSModel.FK_tblPermit_CCs_tblPermits" FromRole="tblPermit" ToRole="tblPermit_CCs" />
+          <NavigationProperty Name="tblPermit_Districts" Relationship="SCBPPSModel.FK_tblPermit_Districts_tblPermits" FromRole="tblPermit" ToRole="tblPermit_Districts" />
+          <NavigationProperty Name="tblPermit_Encroachment" Relationship="SCBPPSModel.FK_tblPermit_Encroachment_tblPermits" FromRole="tblPermit" ToRole="tblPermit_Encroachment" />
+          <NavigationProperty Name="tblPermit_Locations" Relationship="SCBPPSModel.FK_tblPermit_Locations_tblPermits" FromRole="tblPermit" ToRole="tblPermit_Locations" />
+          <NavigationProperty Name="tblPermit_Reasons" Relationship="SCBPPSModel.FK_tblPermit_Reasons_tblPermits" FromRole="tblPermit" ToRole="tblPermit_Reasons" />
+          <NavigationProperty Name="tblPermit_Remarks" Relationship="SCBPPSModel.FK_tblPermit_Remarks_tblPermits" FromRole="tblPermit" ToRole="tblPermit_Remarks" />
+          <NavigationProperty Name="tblPermitType" Relationship="SCBPPSModel.FK_tblPermits_tblPermitTypes" FromRole="tblPermit" ToRole="tblPermitType" />
+          <NavigationProperty Name="Documents" Relationship="SCBPPSModel.PermitDocuments" FromRole="tblPermit" ToRole="Document" />
+          <NavigationProperty Name="tblPermit_References" Relationship="SCBPPSModel.FK_tblPermit_References_tblPermits" FromRole="tblPermit" ToRole="tblPermit_References" />
+          <NavigationProperty Name="tblPermit_Extensions" Relationship="SCBPPSModel.FK_tblPermit_Extensions_tblPermits" FromRole="tblPermit" ToRole="tblPermit_Extensions" />
+        </EntityType>
+        <EntityType Name="tblPermitType">
+          <Key>
+            <PropertyRef Name="PermitTypeID" />
+          </Key>
+          <Property Name="PermitTypeID" Type="Int32" Nullable="false" />
+          <Property Name="PermitTypeName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PermitTypeAbbrev" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="EncroachmentRequired" Type="Boolean" />
+          <NavigationProperty Name="tblPermits" Relationship="SCBPPSModel.FK_tblPermits_tblPermitTypes" FromRole="tblPermitType" ToRole="tblPermit" />
+        </EntityType>
+        <EntityType Name="tblProjectType">
+          <Key>
+            <PropertyRef Name="ProjectTypeId" />
+          </Key>
+          <Property Name="ProjectTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ProjectName" Type="String" MaxLength="35" FixedLength="false" Unicode="false" />
+          <Property Name="PennDOTFlag" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblPermit_Location_GIS">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="Seq_Num" />
+            <PropertyRef Name="lElementTypeID" />
+            <PropertyRef Name="Element_Id" />
+          </Key>
+          <Property Name="Permit_Number" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Seq_Num" Type="Int16" Nullable="false" />
+          <Property Name="lElementTypeID" Type="Int32" Nullable="false" />
+          <Property Name="Element_Id" Type="Int32" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_tblPermits_tblContact">
+          <End Type="SCBPPSModel.tblContact" Role="tblContact" Multiplicity="0..1" />
+          <End Type="SCBPPSModel.tblPermit" Role="tblPermit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblContact">
+              <PropertyRef Name="ContactId" />
+            </Principal>
+            <Dependent Role="tblPermit">
+              <PropertyRef Name="ContactId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermits_tblDecisions">
+          <End Type="SCBPPSModel.tblDecision" Role="tblDecision" Multiplicity="0..1" />
+          <End Type="SCBPPSModel.tblPermit" Role="tblPermit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDecision">
+              <PropertyRef Name="DecisionID" />
+            </Principal>
+            <Dependent Role="tblPermit">
+              <PropertyRef Name="DecisionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblDistricts_tblDistrictTypes">
+          <End Type="SCBPPSModel.tblDistrictType" Role="tblDistrictType" Multiplicity="1" />
+          <End Type="SCBPPSModel.tblDistrict" Role="tblDistrict" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDistrictType">
+              <PropertyRef Name="DistrictTypeID" />
+            </Principal>
+            <Dependent Role="tblDistrict">
+              <PropertyRef Name="Di_DistrictTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_Districts_tblDistricts">
+          <End Type="SCBPPSModel.tblDistrict" Role="tblDistrict" Multiplicity="0..1" />
+          <End Type="SCBPPSModel.tblPermit_Districts" Role="tblPermit_Districts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDistrict">
+              <PropertyRef Name="DistrictID" />
+            </Principal>
+            <Dependent Role="tblPermit_Districts">
+              <PropertyRef Name="DistrictId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermits_tblOwner">
+          <End Type="SCBPPSModel.tblOwner" Role="tblOwner" Multiplicity="0..1" />
+          <End Type="SCBPPSModel.tblPermit" Role="tblPermit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblOwner">
+              <PropertyRef Name="OwnerId" />
+            </Principal>
+            <Dependent Role="tblPermit">
+              <PropertyRef Name="OwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_CCs_tblPermits">
+          <End Type="SCBPPSModel.tblPermit" Role="tblPermit" Multiplicity="1" />
+          <End Type="SCBPPSModel.tblPermit_CCs" Role="tblPermit_CCs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermit">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="tblPermit_CCs">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_Districts_tblPermits">
+          <End Type="SCBPPSModel.tblPermit" Role="tblPermit" Multiplicity="1" />
+          <End Type="SCBPPSModel.tblPermit_Districts" Role="tblPermit_Districts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermit">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="tblPermit_Districts">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_Encroachment_tblPermits">
+          <End Type="SCBPPSModel.tblPermit" Role="tblPermit" Multiplicity="1" />
+          <End Type="SCBPPSModel.tblPermit_Encroachment" Role="tblPermit_Encroachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermit">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="tblPermit_Encroachment">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_Locations_tblPermits">
+          <End Type="SCBPPSModel.tblPermit" Role="tblPermit" Multiplicity="1" />
+          <End Type="SCBPPSModel.tblPermit_Locations" Role="tblPermit_Locations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermit">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="tblPermit_Locations">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_Reasons_tblPermits">
+          <End Type="SCBPPSModel.tblPermit" Role="tblPermit" Multiplicity="1" />
+          <End Type="SCBPPSModel.tblPermit_Reasons" Role="tblPermit_Reasons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermit">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="tblPermit_Reasons">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_Remarks_tblPermits">
+          <End Type="SCBPPSModel.tblPermit" Role="tblPermit" Multiplicity="1" />
+          <End Type="SCBPPSModel.tblPermit_Remarks" Role="tblPermit_Remarks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermit">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="tblPermit_Remarks">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermits_tblPermitTypes">
+          <End Type="SCBPPSModel.tblPermitType" Role="tblPermitType" Multiplicity="0..1" />
+          <End Type="SCBPPSModel.tblPermit" Role="tblPermit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermitType">
+              <PropertyRef Name="PermitTypeID" />
+            </Principal>
+            <Dependent Role="tblPermit">
+              <PropertyRef Name="PermitTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="tblCompany">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+          </Key>
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyTypeId" Type="Int16" />
+          <Property Name="Philadelphia_TaxId" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="PostalCode" Type="String" MaxLength="9" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Website" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="Subdivision_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RecCreateUserId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="RecCreateDate" Type="DateTime" Precision="3" />
+          <Property Name="RecEditUserId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="RecEditDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="tblCompanyType">
+          <Key>
+            <PropertyRef Name="CompanyTypeID" />
+            <PropertyRef Name="CompanyTypeName" />
+          </Key>
+          <Property Name="CompanyTypeID" Type="Int16" Nullable="false" />
+          <Property Name="CompanyTypeName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OT_Description" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tblStatusCode">
+          <Key>
+            <PropertyRef Name="status_code_id" />
+            <PropertyRef Name="status_code_description" />
+            <PropertyRef Name="timestamp" />
+          </Key>
+          <Property Name="status_code_id" Type="Int32" Nullable="false" />
+          <Property Name="status_code_description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="active" Type="Boolean" />
+          <Property Name="last_activity_date" Type="DateTime" Precision="3" />
+          <Property Name="timestamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblContacts" Relationship="SCBPPSModel.ContactRoles" FromRole="Role" ToRole="tblContact" />
+        </EntityType>
+        <Association Name="ContactRoles">
+          <End Type="SCBPPSModel.Role" Role="Role" Multiplicity="*" />
+          <End Type="SCBPPSModel.tblContact" Role="tblContact" Multiplicity="*" />
+        </Association>
+        <EntityType Name="tblOccupancyType">
+          <Key>
+            <PropertyRef Name="OccupancyTypeID" />
+          </Key>
+          <Property Name="OccupancyTypeID" Type="Int16" Nullable="false" />
+          <Property Name="OccupancyTypeName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="OT_Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="OT_DisplayColor" Type="Int32" />
+        </EntityType>
+        <EntityType Name="tblEncroachmentType">
+          <Key>
+            <PropertyRef Name="EncroachmentTypeID" />
+          </Key>
+          <Property Name="EncroachmentTypeID" Type="Int32" Nullable="false" />
+          <Property Name="EncroachmentTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Fields_Needed" Type="String" MaxLength="6" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tblStreet">
+          <Key>
+            <PropertyRef Name="SEG_ID" />
+          </Key>
+          <Property Name="FNODE_" Type="Int32" />
+          <Property Name="TNODE_" Type="Int32" />
+          <Property Name="LPOLY_" Type="Double" />
+          <Property Name="RPOLY_" Type="Double" />
+          <Property Name="LENGTH" Type="Double" />
+          <Property Name="STCL2_" Type="Double" />
+          <Property Name="STCL2_ID" Type="Double" />
+          <Property Name="PRE_DIR" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="ST_NAME" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ST_TYPE" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="SUF_DIR" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="ZIP_LEFT" Type="Double" />
+          <Property Name="ZIP_RIGHT" Type="Double" />
+          <Property Name="L_F_ADD" Type="Double" />
+          <Property Name="L_T_ADD" Type="Double" />
+          <Property Name="R_F_ADD" Type="Double" />
+          <Property Name="R_T_ADD" Type="Double" />
+          <Property Name="ST_CODE" Type="Int32" />
+          <Property Name="L_HUNDRED" Type="Double" />
+          <Property Name="R_HUNDRED" Type="Double" />
+          <Property Name="SEG_ID" Type="Int32" Nullable="false" />
+          <Property Name="ONEWAY" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="CLASS" Type="Double" />
+          <Property Name="RESPONSIBL" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="UPDATE" Type="DateTime" Precision="3" />
+          <Property Name="NEWSEGDATE" Type="DateTime" Precision="3" />
+          <Property Name="MULTI_REP" Type="Double" />
+          <Property Name="STNAME" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tblNode">
+          <Key>
+            <PropertyRef Name="NODE_ID" />
+          </Key>
+          <Property Name="ARC_" Type="Double" />
+          <Property Name="STREETCL_" Type="Int32" />
+          <Property Name="STREETCL_I" Type="Double" />
+          <Property Name="NODE_ID" Type="Int32" Nullable="false" />
+          <Property Name="INT_ID" Type="Double" />
+          <Property Name="UPDATE" Type="DateTime" Precision="0" />
+          <Property Name="INTERSECTI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="X_COORD" Type="Double" />
+          <Property Name="Y_COORD" Type="Double" />
+        </EntityType>
+        <EntityType Name="Document">
+          <Key>
+            <PropertyRef Name="DocumentId" />
+          </Key>
+          <Property Name="DocumentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentShortDescription" Type="String" MaxLength="126" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentLongDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblPermits" Relationship="SCBPPSModel.PermitDocuments" FromRole="Document" ToRole="tblPermit" />
+        </EntityType>
+        <Association Name="PermitDocuments">
+          <End Type="SCBPPSModel.Document" Role="Document" Multiplicity="*" />
+          <End Type="SCBPPSModel.tblPermit" Role="tblPermit" Multiplicity="*" />
+        </Association>
+        <EntityType Name="UserToken">
+          <Key>
+            <PropertyRef Name="EmailAddress" />
+            <PropertyRef Name="CompanyId" />
+            <PropertyRef Name="Token" />
+          </Key>
+          <Property Name="EmailAddress" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Token" Type="String" Nullable="false" MaxLength="126" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedUtc" Type="DateTime" Precision="7" Nullable="false" />
+          <Property Name="UpdatedUtc" Type="DateTime" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblPermit_References">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="Seq_Num" />
+          </Key>
+          <Property Name="Permit_Number" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Seq_Num" Type="Int16" Nullable="false" />
+          <Property Name="ReferenceTypeID" Type="Int32" />
+          <Property Name="ReferenceValue" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblPermit" Relationship="SCBPPSModel.FK_tblPermit_References_tblPermits" FromRole="tblPermit_References" ToRole="tblPermit" />
+          <NavigationProperty Name="tblReferenceType" Relationship="SCBPPSModel.FK_tblPermit_References_tblReferenceTypes" FromRole="tblPermit_References" ToRole="tblReferenceType" />
+        </EntityType>
+        <EntityType Name="tblReferenceType">
+          <Key>
+            <PropertyRef Name="ReferenceTypeID" />
+          </Key>
+          <Property Name="ReferenceTypeID" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceTypeName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReferenceTypeAbbrev" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblPermit_References" Relationship="SCBPPSModel.FK_tblPermit_References_tblReferenceTypes" FromRole="tblReferenceType" ToRole="tblPermit_References" />
+        </EntityType>
+        <Association Name="FK_tblPermit_References_tblPermits">
+          <End Type="SCBPPSModel.tblPermit" Role="tblPermit" Multiplicity="1" />
+          <End Type="SCBPPSModel.tblPermit_References" Role="tblPermit_References" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermit">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="tblPermit_References">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPermit_References_tblReferenceTypes">
+          <End Type="SCBPPSModel.tblReferenceType" Role="tblReferenceType" Multiplicity="0..1" />
+          <End Type="SCBPPSModel.tblPermit_References" Role="tblPermit_References" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblReferenceType">
+              <PropertyRef Name="ReferenceTypeID" />
+            </Principal>
+            <Dependent Role="tblPermit_References">
+              <PropertyRef Name="ReferenceTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="STREETCL_NODE">
+          <Key>
+            <PropertyRef Name="OBJECTID" />
+          </Key>
+          <Property Name="OBJECTID" Type="Int32" Nullable="false" />
+          <Property Name="Shape" Type="Geometry" />
+          <Property Name="ARC_" Type="Int32" />
+          <Property Name="STREETCL_" Type="Int32" />
+          <Property Name="STREETCL_ID" Type="Int32" />
+          <Property Name="NODE_ID" Type="Int32" />
+          <Property Name="INT_ID" Type="Int32" />
+          <Property Name="UPDATE_" Type="DateTime" Precision="3" />
+          <Property Name="INTERSECTION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FacilityId" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="WarrantyDate" Type="DateTime" Precision="3" />
+          <Property Name="Condition" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ConditionDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="tblPermit_Extensions">
+          <Key>
+            <PropertyRef Name="Permit_Number" />
+            <PropertyRef Name="Seq_Num" />
+          </Key>
+          <Property Name="Permit_Number" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Seq_Num" Type="Int32" Nullable="false" />
+          <Property Name="Init_ExpirationDate" Type="DateTime" Precision="3" />
+          <Property Name="ExpirationDate" Type="DateTime" Precision="3" />
+          <Property Name="Extend_Reason" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="User_Id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="RCDCHGDT" Type="DateTime" Precision="3" />
+          <Property Name="RCDSTATUS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="tblPermit" Relationship="SCBPPSModel.FK_tblPermit_Extensions_tblPermits" FromRole="tblPermit_Extensions" ToRole="tblPermit" />
+        </EntityType>
+        <EntityType Name="tblPermit_Fees">
+          <Key>
+            <PropertyRef Name="FeeTypeID" />
+          </Key>
+          <Property Name="FeeTypeID" Type="Int16" Nullable="false" />
+          <Property Name="FeeTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HighTrafficArea" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Minimum____" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Minimum___s_" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Minimum___t_" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Rate____" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Rate___s_" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Rate___t_" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Maximum____" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Maximum___s_" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Maximum___t_" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Duration____" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Duration____1" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="Duration__t_" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Unit__s_" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Unit__t_" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="tblSpecialNode">
+          <Key>
+            <PropertyRef Name="NODE_ID" />
+          </Key>
+          <Property Name="NODE_ID" Type="Int32" Nullable="false" />
+          <Property Name="TYPE" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="Primary_StCode" Type="Int32" />
+          <Property Name="Primary_ST_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Secondary_StCode" Type="Int32" />
+          <Property Name="Secondary_ST_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="STREETCL_ARC">
+          <Key>
+            <PropertyRef Name="OBJECTID" />
+          </Key>
+          <Property Name="OBJECTID" Type="Int32" Nullable="false" />
+          <Property Name="FNODE_" Type="Int32" />
+          <Property Name="TNODE_" Type="Int32" />
+          <Property Name="LPOLY_" Type="Int32" />
+          <Property Name="RPOLY_" Type="Int32" />
+          <Property Name="LENGTH" Type="Decimal" Precision="38" Scale="8" />
+          <Property Name="STREETCL_" Type="Int32" />
+          <Property Name="STREETCL_ID" Type="Int32" />
+          <Property Name="PRE_DIR" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="ST_NAME" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ST_TYPE" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="SUF_DIR" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="ZIP_LEFT" Type="Int32" />
+          <Property Name="ZIP_RIGHT" Type="Int32" />
+          <Property Name="L_F_ADD" Type="Int32" />
+          <Property Name="L_T_ADD" Type="Int32" />
+          <Property Name="R_F_ADD" Type="Int32" />
+          <Property Name="R_T_ADD" Type="Int32" />
+          <Property Name="ST_CODE" Type="Int32" />
+          <Property Name="L_HUNDRED" Type="Int32" />
+          <Property Name="R_HUNDRED" Type="Int32" />
+          <Property Name="SEG_ID" Type="Int32" />
+          <Property Name="ONEWAY" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="CLASS" Type="Int16" />
+          <Property Name="RESPONSIBILITY" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="UPDATE_" Type="DateTime" Precision="3" />
+          <Property Name="NEWSEGDATE" Type="DateTime" Precision="3" />
+          <Property Name="MULTI_REP" Type="Int16" />
+          <Property Name="ADDSTCODE" Type="String" MaxLength="29" FixedLength="false" Unicode="true" />
+          <Property Name="STNAME" Type="String" MaxLength="41" FixedLength="false" Unicode="true" />
+          <Property Name="Shape" Type="Geometry" />
+          <Property Name="FacilityId" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="WarrantyDate" Type="DateTime" Precision="3" />
+          <Property Name="Condition" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ConditionDate" Type="DateTime" Precision="3" />
+          <Property Name="fnode" Type="Int32" />
+          <Property Name="tnode" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_tblPermit_Extensions_tblPermits">
+          <End Type="SCBPPSModel.tblPermit" Role="tblPermit" Multiplicity="1" />
+          <End Type="SCBPPSModel.tblPermit_Extensions" Role="tblPermit_Extensions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermit">
+              <PropertyRef Name="Permit_Number" />
+            </Principal>
+            <Dependent Role="tblPermit_Extensions">
+              <PropertyRef Name="Permit_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="Get_CrossStreetsAndOnStreetSegIDsFromStCode2_Result">
+          <Property Type="Int32" Name="St_Code" Nullable="true" />
+          <Property Type="String" Name="StName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="NodeOrder" Nullable="true" />
+          <Property Type="Int32" Name="NodeID" Nullable="true" />
+          <Property Type="String" Name="Pre_Dir" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="St_Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="St_Type" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="Suf_Dir" Nullable="true" MaxLength="5" />
+          <Property Type="Int32" Name="Seg_ID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="Get_CrossStreetsFromStCode_new_Result">
+          <Property Type="Int32" Name="St_Code" Nullable="true" />
+          <Property Type="String" Name="st_name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="St_Order" Nullable="true" MaxLength="44" />
+          <Property Type="Int32" Name="NodeOrder" Nullable="true" />
+          <Property Type="String" Name="Pre_Dir" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="St_Type" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="Suf_Dir" Nullable="true" MaxLength="5" />
+        </ComplexType>
+        <ComplexType Name="get_OnStreetElementsBetweenOrderedPair_Result">
+          <Property Type="Int32" Name="ElementTypeId" Nullable="false" />
+          <Property Type="Int32" Name="ElementId" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="OrderedNodesOnStcode_Result">
+          <Property Type="Int32" Name="NodeOrder" Nullable="true" />
+          <Property Type="Int32" Name="NodeID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="Sp_AllStreets_Result">
+          <Property Type="Int32" Name="ST_CODE" Nullable="true" />
+          <Property Type="String" Name="ST_NAME" Nullable="true" MaxLength="44" />
+          <Property Type="String" Name="ST_ORDER" Nullable="true" MaxLength="43" />
+          <Property Type="String" Name="NAME" Nullable="true" MaxLength="35" />
+          <Property Type="String" Name="PRE_DIR" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="TYPE" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="SUF_DIR" Nullable="true" MaxLength="5" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SCBPPSModelStoreContainer" CdmEntityContainer="SCBPPSEntities">
+          <EntitySetMapping Name="tblContacts">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblContact">
+              <MappingFragment StoreEntitySet="tblContact">
+                <ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
+                <ScalarProperty Name="SecurityTokenCreateDate" ColumnName="SecurityTokenCreateDate" />
+                <ScalarProperty Name="SecurityToken" ColumnName="SecurityToken" />
+                <ScalarProperty Name="RecEditDate" ColumnName="RecEditDate" />
+                <ScalarProperty Name="RecEditUserId" ColumnName="RecEditUserId" />
+                <ScalarProperty Name="RecCreateDate" ColumnName="RecCreateDate" />
+                <ScalarProperty Name="RecCreateUserId" ColumnName="RecCreateUserId" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="EMailAddress" ColumnName="EMailAddress" />
+                <ScalarProperty Name="Cell_Phone" ColumnName="Cell_Phone" />
+                <ScalarProperty Name="Pager_PIN" ColumnName="Pager_PIN" />
+                <ScalarProperty Name="Pager" ColumnName="Pager" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Ext" ColumnName="Ext" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="ContactId" ColumnName="ContactId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblDecisions">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblDecision">
+              <MappingFragment StoreEntitySet="tblDecisions">
+                <ScalarProperty Name="DefaultSetting" ColumnName="DefaultSetting" />
+                <ScalarProperty Name="RequireReason" ColumnName="RequireReason" />
+                <ScalarProperty Name="DecisionName" ColumnName="DecisionName" />
+                <ScalarProperty Name="DecisionID" ColumnName="DecisionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblDistrictRegions">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblDistrictRegion">
+              <MappingFragment StoreEntitySet="tblDistrictRegions">
+                <ScalarProperty Name="DistrictOfficeId" ColumnName="DistrictOfficeId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DistrictRegionId" ColumnName="DistrictRegionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblDistricts">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblDistrict">
+              <MappingFragment StoreEntitySet="tblDistricts">
+                <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+                <ScalarProperty Name="Di_RegionId" ColumnName="Di_RegionId" />
+                <ScalarProperty Name="Di_PostalCode" ColumnName="Di_PostalCode" />
+                <ScalarProperty Name="Di_Address" ColumnName="Di_Address" />
+                <ScalarProperty Name="Di_Fax" ColumnName="Di_Fax" />
+                <ScalarProperty Name="Di_Phone" ColumnName="Di_Phone" />
+                <ScalarProperty Name="Di_ManagerTitle" ColumnName="Di_ManagerTitle" />
+                <ScalarProperty Name="Di_ManagerName" ColumnName="Di_ManagerName" />
+                <ScalarProperty Name="Di_DistrictTypeID" ColumnName="Di_DistrictTypeID" />
+                <ScalarProperty Name="DistrictName" ColumnName="DistrictName" />
+                <ScalarProperty Name="DistrictID" ColumnName="DistrictID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblDistrictTypes">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblDistrictType">
+              <MappingFragment StoreEntitySet="tblDistrictTypes">
+                <ScalarProperty Name="boundary_type_id" ColumnName="boundary_type_id" />
+                <ScalarProperty Name="DT_Description" ColumnName="DT_Description" />
+                <ScalarProperty Name="DistrictTypeAbbrev" ColumnName="DistrictTypeAbbrev" />
+                <ScalarProperty Name="DistrictTypeName" ColumnName="DistrictTypeName" />
+                <ScalarProperty Name="DistrictTypeID" ColumnName="DistrictTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblOwners">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblOwner">
+              <MappingFragment StoreEntitySet="tblOwner">
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPermit_CCs">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblPermit_CCs">
+              <MappingFragment StoreEntitySet="tblPermit_CCs">
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="CarbonCopyName" ColumnName="CarbonCopyName" />
+                <ScalarProperty Name="Seq_Num" ColumnName="Seq_Num" />
+                <ScalarProperty Name="Permit_Number" ColumnName="Permit_Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPermit_Districts">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblPermit_Districts">
+              <MappingFragment StoreEntitySet="tblPermit_Districts">
+                <ScalarProperty Name="DistrictId" ColumnName="DistrictId" />
+                <ScalarProperty Name="Seq_Num" ColumnName="Seq_Num" />
+                <ScalarProperty Name="Permit_Number" ColumnName="Permit_Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPermit_Encroachment">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblPermit_Encroachment">
+              <MappingFragment StoreEntitySet="tblPermit_Encroachment">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ProviderId" ColumnName="ProviderId" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="Width" ColumnName="Width" />
+                <ScalarProperty Name="Length" ColumnName="Length" />
+                <ScalarProperty Name="EncroachmentTypeID" ColumnName="EncroachmentTypeID" />
+                <ScalarProperty Name="Seq_Num" ColumnName="Seq_Num" />
+                <ScalarProperty Name="Permit_Number" ColumnName="Permit_Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPermit_Locations">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblPermit_Locations">
+              <MappingFragment StoreEntitySet="tblPermit_Locations">
+                <ScalarProperty Name="ReferenceValue" ColumnName="ReferenceValue" />
+                <ScalarProperty Name="ReferenceTypeID" ColumnName="ReferenceTypeID" />
+                <ScalarProperty Name="sHighTrafficArea" ColumnName="sHighTrafficArea" />
+                <ScalarProperty Name="sToActual" ColumnName="sToActual" />
+                <ScalarProperty Name="sFromActual" ColumnName="sFromActual" />
+                <ScalarProperty Name="sOnActual" ColumnName="sOnActual" />
+                <ScalarProperty Name="ToSTCODE" ColumnName="ToSTCODE" />
+                <ScalarProperty Name="FromSTCODE" ColumnName="FromSTCODE" />
+                <ScalarProperty Name="OnSTCODE" ColumnName="OnSTCODE" />
+                <ScalarProperty Name="OccupancyTypeID" ColumnName="OccupancyTypeID" />
+                <ScalarProperty Name="Seq_Num" ColumnName="Seq_Num" />
+                <ScalarProperty Name="Permit_Number" ColumnName="Permit_Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPermit_Reasons">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblPermit_Reasons">
+              <MappingFragment StoreEntitySet="tblPermit_Reasons">
+                <ScalarProperty Name="RecDate" ColumnName="RecDate" />
+                <ScalarProperty Name="RecUserid" ColumnName="RecUserid" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="Seq_Num" ColumnName="Seq_Num" />
+                <ScalarProperty Name="DecisionId" ColumnName="DecisionId" />
+                <ScalarProperty Name="Permit_Number" ColumnName="Permit_Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPermit_Remarks">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblPermit_Remarks">
+              <MappingFragment StoreEntitySet="tblPermit_Remarks">
+                <ScalarProperty Name="RemarkID" ColumnName="RemarkID" />
+                <ScalarProperty Name="Seq_Num" ColumnName="Seq_Num" />
+                <ScalarProperty Name="Permit_Number" ColumnName="Permit_Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPermitAudits">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblPermitAudit">
+              <MappingFragment StoreEntitySet="tblPermitAudit">
+                <ScalarProperty Name="Permit_DateTime" ColumnName="Permit_DateTime" />
+                <ScalarProperty Name="Permit_UserId" ColumnName="Permit_UserId" />
+                <ScalarProperty Name="DecisionId" ColumnName="DecisionId" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Purpose" ColumnName="Purpose" />
+                <ScalarProperty Name="TimeText" ColumnName="TimeText" />
+                <ScalarProperty Name="GrantedToText" ColumnName="GrantedToText" />
+                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="RecTimeStamp" ColumnName="RecTimeStamp" />
+                <ScalarProperty Name="Permit_Number" ColumnName="Permit_Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPermits">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblPermit">
+              <MappingFragment StoreEntitySet="tblPermits">
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Company_Name" ColumnName="Company_Name" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Contact_Last_Name" ColumnName="Contact_Last_Name" />
+                <ScalarProperty Name="Contact_Mid_Name" ColumnName="Contact_Mid_Name" />
+                <ScalarProperty Name="Contact_First_Name" ColumnName="Contact_First_Name" />
+                <ScalarProperty Name="Rec_DateTime" ColumnName="Rec_DateTime" />
+                <ScalarProperty Name="Rec_UserId" ColumnName="Rec_UserId" />
+                <ScalarProperty Name="TNPDate" ColumnName="TNPDate" />
+                <ScalarProperty Name="ProjectType" ColumnName="ProjectType" />
+                <ScalarProperty Name="InspectorStopDate" ColumnName="InspectorStopDate" />
+                <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
+                <ScalarProperty Name="DecisionId" ColumnName="DecisionId" />
+                <ScalarProperty Name="AuthorizedSignatureId" ColumnName="AuthorizedSignatureId" />
+                <ScalarProperty Name="IssueDate" ColumnName="IssueDate" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Purpose" ColumnName="Purpose" />
+                <ScalarProperty Name="NightPermit" ColumnName="NightPermit" />
+                <ScalarProperty Name="TimeText" ColumnName="TimeText" />
+                <ScalarProperty Name="GrantedToText" ColumnName="GrantedToText" />
+                <ScalarProperty Name="ContactId" ColumnName="ContactId" />
+                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="ApplicationDate" ColumnName="ApplicationDate" />
+                <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
+                <ScalarProperty Name="PermitTypeId" ColumnName="PermitTypeId" />
+                <ScalarProperty Name="Permit_Number" ColumnName="Permit_Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPermitTypes">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblPermitType">
+              <MappingFragment StoreEntitySet="tblPermitTypes">
+                <ScalarProperty Name="EncroachmentRequired" ColumnName="EncroachmentRequired" />
+                <ScalarProperty Name="PermitTypeAbbrev" ColumnName="PermitTypeAbbrev" />
+                <ScalarProperty Name="PermitTypeName" ColumnName="PermitTypeName" />
+                <ScalarProperty Name="PermitTypeID" ColumnName="PermitTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblProjectTypes">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblProjectType">
+              <MappingFragment StoreEntitySet="tblProjectTypes">
+                <ScalarProperty Name="PennDOTFlag" ColumnName="PennDOTFlag" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+                <ScalarProperty Name="ProjectTypeId" ColumnName="ProjectTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPermit_Location_GIS">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblPermit_Location_GIS">
+              <MappingFragment StoreEntitySet="tblPermit_Location_GIS">
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Element_Id" ColumnName="Element_Id" />
+                <ScalarProperty Name="lElementTypeID" ColumnName="lElementTypeID" />
+                <ScalarProperty Name="Seq_Num" ColumnName="Seq_Num" />
+                <ScalarProperty Name="Permit_Number" ColumnName="Permit_Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblCompanies">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblCompany">
+              <MappingFragment StoreEntitySet="tblCompany">
+                <ScalarProperty Name="RecEditDate" ColumnName="RecEditDate" />
+                <ScalarProperty Name="RecEditUserId" ColumnName="RecEditUserId" />
+                <ScalarProperty Name="RecCreateDate" ColumnName="RecCreateDate" />
+                <ScalarProperty Name="RecCreateUserId" ColumnName="RecCreateUserId" />
+                <ScalarProperty Name="Subdivision_Name" ColumnName="Subdivision_Name" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address3" ColumnName="Address3" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Philadelphia_TaxId" ColumnName="Philadelphia_TaxId" />
+                <ScalarProperty Name="CompanyTypeId" ColumnName="CompanyTypeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblCompanyTypes">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblCompanyType">
+              <MappingFragment StoreEntitySet="tblCompanyTypes">
+                <ScalarProperty Name="OT_Description" ColumnName="OT_Description" />
+                <ScalarProperty Name="CompanyTypeName" ColumnName="CompanyTypeName" />
+                <ScalarProperty Name="CompanyTypeID" ColumnName="CompanyTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblStatusCodes">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblStatusCode">
+              <MappingFragment StoreEntitySet="tblStatusCodes">
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="last_activity_date" ColumnName="last_activity_date" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="status_code_description" ColumnName="status_code_description" />
+                <ScalarProperty Name="status_code_id" ColumnName="status_code_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="SCBPPSModel.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ContactRoles" TypeName="SCBPPSModel.ContactRoles" StoreEntitySet="ContactRoles">
+            <EndProperty Name="tblContact">
+              <ScalarProperty Name="ContactId" ColumnName="ContactId" />
+            </EndProperty>
+            <EndProperty Name="Role">
+              <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="tblOccupancyTypes">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblOccupancyType">
+              <MappingFragment StoreEntitySet="tblOccupancyTypes">
+                <ScalarProperty Name="OT_DisplayColor" ColumnName="OT_DisplayColor" />
+                <ScalarProperty Name="OT_Description" ColumnName="OT_Description" />
+                <ScalarProperty Name="OccupancyTypeName" ColumnName="OccupancyTypeName" />
+                <ScalarProperty Name="OccupancyTypeID" ColumnName="OccupancyTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblEncroachmentTypes">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblEncroachmentType">
+              <MappingFragment StoreEntitySet="tblEncroachmentTypes">
+                <ScalarProperty Name="Fields_Needed" ColumnName="Fields_Needed" />
+                <ScalarProperty Name="EncroachmentTypeName" ColumnName="EncroachmentTypeName" />
+                <ScalarProperty Name="EncroachmentTypeID" ColumnName="EncroachmentTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblStreets">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblStreet">
+              <MappingFragment StoreEntitySet="tblStreets">
+                <ScalarProperty Name="STNAME" ColumnName="STNAME" />
+                <ScalarProperty Name="MULTI_REP" ColumnName="MULTI_REP" />
+                <ScalarProperty Name="NEWSEGDATE" ColumnName="NEWSEGDATE" />
+                <ScalarProperty Name="UPDATE" ColumnName="UPDATE" />
+                <ScalarProperty Name="RESPONSIBL" ColumnName="RESPONSIBL" />
+                <ScalarProperty Name="CLASS" ColumnName="CLASS" />
+                <ScalarProperty Name="ONEWAY" ColumnName="ONEWAY" />
+                <ScalarProperty Name="SEG_ID" ColumnName="SEG_ID" />
+                <ScalarProperty Name="R_HUNDRED" ColumnName="R_HUNDRED" />
+                <ScalarProperty Name="L_HUNDRED" ColumnName="L_HUNDRED" />
+                <ScalarProperty Name="ST_CODE" ColumnName="ST_CODE" />
+                <ScalarProperty Name="R_T_ADD" ColumnName="R_T_ADD" />
+                <ScalarProperty Name="R_F_ADD" ColumnName="R_F_ADD" />
+                <ScalarProperty Name="L_T_ADD" ColumnName="L_T_ADD" />
+                <ScalarProperty Name="L_F_ADD" ColumnName="L_F_ADD" />
+                <ScalarProperty Name="ZIP_RIGHT" ColumnName="ZIP_RIGHT" />
+                <ScalarProperty Name="ZIP_LEFT" ColumnName="ZIP_LEFT" />
+                <ScalarProperty Name="SUF_DIR" ColumnName="SUF_DIR" />
+                <ScalarProperty Name="ST_TYPE" ColumnName="ST_TYPE" />
+                <ScalarProperty Name="ST_NAME" ColumnName="ST_NAME" />
+                <ScalarProperty Name="PRE_DIR" ColumnName="PRE_DIR" />
+                <ScalarProperty Name="STCL2_ID" ColumnName="STCL2_ID" />
+                <ScalarProperty Name="STCL2_" ColumnName="STCL2_" />
+                <ScalarProperty Name="LENGTH" ColumnName="LENGTH" />
+                <ScalarProperty Name="RPOLY_" ColumnName="RPOLY_" />
+                <ScalarProperty Name="LPOLY_" ColumnName="LPOLY_" />
+                <ScalarProperty Name="TNODE_" ColumnName="TNODE_" />
+                <ScalarProperty Name="FNODE_" ColumnName="FNODE_" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblNodes">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblNode">
+              <MappingFragment StoreEntitySet="tblNodes">
+                <ScalarProperty Name="Y_COORD" ColumnName="Y_COORD" />
+                <ScalarProperty Name="X_COORD" ColumnName="X_COORD" />
+                <ScalarProperty Name="INTERSECTI" ColumnName="INTERSECTI" />
+                <ScalarProperty Name="UPDATE" ColumnName="UPDATE" />
+                <ScalarProperty Name="INT_ID" ColumnName="INT_ID" />
+                <ScalarProperty Name="NODE_ID" ColumnName="NODE_ID" />
+                <ScalarProperty Name="STREETCL_I" ColumnName="STREETCL_I" />
+                <ScalarProperty Name="STREETCL_" ColumnName="STREETCL_" />
+                <ScalarProperty Name="ARC_" ColumnName="ARC_" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Documents">
+            <EntityTypeMapping TypeName="SCBPPSModel.Document">
+              <MappingFragment StoreEntitySet="Documents">
+                <ScalarProperty Name="DocumentLongDescription" ColumnName="DocumentLongDescription" />
+                <ScalarProperty Name="DocumentShortDescription" ColumnName="DocumentShortDescription" />
+                <ScalarProperty Name="DocumentName" ColumnName="DocumentName" />
+                <ScalarProperty Name="DocumentId" ColumnName="DocumentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="PermitDocuments" TypeName="SCBPPSModel.PermitDocuments" StoreEntitySet="PermitDocuments">
+            <EndProperty Name="tblPermit">
+              <ScalarProperty Name="Permit_Number" ColumnName="Permit_Number" />
+            </EndProperty>
+            <EndProperty Name="Document">
+              <ScalarProperty Name="DocumentId" ColumnName="DocumentId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="UserTokens">
+            <EntityTypeMapping TypeName="SCBPPSModel.UserToken">
+              <MappingFragment StoreEntitySet="UserTokens">
+                <ScalarProperty Name="UpdatedUtc" ColumnName="UpdatedUtc" />
+                <ScalarProperty Name="CreatedUtc" ColumnName="CreatedUtc" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPermit_References">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblPermit_References">
+              <MappingFragment StoreEntitySet="tblPermit_References">
+                <ScalarProperty Name="ReferenceValue" ColumnName="ReferenceValue" />
+                <ScalarProperty Name="ReferenceTypeID" ColumnName="ReferenceTypeID" />
+                <ScalarProperty Name="Seq_Num" ColumnName="Seq_Num" />
+                <ScalarProperty Name="Permit_Number" ColumnName="Permit_Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblReferenceTypes">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblReferenceType">
+              <MappingFragment StoreEntitySet="tblReferenceTypes">
+                <ScalarProperty Name="ReferenceTypeAbbrev" ColumnName="ReferenceTypeAbbrev" />
+                <ScalarProperty Name="ReferenceTypeName" ColumnName="ReferenceTypeName" />
+                <ScalarProperty Name="ReferenceTypeID" ColumnName="ReferenceTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="STREETCL_NODE">
+            <EntityTypeMapping TypeName="SCBPPSModel.STREETCL_NODE">
+              <MappingFragment StoreEntitySet="STREETCL_NODE">
+                <ScalarProperty Name="ConditionDate" ColumnName="ConditionDate" />
+                <ScalarProperty Name="Condition" ColumnName="Condition" />
+                <ScalarProperty Name="WarrantyDate" ColumnName="WarrantyDate" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="FacilityId" ColumnName="FacilityId" />
+                <ScalarProperty Name="INTERSECTION" ColumnName="INTERSECTION" />
+                <ScalarProperty Name="UPDATE_" ColumnName="UPDATE_" />
+                <ScalarProperty Name="INT_ID" ColumnName="INT_ID" />
+                <ScalarProperty Name="NODE_ID" ColumnName="NODE_ID" />
+                <ScalarProperty Name="STREETCL_ID" ColumnName="STREETCL_ID" />
+                <ScalarProperty Name="STREETCL_" ColumnName="STREETCL_" />
+                <ScalarProperty Name="ARC_" ColumnName="ARC_" />
+                <ScalarProperty Name="Shape" ColumnName="Shape" />
+                <ScalarProperty Name="OBJECTID" ColumnName="OBJECTID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPermit_Extensions">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblPermit_Extensions">
+              <MappingFragment StoreEntitySet="tblPermit_Extensions">
+                <ScalarProperty Name="RCDSTATUS" ColumnName="RCDSTATUS" />
+                <ScalarProperty Name="RCDCHGDT" ColumnName="RCDCHGDT" />
+                <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+                <ScalarProperty Name="Extend_Reason" ColumnName="Extend_Reason" />
+                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
+                <ScalarProperty Name="Init_ExpirationDate" ColumnName="Init_ExpirationDate" />
+                <ScalarProperty Name="Seq_Num" ColumnName="Seq_Num" />
+                <ScalarProperty Name="Permit_Number" ColumnName="Permit_Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPermit_Fees">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblPermit_Fees">
+              <MappingFragment StoreEntitySet="tblPermit_Fees">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Unit__t_" ColumnName="Unit (t)" />
+                <ScalarProperty Name="Unit__s_" ColumnName="Unit (s)" />
+                <ScalarProperty Name="Duration__t_" ColumnName="Duration (t)" />
+                <ScalarProperty Name="Duration____1" ColumnName="Duration (#)" />
+                <ScalarProperty Name="Duration____" ColumnName="Duration ($)" />
+                <ScalarProperty Name="Maximum___t_" ColumnName="Maximum (/t)" />
+                <ScalarProperty Name="Maximum___s_" ColumnName="Maximum (/s)" />
+                <ScalarProperty Name="Maximum____" ColumnName="Maximum ($)" />
+                <ScalarProperty Name="Rate___t_" ColumnName="Rate (/t)" />
+                <ScalarProperty Name="Rate___s_" ColumnName="Rate (/s)" />
+                <ScalarProperty Name="Rate____" ColumnName="Rate ($)" />
+                <ScalarProperty Name="Minimum___t_" ColumnName="Minimum (/t)" />
+                <ScalarProperty Name="Minimum___s_" ColumnName="Minimum (/s)" />
+                <ScalarProperty Name="Minimum____" ColumnName="Minimum ($)" />
+                <ScalarProperty Name="HighTrafficArea" ColumnName="HighTrafficArea" />
+                <ScalarProperty Name="FeeTypeName" ColumnName="FeeTypeName" />
+                <ScalarProperty Name="FeeTypeID" ColumnName="FeeTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblSpecialNodes">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblSpecialNode">
+              <MappingFragment StoreEntitySet="tblSpecialNodes">
+                <ScalarProperty Name="Secondary_ST_Name" ColumnName="Secondary_ST_Name" />
+                <ScalarProperty Name="Secondary_StCode" ColumnName="Secondary_StCode" />
+                <ScalarProperty Name="Primary_ST_Name" ColumnName="Primary_ST_Name" />
+                <ScalarProperty Name="Primary_StCode" ColumnName="Primary_StCode" />
+                <ScalarProperty Name="TYPE" ColumnName="TYPE" />
+                <ScalarProperty Name="NODE_ID" ColumnName="NODE_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="STREETCL_ARC">
+            <EntityTypeMapping TypeName="SCBPPSModel.STREETCL_ARC">
+              <MappingFragment StoreEntitySet="STREETCL_ARC">
+                <ScalarProperty Name="tnode" ColumnName="tnode" />
+                <ScalarProperty Name="fnode" ColumnName="fnode" />
+                <ScalarProperty Name="ConditionDate" ColumnName="ConditionDate" />
+                <ScalarProperty Name="Condition" ColumnName="Condition" />
+                <ScalarProperty Name="WarrantyDate" ColumnName="WarrantyDate" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="FacilityId" ColumnName="FacilityId" />
+                <ScalarProperty Name="Shape" ColumnName="Shape" />
+                <ScalarProperty Name="STNAME" ColumnName="STNAME" />
+                <ScalarProperty Name="ADDSTCODE" ColumnName="ADDSTCODE" />
+                <ScalarProperty Name="MULTI_REP" ColumnName="MULTI_REP" />
+                <ScalarProperty Name="NEWSEGDATE" ColumnName="NEWSEGDATE" />
+                <ScalarProperty Name="UPDATE_" ColumnName="UPDATE_" />
+                <ScalarProperty Name="RESPONSIBILITY" ColumnName="RESPONSIBILITY" />
+                <ScalarProperty Name="CLASS" ColumnName="CLASS" />
+                <ScalarProperty Name="ONEWAY" ColumnName="ONEWAY" />
+                <ScalarProperty Name="SEG_ID" ColumnName="SEG_ID" />
+                <ScalarProperty Name="R_HUNDRED" ColumnName="R_HUNDRED" />
+                <ScalarProperty Name="L_HUNDRED" ColumnName="L_HUNDRED" />
+                <ScalarProperty Name="ST_CODE" ColumnName="ST_CODE" />
+                <ScalarProperty Name="R_T_ADD" ColumnName="R_T_ADD" />
+                <ScalarProperty Name="R_F_ADD" ColumnName="R_F_ADD" />
+                <ScalarProperty Name="L_T_ADD" ColumnName="L_T_ADD" />
+                <ScalarProperty Name="L_F_ADD" ColumnName="L_F_ADD" />
+                <ScalarProperty Name="ZIP_RIGHT" ColumnName="ZIP_RIGHT" />
+                <ScalarProperty Name="ZIP_LEFT" ColumnName="ZIP_LEFT" />
+                <ScalarProperty Name="SUF_DIR" ColumnName="SUF_DIR" />
+                <ScalarProperty Name="ST_TYPE" ColumnName="ST_TYPE" />
+                <ScalarProperty Name="ST_NAME" ColumnName="ST_NAME" />
+                <ScalarProperty Name="PRE_DIR" ColumnName="PRE_DIR" />
+                <ScalarProperty Name="STREETCL_ID" ColumnName="STREETCL_ID" />
+                <ScalarProperty Name="STREETCL_" ColumnName="STREETCL_" />
+                <ScalarProperty Name="LENGTH" ColumnName="LENGTH" />
+                <ScalarProperty Name="RPOLY_" ColumnName="RPOLY_" />
+                <ScalarProperty Name="LPOLY_" ColumnName="LPOLY_" />
+                <ScalarProperty Name="TNODE_" ColumnName="TNODE_" />
+                <ScalarProperty Name="FNODE_" ColumnName="FNODE_" />
+                <ScalarProperty Name="OBJECTID" ColumnName="OBJECTID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Get_CrossStreetsAndOnStreetSegIDsFromStCode2" FunctionName="SCBPPSModel.Store.Get_CrossStreetsAndOnStreetSegIDsFromStCode2">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SCBPPSModel.Get_CrossStreetsAndOnStreetSegIDsFromStCode2_Result">
+                <ScalarProperty Name="St_Code" ColumnName="St_Code" />
+                <ScalarProperty Name="StName" ColumnName="StName" />
+                <ScalarProperty Name="NodeOrder" ColumnName="NodeOrder" />
+                <ScalarProperty Name="NodeID" ColumnName="NodeID" />
+                <ScalarProperty Name="Pre_Dir" ColumnName="Pre_Dir" />
+                <ScalarProperty Name="St_Name" ColumnName="St_Name" />
+                <ScalarProperty Name="St_Type" ColumnName="St_Type" />
+                <ScalarProperty Name="Suf_Dir" ColumnName="Suf_Dir" />
+                <ScalarProperty Name="Seg_ID" ColumnName="Seg_ID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Get_CrossStreetsFromStCode_new" FunctionName="SCBPPSModel.Store.Get_CrossStreetsFromStCode_new">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SCBPPSModel.Get_CrossStreetsFromStCode_new_Result">
+                <ScalarProperty Name="St_Code" ColumnName="St_Code" />
+                <ScalarProperty Name="st_name" ColumnName="st_name" />
+                <ScalarProperty Name="St_Order" ColumnName="St_Order" />
+                <ScalarProperty Name="NodeOrder" ColumnName="NodeOrder" />
+                <ScalarProperty Name="Pre_Dir" ColumnName="Pre_Dir" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="St_Type" ColumnName="St_Type" />
+                <ScalarProperty Name="Suf_Dir" ColumnName="Suf_Dir" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="get_OnStreetElementsBetweenOrderedPair" FunctionName="SCBPPSModel.Store.get_OnStreetElementsBetweenOrderedPair">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SCBPPSModel.get_OnStreetElementsBetweenOrderedPair_Result">
+                <ScalarProperty Name="ElementTypeId" ColumnName="ElementTypeId" />
+                <ScalarProperty Name="ElementId" ColumnName="ElementId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OrderedNodesOnStcode" FunctionName="SCBPPSModel.Store.OrderedNodesOnStcode">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SCBPPSModel.OrderedNodesOnStcode_Result">
+                <ScalarProperty Name="NodeOrder" ColumnName="NodeOrder" />
+                <ScalarProperty Name="NodeID" ColumnName="NodeID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Sp_AllStreets" FunctionName="SCBPPSModel.Store.Sp_AllStreets">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SCBPPSModel.Sp_AllStreets_Result">
+                <ScalarProperty Name="ST_CODE" ColumnName="ST_CODE" />
+                <ScalarProperty Name="ST_NAME" ColumnName="ST_NAME" />
+                <ScalarProperty Name="ST_ORDER" ColumnName="ST_ORDER" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="PRE_DIR" ColumnName="PRE_DIR" />
+                <ScalarProperty Name="TYPE" ColumnName="TYPE" />
+                <ScalarProperty Name="SUF_DIR" ColumnName="SUF_DIR" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Get_HightrafficArea" FunctionName="SCBPPSModel.Store.sp_Get_HightrafficArea" />
+          <FunctionImportMapping FunctionImportName="sp_SavePermitData" FunctionName="SCBPPSModel.Store.sp_SavePermitData" />
+          <FunctionImportMapping FunctionImportName="sp_SavePermitEncroachment" FunctionName="SCBPPSModel.Store.sp_SavePermitEncroachment" />
+          <FunctionImportMapping FunctionImportName="sp_SavePermitLocations" FunctionName="SCBPPSModel.Store.sp_SavePermitLocations" />
+          <FunctionImportMapping FunctionImportName="sp_SavePermitLocGIS" FunctionName="SCBPPSModel.Store.sp_SavePermitLocGIS" />
+          <FunctionImportMapping FunctionImportName="sp_SavePermitReferences" FunctionName="SCBPPSModel.Store.sp_SavePermitReferences" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
