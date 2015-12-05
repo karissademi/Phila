@@ -30,10 +30,6 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Phila.Web.App.Streets.Closu
 		SlnRelativePath = "Web\App\Streets\Phila.Web.App.Streets.Closures\"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phila.Web.App.Streets", "Web\App\Streets\Phila.Web.App.Streets\Phila.Web.App.Streets.csproj", "{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phila.Web.App.Streets.Tests", "Web\App\Streets\Phila.Web.App.Streets.Tests\Phila.Web.App.Streets.Tests.csproj", "{8F0A8732-16B6-4B84-8B8B-B951F786730E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CityNetDev|Any CPU = CityNetDev|Any CPU
@@ -74,22 +70,6 @@ Global
 		{0A33F518-5E69-4726-A12F-8324EC03E26D}.Dev|Any CPU.Build.0 = Debug|Any CPU
 		{0A33F518-5E69-4726-A12F-8324EC03E26D}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{0A33F518-5E69-4726-A12F-8324EC03E26D}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}.CityNetDev|Any CPU.ActiveCfg = CityNetDev|Any CPU
-		{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}.CityNetDev|Any CPU.Build.0 = CityNetDev|Any CPU
-		{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}.Dev|Any CPU.ActiveCfg = Dev|Any CPU
-		{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}.Dev|Any CPU.Build.0 = Dev|Any CPU
-		{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3AFDD474-9AAE-4E94-AD4B-EF8D3B73919C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8F0A8732-16B6-4B84-8B8B-B951F786730E}.CityNetDev|Any CPU.ActiveCfg = CityNetDev|Any CPU
-		{8F0A8732-16B6-4B84-8B8B-B951F786730E}.CityNetDev|Any CPU.Build.0 = CityNetDev|Any CPU
-		{8F0A8732-16B6-4B84-8B8B-B951F786730E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F0A8732-16B6-4B84-8B8B-B951F786730E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F0A8732-16B6-4B84-8B8B-B951F786730E}.Dev|Any CPU.ActiveCfg = Dev|Any CPU
-		{8F0A8732-16B6-4B84-8B8B-B951F786730E}.Dev|Any CPU.Build.0 = Dev|Any CPU
-		{8F0A8732-16B6-4B84-8B8B-B951F786730E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F0A8732-16B6-4B84-8B8B-B951F786730E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
