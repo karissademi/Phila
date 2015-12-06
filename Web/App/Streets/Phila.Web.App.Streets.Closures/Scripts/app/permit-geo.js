@@ -68,9 +68,9 @@ function createWalkingRoute() {
     directionsManager.resetDirections();
     // Set Route Mode to walking 
     directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.walking });
-    var seattleWaypoint = new Microsoft.Maps.Directions.Waypoint({ address: 'Seattle, WA' });
+    var seattleWaypoint = new Microsoft.Maps.Directions.Waypoint({ address: '1234 Market St, Philadelphia, PA' });
     directionsManager.addWaypoint(seattleWaypoint);
-    var redmondWaypoint = new Microsoft.Maps.Directions.Waypoint({ address: 'Redmond, WA', location: new Microsoft.Maps.Location(47.678561, -122.130993) });
+    var redmondWaypoint = new Microsoft.Maps.Directions.Waypoint({ address: '1401 JFK Blvd, Philadelphia, PA' });
     directionsManager.addWaypoint(redmondWaypoint);
     // Set the element in which the itinerary will be rendered
     //directionsManager.setRenderOptions({ itineraryContainer: document.getElementById('directionsItinerary') });
