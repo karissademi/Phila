@@ -7,6 +7,8 @@
 /// <reference path="../knockout.validation.js" />
 /// <reference path="ko.editable.js" />
 /// <reference path="app-models.js" />
+/// <reference path="permit-geo.js" />
+
 
 
 //**** View Model
@@ -133,7 +135,7 @@ function AppViewModel() {
     self.radioSearchSelectedOptionValue.subscribe(function() { //}(data, event) {
         $("#loading-table").show();
         self.getPermitsForCompany();
-        
+
     });
 
     //*** methods
@@ -427,8 +429,7 @@ function AppViewModel() {
 
             return;
         }
-    }
-
+    };
     self.getToStreets = function(onStreet, fromStreet) {
 
 
@@ -573,7 +574,6 @@ function AppViewModel() {
         /// <summary>
         ///     Gets a list of permits for a company
         /// </summary>
-
         var $loadingIndicator = $('#loading-indicator');
         $loadingIndicator.show();
 
@@ -729,7 +729,7 @@ function AppViewModel() {
         });
     };
 
-    self.resetNewPermitFields = function () {
+    self.resetNewPermitFields = function() {
         self.selectedUtilityOwner(null);
         self.selectedPermitType(null);
         self.selectedProjectTypes.projectTypes([]);
@@ -919,7 +919,7 @@ function AppViewModel() {
         document.body.scrollTop = document.documentElement.scrollTop = 0;
     };
 
-    self.showMainSections = function () {
+    self.showMainSections = function() {
         $("#loading-table").show();
         self.getStatusCodes();
         self.getPermitsForCompany();
@@ -1047,7 +1047,7 @@ function AppViewModel() {
 
     //    return b;
     //};
-    
+
     //self.projectTypesBinToDecimal = function(bin) {
     //    return parseInt(bin, 2);
     //};
@@ -1074,7 +1074,7 @@ function AppViewModel() {
 
             return b;
         },
-        binary2Decimal: function () {
+        binary2Decimal: function() {
             return parseInt(this.toBinary(), 2);
         },
         decimal2Binary: function(dec) {
@@ -1191,13 +1191,22 @@ $(document).ready(function() {
         handles: "e"
     });
 
-    $(document).ajaxStart(function (){
+    $(document).ajaxStart(function() {
         $('.mask').addClass('ajax');
     });
-    $(document).ajaxComplete(function (){
+    $(document).ajaxComplete(function() {
         $('.mask').removeClass('ajax');
     });
+
+    loadMap();
+
 });
+
+
+
+
+
+
 
 getUrlParameter = function(sParam) {
     var sPageUrl = window.location.search.substring(1);

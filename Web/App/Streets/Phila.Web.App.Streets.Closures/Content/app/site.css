@@ -1,0 +1,307 @@
+#ResourceTable {
+    /*Remove bullets from our table*/
+    list-style-type: none;
+}
+
+#AddResourcePage {
+    /*The alpha style pushes the last div over to the right column
+    This pushes it back to the left and makes it larger*/
+    /*float: left;
+    width: 75%;*/
+}
+
+#ContactList {
+    /*Remove bullets from our table*/
+    list-style-type: none;
+}
+
+.ContactRow { width: 75%; }
+
+.marg-top-20 { margin-top: 20px; }
+
+.details {
+    margin-top: 5px;
+    padding: 2px;
+}
+
+.GetCodeButton { margin: 10px 0; }
+
+#event-table p { font-size: 80%; }
+
+#event-table h3 { margin-bottom: .2rem; }
+
+#AccountContactHeader p {
+    font-size: 80%;
+    margin: 0em 0;
+}
+
+#AppNameBanner { margin-top: 22; }
+
+#AppNameBanner h2 { text-align: right; }
+
+.pad-25 { padding-top: 25px; }
+
+.marg-bottom-20 { padding-bottom: 20px; }
+
+.no-padding { padding: 0 0 0 0; }
+
+.no-margin { margin: 0 0 0 0; }
+
+/*Login screen, puts buttons to the right of the contact name in our LI rows*/
+
+.ContactName {
+    float: left;
+    vertical-align: bottom;
+    width: 50%;
+}
+
+.background-color { background: #f1f3f1; }
+
+.GetCodeButton { }
+
+.RemoveResourceButton { margin-top: 20px; }
+
+#AccountDetails { /*background-color: #FFFFDE;*/ }
+
+#UserDetails { /*background-color: #FFFFDE;*/ }
+
+
+.gridStyle {
+    border: 1px solid rgb(212, 212, 212);
+    height: 1000px;
+    width: 800px;
+}
+
+.loading-indicator {
+    display: none;
+    left: 50%;
+    margin-left: -26px;
+    margin-top: -26px;
+    position: absolute;
+    top: 50%;
+    z-index: 9999;
+}
+
+.checkbox-grid li {
+    display: block;
+    float: left;
+    width: 25%;
+}
+
+@media screen and (max-width: 640px) {
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .checkbox-grid li {
+        display: block;
+        float: left;
+        width: 100%;
+    }
+}
+
+.mask {
+    display: none; /*This hides the mask*/
+}
+
+.mask .ajax {
+    background-image: url(~/Content/app/images/loading.png);
+    display: block;
+    height: 100%;
+    position: relative; /*required for z-index*/
+    width: 100%;
+    z-index: 1000; /*puts on top of everything*/
+}
+
+
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+
+.dl-horizontal dt { white-space: normal; }
+
+/* Set width on the form input elements since they're 100% wide by default */
+
+input,
+select,
+textarea { /*max-width: 280px;*/ }
+
+.marg-top-20 { margin-top: 20px; }
+
+label { display: block; }
+
+.validationMessage { color: Red; }
+
+.input-validation-error { color: Orange; }
+
+.input-validation-error-pink { color: Pink; }
+
+.resize {
+    border-spacing: 2px;
+    border-style: outset;
+    border-width: 1px;
+    width: 100%;
+}
+
+.resize td, .resize th {
+    border-style: inset;
+    border-width: 1px;
+}
+
+.searchGroup {
+    float: left;
+    margin-left: 1em;
+    width: auto;
+}
+
+body {
+    background-color: #ffffff;
+    color: #333333;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    margin: 0;
+    padding-bottom: 20px;
+    padding-top: 50px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+a {
+    color: #0088cc;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #005580;
+    text-decoration: underline;
+}
+
+h2 { padding-top: 20px; }
+
+h2:first-of-type { padding-top: 0; }
+
+ul { padding: 0; }
+
+.pagination {
+    height: 36px;
+    margin: 18px 0;
+}
+
+.pagination ul {
+    -moz-border-radius: 3px;
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    -webkit-border-radius: 3px;
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    display: inline-block;
+    *display: inline;
+    margin-bottom: 0;
+    margin-left: 0;
+    /* IE7 inline-block hack */
+
+    *zoom: 1;
+}
+
+.pagination li { display: inline; }
+
+.pagination a {
+    border: 1px solid #ddd;
+    border-left-width: 0;
+    float: left;
+    line-height: 34px;
+    padding: 0 14px;
+    text-decoration: none;
+}
+
+.pagination a:hover,
+.pagination .active a { background-color: #0088cc; }
+
+.pagination .active a {
+    color: #ffffff;
+    cursor: default;
+}
+
+.pagination .disabled span,
+.pagination .disabled a,
+.pagination .disabled a:hover {
+    background-color: transparent;
+    color: #999999;
+    cursor: default;
+}
+
+.pagination li:first-child a {
+    -moz-border-radius: 3px 0 0 3px;
+    -webkit-border-radius: 3px 0 0 3px;
+    border-left-width: 1px;
+    border-radius: 3px 0 0 3px;
+}
+
+.pagination li:last-child a {
+    -moz-border-radius: 0 3px 3px 0;
+    -webkit-border-radius: 0 3px 3px 0;
+    border-radius: 0 3px 3px 0;
+}
+
+.pagination-centered { text-align: center; }
+
+.pagination-right { text-align: right; }
+
+.pager {
+    list-style: none;
+    margin-bottom: 18px;
+    margin-left: 0;
+    text-align: center;
+    *zoom: 1;
+}
+
+.pager:before,
+.pager:after {
+    content: "";
+    display: table;
+}
+
+.pager:after { clear: both; }
+
+.pager li { display: inline; }
+
+.pager a {
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    display: inline-block;
+    padding: 5px 14px;
+}
+
+.pager a:hover {
+    background-color: #f5f5f5;
+    text-decoration: none;
+}
+
+.pager .next a { float: right; }
+
+.pager .previous a { float: left; }
+
+.pager .disabled a,
+.pager .disabled a:hover {
+    background-color: #fff;
+    color: #999999;
+    cursor: default;
+}
+
+
+.map {
+   position: fixed;
+   width: 400px;
+   height: 400px;
+   border:#555555 2px solid;
+}
