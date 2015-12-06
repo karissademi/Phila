@@ -80,7 +80,7 @@ namespace Phila.Web.Api.Streets.Controllers
 
             var message = new MailMessage("streets@phila.gov", testersEmailAddress,
                 "Philadelphia Streets Department Login",
-                string.Format("https://streets.azurewebsites.net/Permits/StreetClosures?token={0}", token));
+                string.Format("https://streets.azurewebsites.net?token={0}", token));
 
             //ToDo: add link that the user can click if he or she did not request the token
 

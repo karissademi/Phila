@@ -39,7 +39,7 @@ function renderMap(latitude, longitude, zoom) {
         enableSearchLogo: false,
         enableClickableLogo: false,
         mapTypeId: Microsoft.Maps.MapTypeId.road,
-        width: 500, height: 500,
+        height: 500,
         //bounds: initialViewBounds,
         zoom: zoom,
         center: new Microsoft.Maps.Location(latitude, longitude),

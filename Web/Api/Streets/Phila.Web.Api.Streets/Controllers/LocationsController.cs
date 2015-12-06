@@ -71,19 +71,6 @@ namespace Phila.Web.Api.Streets.Controllers
             }
         }
 
-
-
-
-
-
-
-
-
-
-        ...+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-
         [EnableCors(origins: "*", headers: "*", methods: "*")]
         [AllowAnonymous]
         [Route("api/locations/GetFromStreets")]
