@@ -904,8 +904,9 @@ function AppViewModel() {
         $("#UsersCompaniesSection").hide();
 
         $("#AddNewPermitSection").show();
-
+        var $mapDiv = $("#mapDiv");
         document.body.scrollTop = document.documentElement.scrollTop = 0;
+        map.setOptions({ width: $mapDiv.width()});
     };
 
     self.cancelNewPermit = function() {
@@ -1200,6 +1201,15 @@ $(document).ready(function() {
 
     loadMap();
 
+
+    $(window).resize(function () {
+        var $mapDiv = $("#mapDiv");
+        map.setOptions({ width: $mapDiv.width() });
+
+        //$("div.MicrosoftMap.MapTypeId_auto").css("width", $(".flexible-container").css("width"));
+        //$("div.MicrosoftMap.MapTypeId_auto").css("height", "500px");//$(".flexible-container").css("height"));
+
+    });
 });
 
 
