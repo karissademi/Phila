@@ -329,7 +329,7 @@ namespace Phila.Web.Api.Streets.Controllers
             }
 
             int totalPermits = permits.Count();
-            int totalPages = totalPermits%pageSize;
+            int totalPages = totalPermits % pageSize;
             totalPages = totalPages > 0 ? (totalPermits/pageSize) + 1 : (totalPermits/pageSize);
             permits = permits.Skip((page - 1)*pageSize).Take(pageSize).ToList();
 

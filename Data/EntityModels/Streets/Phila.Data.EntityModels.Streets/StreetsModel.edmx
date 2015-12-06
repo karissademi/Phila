@@ -534,6 +534,8 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <Property Name="NEWSEGDATE" Type="datetime" />
           <Property Name="MULTI_REP" Type="float" />
           <Property Name="STNAME" Type="nvarchar" MaxLength="30" />
+          <Property Name="StreetName" Type="nvarchar" MaxLength="64" />
+          <Property Name="StreetNameShort" Type="nvarchar" MaxLength="64" />
         </EntityType>
         <EntityType Name="UserTokens">
           <Key>
@@ -1018,7 +1020,9 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
     [tblStreets].[UPDATE] AS [UPDATE], 
     [tblStreets].[NEWSEGDATE] AS [NEWSEGDATE], 
     [tblStreets].[MULTI_REP] AS [MULTI_REP], 
-    [tblStreets].[STNAME] AS [STNAME]
+    [tblStreets].[STNAME] AS [STNAME], 
+    [tblStreets].[StreetName] AS [StreetName], 
+    [tblStreets].[StreetNameShort] AS [StreetNameShort]
     FROM [dbo].[tblStreets] AS [tblStreets]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_ContactRoles_Roles" Association="Self.FK_ContactRoles_Roles">
@@ -1819,6 +1823,8 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <Property Name="NEWSEGDATE" Type="DateTime" Precision="3" />
           <Property Name="MULTI_REP" Type="Double" />
           <Property Name="STNAME" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="StreetName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="StreetNameShort" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tblNode">
           <Key>
@@ -2406,6 +2412,8 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <EntitySetMapping Name="tblStreets">
             <EntityTypeMapping TypeName="SCBPPSModel.tblStreet">
               <MappingFragment StoreEntitySet="tblStreets">
+                <ScalarProperty Name="StreetNameShort" ColumnName="StreetNameShort" />
+                <ScalarProperty Name="StreetName" ColumnName="StreetName" />
                 <ScalarProperty Name="STNAME" ColumnName="STNAME" />
                 <ScalarProperty Name="MULTI_REP" ColumnName="MULTI_REP" />
                 <ScalarProperty Name="NEWSEGDATE" ColumnName="NEWSEGDATE" />

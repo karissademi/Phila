@@ -109,8 +109,6 @@ function AppViewModel() {
         }
 
         try {
-            //self.getStatusCodes();
-            //self.getPermitsForCompany();
             $("#loading-table").show();
             self.showMainSections();
         } catch (e) {
@@ -935,6 +933,9 @@ function AppViewModel() {
             $("#UsersCompaniesSection").show();
 
         document.body.scrollTop = document.documentElement.scrollTop = 0;
+
+        if (map == null)
+            loadMap();
     };
 
     self.showUsersCompaniesSection = function() {
@@ -1199,7 +1200,7 @@ $(document).ready(function() {
         $('.mask').removeClass('ajax');
     });
 
-    loadMap();
+    
 
 
     $(window).resize(function () {
