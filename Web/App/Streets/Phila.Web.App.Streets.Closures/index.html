@@ -3,23 +3,28 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <!--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">-->
         <meta name="description" content="City of Philadelphia Streets Department's street Closure application" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>Philadelphia Street Department: Street Closures</title>
         <link rel='icon' type='image/x-icon' href="https://cityofphiladelphia.github.io/patterns/images/favicon.ico" />
+        
 
         <!-- ToDo: bundle and minify css before publishing to production -->
         <link href="Content/bootstrap.css" rel="stylesheet" />
-        <link href="Content/bootstrap-datepicker.css" rel="stylesheet" />
+        <!--<link href="Content/bootstrap-datepicker.css" rel="stylesheet" />-->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
         <link href="Content/app/jquery-ui-smoothness-1.11.4.css" rel="stylesheet" />
         <link href="Content/app/ionicons.min-2.0.1.css" rel="stylesheet" />
         <link href="Content/app/patterns-0.8.1.css" rel="stylesheet" />
         <link href="Content/app/site.css" rel="stylesheet" />
         
+
+        
         <script charset="UTF-8" type="text/javascript" src="https://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0&s=1">
         </script>
+        
+        <!--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />-->
+
     </head>
     <body>
 
@@ -32,9 +37,6 @@
                     <h1 class="page-title"><a href="#">Street Closure Request</a></h1>
                 </div>
             </div>
-            
-            
-
         </header>
         <!-- end header -->
 
@@ -298,7 +300,9 @@
                     </div>
                     <!-- end top input div -->
                     <!-- Begin location div  -->
-                    <div id='mapDiv'></div>
+                    <div class="flexible-container">
+                        <div id="mapDiv"></div>
+                    </div>
                     <div>
                         <table>
                             <thead>

@@ -1152,32 +1152,32 @@ $(document).ready(function() {
         //document.getElementById("RefStart").min = minDate;
 
         //// ToDo: make the start and end dates observable
-        $("#ReqStart").datepicker({
-            format: "mm/dd/yyyy",
-            startDate: "+10d",
-            autoclose: true
-        }).on("changeDate", function(e) {
-            $(this).datepicker("hide");
+        //$("#ReqStart").datepicker({
+        //    format: "mm/dd/yyyy",
+        //    startDate: "+10d",
+        //    autoclose: true
+        //}).on("changeDate", function(e) {
+        //    $(this).datepicker("hide");
 
-            var today = new Date();
-            $("#ReqEnd").val("");
+        //    var today = new Date();
+        //    $("#ReqEnd").val("");
 
-            $("#ReqEnd").datepicker("remove");
+        //    $("#ReqEnd").datepicker("remove");
 
-            $("#ReqEnd").datepicker({
-                format: "mm/dd/yyyy",
-                startDate: "+" + today.dayDiff(e.date) + "d",
-                autoclose: true
-            }).on("changeDate", function() { //e) {
-                $(this).datepicker("hide");
-            });
-        });
+        //    $("#ReqEnd").datepicker({
+        //        format: "mm/dd/yyyy",
+        //        startDate: "+" + today.dayDiff(e.date) + "d",
+        //        autoclose: true
+        //    }).on("changeDate", function() { //e) {
+        //        $(this).datepicker("hide");
+        //    });
+        //});
 
-        $("#ReqEnd").datepicker({
-            format: "mm/dd/yyyy",
-            startDate: "+10d",
-            autoclose: true
-        });
+        //$("#ReqEnd").datepicker({
+        //    format: "mm/dd/yyyy",
+        //    startDate: "+10d",
+        //    autoclose: true
+        //});
     } else {
         $("#LoginSection").show();
         $("#PageLoadingProgress").hide();
