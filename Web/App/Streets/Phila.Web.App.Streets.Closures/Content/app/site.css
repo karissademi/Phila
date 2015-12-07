@@ -328,6 +328,10 @@ ul { padding: 0; }
         float: left;
         width: 100%;
     }
+
+   .search-button {
+       display: inline;
+   }
 }
 
 .mask {
@@ -342,3 +346,4 @@ ul { padding: 0; }
     width: 100%;
     z-index: 1000; /*puts on top of everything*/
 }
+

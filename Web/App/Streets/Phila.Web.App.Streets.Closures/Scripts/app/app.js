@@ -25,6 +25,7 @@ function AppViewModel() {
 
     self.newPermit = ko.observable(new Permit());
 
+    self.streetSearch = ko.observable();
 
     // data used to populate the app
     self.permits = ko.observableArray();
@@ -34,6 +35,7 @@ function AppViewModel() {
     self.permitTypes = ko.observableArray();
     self.occupancyTypes = ko.observableArray();
     self.utilityOwners = ko.observableArray();
+
 
     // data used to submit a new permit app
     self.selectedEncroachmentTypes = ko.observableArray();
@@ -904,7 +906,14 @@ function AppViewModel() {
         $("#AddNewPermitSection").show();
         var $mapDiv = $("#mapDiv");
         document.body.scrollTop = document.documentElement.scrollTop = 0;
-        map.setOptions({ width: $mapDiv.width()});
+        try {
+              map.setOptions({ width: $mapDiv.width() });
+        } catch (e) {
+
+        } 
+      
+
+        
     };
 
     self.cancelNewPermit = function() {
@@ -1054,6 +1063,9 @@ function AppViewModel() {
     //    return parseInt(bin, 2);
     //};
 
+    self.getRoute = function() {
+        createWalkingRoute(self.streetSearch(), self.streetSearch());
+    };
 
     self.selectedProjectTypes =
     {
