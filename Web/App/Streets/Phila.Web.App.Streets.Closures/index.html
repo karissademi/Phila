@@ -273,32 +273,41 @@
                     <!-- Begin top input div -->
                     <div id="AddResourcePage" class="marg-top-20">
                         <h2 class="marg-top-20 alternate divide medium-24 columns">New Closure Information</h2>
-                        <div class="medium-6 columns">
-                            <label>Effective Date:</label><input type="datetime-local" id="ReqStart" data-bind="value: $root.effectiveDate" />
+                        <div class="row">
+                            <div class="medium-6 columns">
+                                <label>Effective Date:</label><input type="datetime-local" id="ReqStart" data-bind="value: $root.effectiveDate" />
+                            </div>
+                            <div class="medium-6 columns">
+                                <label>Expiration Date:</label>
+                                <input type="datetime-local" class="form-control" name="EventEndDate" id="ReqEnd" data-bind="value: $root.expirationDate" />
+                            </div>
+                            <div class="medium-6 columns"></div>
+                            <div class="medium-6 columns">
+                                <label>Time of Work:</label>
+                                <input type="time" name="EventTime" id="ReqTime" data-bind="value: $root.timeOfWork" />
+                            </div>
                         </div>
-                        <div class="medium-6 columns">
-                            <label>Expiration Date:</label>
-                            <input type="datetime-local" class="form-control" name="EventEndDate" id="ReqEnd" data-bind="value: $root.expirationDate" />
+                        <div class="row">
+                            <div class="medium-24 columns">
+                                <label>Purpose:</label>
+                                <textarea id="ReqPurpose" name="EventDesc" data-bind="value: $root.purpose"></textarea>
+                            </div>
                         </div>
-                        <div class="medium-6 columns">
-                            <label>Time of Work:</label>
-                            <input type="time" name="EventTime" id="ReqTime" data-bind="value: $root.timeOfWork" />
+                        <div class="row">
+                            <div class="medium-12 columns">
+                                <label>Permit Type: </label>
+                                <select data-bind="options: permitTypes, optionsText: 'PermitTypeName', value: selectedPermitType, optionsCaption: 'Choose...'"></select>
+                            </div>
+                            <div class="medium-12 columns">
+                                <label>Utility Owner: </label>
+                                <select data-bind="options: utilityOwners, optionsText: 'Name', value: selectedUtilityOwner, optionsCaption: 'Choose...'"></select>
+                            </div>
                         </div>
-                        <div class="medium-6 columns">
-                            <label>Purpose:</label>
-                            <input type="text" name="EventDesc" id="ReqPurpose" data-bind="value: $root.purpose" />
-                        </div>
-                        <div class="medium-12 columns">
-                            <label>Permit Type: </label>
-                            <select data-bind="options: permitTypes, optionsText: 'PermitTypeName', value: selectedPermitType, optionsCaption: 'Choose...'"></select>
-                        </div>
-                        <div class="medium-12 columns">
-                            <label>Utility Owner: </label>
-                            <select data-bind="options: utilityOwners, optionsText: 'Name', value: selectedUtilityOwner, optionsCaption: 'Choose...'"></select>
-                        </div>
-                        <div class="medium-24 columns">
-                            <label>Comments: </label>
-                            <textarea id="ReqComments" data-bind="value: $root.comments"></textarea>
+                        <div class="row">
+                            <div class="medium-24 columns">
+                                <label>Comments: </label>
+                                <textarea id="ReqComments" data-bind="value: $root.comments"></textarea>
+                            </div>
                         </div>
                         <h2 class="marg-top-20 alternate divide medium-24 columns">Project Type(s)</h2>
                         <ul class="medium-24 columns checkbox-grid" data-bind="foreach: projectTypes">
