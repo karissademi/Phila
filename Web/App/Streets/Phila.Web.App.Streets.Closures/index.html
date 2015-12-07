@@ -325,15 +325,18 @@
                     <!-- end top input div -->
                     <!-- Begin location div  -->
                     <h2 class="marg-top-20 alternate divide medium-24 columns">Location(s)</h2>
-
-
-                    <div class="searchGroup">
-                        <input id="StreetSearch" data-bind="jqAuto: { value: streetSearch, source: $root.getOnStreets, inputProp: 'StreetName', labelProp: 'StreetName', valueProp: 'StreetName' }, event: { 'blur': $root.getPath.bind($data) }" placeholder="search..." />
+                    <div class="row">
+                        <label class="medium-12 columns">Start by searching for your starting address. That will add Pin A to the map. Next drag Pin B to the ending address.</label>
                     </div>
-                    <div class="searchGroup">
-                        <button>Go</button>
+                    <div class="row">
+                        <div class="searchGroup medium-6 columns">
+                            <input id="StreetSearch" data-bind="jqAuto: { value: streetSearch, source: $root.getOnStreets, inputProp: 'StreetName', labelProp: 'StreetName', valueProp: 'StreetName' }, event: { 'blur': $root.getPath.bind($data) }" placeholder="search..." />
+                        </div>
+                        <div class="searchGroup medium-6 columns">
+                            <button>Go</button>
                         </div>
                         <div id="mapDiv"></div>
+                    </div>
                         <!--<div id='directionsItinerary'> </div>-->
                     <div id="locationResults"></div>
                     <table>
