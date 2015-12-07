@@ -75,78 +75,93 @@
                 </div>
                 <!-- end user's companies selection div -->
                 <!-- Begin account section -->
-                <div id="AccountSection" class="marg-top-20" style="display: none">
+                <div id="AccountSection" class="marg-top-20 row" style="display: none">
                     <div class="large-24 columns">
                         <div id="AccountDetails" data-bing="with: selectedContact">
-                            <div id="AccountHeader" class="background-color row details">
-                                <h3 class="medium-23 columns" style="margin-top: 5px">Company Information</h3>
-                            </div>
-                            <div id="account-details" class="row details background-color" data-bind="with: selectedCompany">
-                                <i class="fa fa-pencil fa-2x" data-bind="click: $root.editCompany.bind($root), visible: !$root.isCompanyEditing($data)" style="margin-top: 5px"></i>
-                                <i class="fa fa-floppy-o fa-2x" data-bind="click: $root.applyCompany.bind($root), visible: $root.isCompanyEditing($data)"></i>
-
-                                <i class="fa fa-times fa-2x medium-1 columns" data-bind="click: $root.cancelEditCompany.bind($root), visible: $root.isCompanyEditing($data)"></i>
-                                <div>
-                                    <h4 class="">Company Name</h4>
-
-                                    <input type="text" class="edit" data-bind="value: CompanyName.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: CompanyName, visible: !$root.isCompanyEditing($data)"></label>
+                            <div id="account-details" class="details background-color" data-bind="with: selectedCompany">
+                                <div class="row">
+                                    <div id="AccountHeader" class="medium-22 columns">
+                                        <h3 style="margin-top: 5px">Company Information</h3>
+                                    </div>
+                                    <div class="medium-2 columns">
+                                        <i class="fa fa-pencil fa-2x" data-bind="click: $root.editCompany.bind($root), visible: !$root.isCompanyEditing($data)" style="margin-top: 5px"></i>
+                                        <i class="fa fa-floppy-o fa-2x" data-bind="click: $root.applyCompany.bind($root), visible: $root.isCompanyEditing($data)"></i>
+                                        <i class="fa fa-times fa-2x" data-bind="click: $root.cancelEditCompany.bind($root), visible: $root.isCompanyEditing($data)"></i>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 class="">Company Phone</h4>
+                                <div class="row">
+                                    <div class="medium-17 columns">
+                                        <h4>Company Name</h4>
 
-                                    <input type="tel" class="edit" data-bind="value: CompanyPhoneNumber.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: CompanyPhoneNumber, visible: !$root.isCompanyEditing($data)"></label>
+                                        <input type="text" class="edit" data-bind="value: CompanyName.editValue, visible: $root.isCompanyEditing($data)" />
+                                        <label class="read" data-bind="text: CompanyName, visible: !$root.isCompanyEditing($data)"></label>
+                                    </div>
+                                    <div class="medium-7 columns">
+                                        <h4>Company Phone</h4>
+
+                                        <input type="tel" class="edit" data-bind="value: CompanyPhoneNumber.editValue, visible: $root.isCompanyEditing($data)" />
+                                        <label class="read" data-bind="text: CompanyPhoneNumber, visible: !$root.isCompanyEditing($data)"></label>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4>Company Fax</h4>
+                                <div class="row">
+                                    <div class="medium-17 columns">
+                                        <h4 class="">Web Site</h4>
 
-                                    <input type="tel" class="edit" data-bind="value: CompanyFaxNumber.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: CompanyFaxNumber, visible: !$root.isCompanyEditing($data)"></label>
+                                        <input type="url" class="edit" data-bind="value: Website.editValue, visible: $root.isCompanyEditing($data)" />
+                                        <label class="read" data-bind="text: Website, visible: !$root.isCompanyEditing($data)"></label>
+                                    </div>
+                                    <div class="medium-7 columns">
+                                        <h4>Company Fax</h4>
+
+                                        <input type="tel" class="edit" data-bind="value: CompanyFaxNumber.editValue, visible: $root.isCompanyEditing($data)" />
+                                        <label class="read" data-bind="text: CompanyFaxNumber, visible: !$root.isCompanyEditing($data)"></label>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 class="">Web Site</h4>
-
-                                    <input type="url" class="edit" data-bind="value: Website.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: Website, visible: !$root.isCompanyEditing($data)"></label>
+                                <div class="row">
+                                    <div class="medium-17 columns">
+                                        <h4>
+                                            Address 1
+                                        </h4>
+                                        <input type="text" class="edit" data-bind="value: BillingStreetAddress1.editValue, visible: $root.isCompanyEditing($data)" />
+                                        <label class="read" data-bind="text: BillingStreetAddress1, visible: !$root.isCompanyEditing($data)"></label>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4>
-                                        Address 1
-                                    </h4>
+                                <div class="row">
+                                    <div class="medium-17 columns">
+                                        <h4 class="">Address 2</h4>
 
-                                    <input type="text" class="edit" data-bind="value: BillingStreetAddress1.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: BillingStreetAddress1, visible: !$root.isCompanyEditing($data)"></label>
+                                        <input type="text" class="edit" data-bind="value: BillingStreetAddress2.editValue, visible: $root.isCompanyEditing($data)" />
+                                        <label class="read" data-bind="text: BillingStreetAddress2, visible: !$root.isCompanyEditing($data)"></label>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 class="">Address 2</h4>
+                                <div class="row">
+                                    <div class="medium-17 columns">
+                                        <h4 class="">Address 3</h4>
 
-                                    <input type="text" class="edit" data-bind="value: BillingStreetAddress2.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: BillingStreetAddress2, visible: !$root.isCompanyEditing($data)"></label>
+                                        <input type="text" class="edit" data-bind="value: BillingStreetAddress3.editValue, visible: $root.isCompanyEditing($data)" />
+                                        <label class="read" data-bind="text: BillingStreetAddress3, visible: !$root.isCompanyEditing($data)"></label>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 class="">Address 3</h4>
+                                <div class="row">
+                                    <div class="medium-5 columns">
+                                        <h4 class="">City</h4>
 
-                                    <input type="text" class="edit" data-bind="value: BillingStreetAddress3.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: BillingStreetAddress3, visible: !$root.isCompanyEditing($data)"></label>
-                                </div>
-                                <div>
-                                    <h4 class="">City</h4>
+                                        <input type="text" class="edit" data-bind="value: BillingCity.editValue, visible: $root.isCompanyEditing($data)" />
+                                        <label class="read" data-bind="text: BillingCity, visible: !$root.isCompanyEditing($data)"></label>
+                                    </div>
+                                    <div class="medium-2 columns">
+                                        <h4 class="">State</h4>
 
-                                    <input type="text" class="edit" data-bind="value: BillingCity.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: BillingCity, visible: !$root.isCompanyEditing($data)"></label>
-                                </div>
-                                <div>
-                                    <h4 class="">State</h4>
+                                        <input type="text" class="edit" data-bind="value: BillingState.editValue, visible: $root.isCompanyEditing($data)" />
+                                        <label class="read" data-bind="text: BillingState, visible: !$root.isCompanyEditing($data)"></label>
+                                    </div>
+                                    <div class="medium-5 columns">
+                                        <h4 class="">Zip</h4>
 
-                                    <input type="text" class="edit" data-bind="value: BillingState.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: BillingState, visible: !$root.isCompanyEditing($data)"></label>
-                                </div>
-                                <div>
-                                    <h4 class="">Zip</h4>
-
-                                    <input type="number" class="edit" data-bind="value: BillingZipCode.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: BillingZipCode, visible: !$root.isCompanyEditing($data)"></label>
+                                        <input type="number" class="edit" data-bind="value: BillingZipCode.editValue, visible: $root.isCompanyEditing($data)" />
+                                        <label class="read" data-bind="text: BillingZipCode, visible: !$root.isCompanyEditing($data)"></label>
+                                    </div>
+                                    <div class="medium-12 columns"></div>
                                 </div>
                             </div>
                         </div>
