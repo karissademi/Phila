@@ -319,14 +319,45 @@
 
 
                     <div class="searchGroup">
-                        <input id="StreetSearch" data-bind="jqAuto: { value: streetSearch, source: $root.getOnStreets, inputProp: 'StreetName', labelProp: 'StreetName', valueProp: 'StreetName' }, event: { 'blur': $root.getRoute.bind($data) }" placeholder="search..." />
+                        <input id="StreetSearch" data-bind="jqAuto: { value: streetSearch, source: $root.getOnStreets, inputProp: 'StreetName', labelProp: 'StreetName', valueProp: 'StreetName' }, event: { 'blur': $root.getPath.bind($data) }" placeholder="search..." />
                     </div>
                     <div class="searchGroup">
                         <button>Go</button>
                         </div>
                         <div id="mapDiv"></div>
                         <!--<div id='directionsItinerary'> </div>-->
-                        <div id="locationResults"></div>
+                    <div id="locationResults"></div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Waypoint Order</th>
+                                <th>Formatted Address</th>
+                                <th>Short Address </th>
+                                <th>Latitude</th>
+                                <th>Longitude</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: $root.permitPath">
+                            <tr>
+                                <td>
+                                    <label class="read" data-bind="text: WaypointOrder"></label>
+                                </td>
+
+                                <td>
+                                    <label class="read" data-bind="text: $data.FormattedAddress == undefined ? '' : $data.FormattedAddress "></label>
+                                </td>
+                                <td>
+                                    <label class="read" data-bind="text: $data.AddressLine == undefined  ? '' : $data.AddressLine"></label>
+                                </td>
+                                <td>
+                                    <label class="read" data-bind="text: $data.Latitude == undefined ? '' : $data.Latitude"></label>
+                                </td>
+                                <td>
+                                    <label class="read" data-bind="text: $data.Longitude == undefined ? '' : $data.Longitude"></label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                         <br /><br />
                         <div style="display: none">
                             <table>
@@ -388,7 +419,6 @@
                                     <tr>
                                         <td>
                                             <select data-bind="options: $root.referenceTypes, optionsText: 'ReferenceTypeName', value: $data.ReferenceTypeId.editValue, optionsCaption: 'Choose...', visible: $root.isReferenceEditing($data)"></select>
-
                                             <label class="read" data-bind="text: ReferenceTypeId() ? ReferenceTypeId().ReferenceTypeName : '', visible: !$root.isReferenceEditing($data)"></label>
                                         </td>
                                         <td>
