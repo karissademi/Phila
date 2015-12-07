@@ -290,8 +290,9 @@ function AppViewModel() {
                     self.showUsersCompaniesSection();
                 }
             },
-            //error: function (xhr, ajaxOptions, thrownError) {
-            //}
+            error: function (xhr, ajaxOptions, thrownError) {
+                //console.log(xhr, ajaxOptions, thrownError);
+            }
         });
     };
 
@@ -1114,8 +1115,10 @@ $(document).ready(function() {
 
     ko.applyBindings(model, document.getElementById("page"));
 
-    var token = getUrlParameter("token");
 
+
+    var token = getUrlParameter("token");
+    
     if (token != undefined) {
 
         model.getViewModelData();
@@ -1193,6 +1196,11 @@ $(document).ready(function() {
         //    autoclose: true
         //});
     } else {
+        var expiredToken = getUrlParameter("ExpiredToken");
+        console.log(expiredToken);
+        if (expiredToken == "true") {
+            $.notify("Please request a new login email.", "info");
+        }
         $("#LoginSection").show();
         $("#PageLoadingProgress").hide();
     }
@@ -1223,6 +1231,14 @@ $(document).ready(function() {
         //$("div.MicrosoftMap.MapTypeId_auto").css("height", "500px");//$(".flexible-container").css("height"));
 
     });
+
+
+    $(document).ajaxError(function (event, request, settings) {
+        if (request.status === 401){
+            window.location.href = "/?ExpiredToken=true";
+        }
+    });
+
 });
 
 

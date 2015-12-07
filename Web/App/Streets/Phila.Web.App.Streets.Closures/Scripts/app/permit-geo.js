@@ -24,7 +24,7 @@ function loadMap() {
                 longitude = -75.166667;
                 renderMap(latitude, longitude, zoom);
             },
-            { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
+            { enableHighAccuracy: false, timeout: 5000, maximumAge: 0 });
     } else {
         latitude = 39.95;
         longitude = -75.166667;
@@ -120,7 +120,7 @@ function createDirectionsManager() {
         // console.log(  arg.message );
     });
     directionsUpdatedEventObj = Microsoft.Maps.Events.addHandler(directionsManager, 'directionsUpdated', function (result) {
-
+        map.setView({ zoom: 15 });
         var totalWaypoints = result.route[0].routeLegs[0].subLegs[0].routePath.decodedLongitudes.length;
 
         var wpLat = result.route[0].routeLegs[0].subLegs[0].routePath.decodedLatitudes;
@@ -151,13 +151,13 @@ function createDirectionsManager() {
                         data.resourceSets[0].resources.length > 0) {
                         if ($locationResults.html() == "") {
                             $locationResults.append("<br/> FROM " + data.resourceSets[0].resources[0].address.addressLine);
-                        } else if ($locationResults.html().trim() == "<br>FROM") {
+                        } else if ($locationResults.html().trim() == "<br>FROM" && data.resourceSets[0].resources[0].address.addressLine != lastWp) {
                             $locationResults.append(data.resourceSets[0].resources[0].address.addressLine);
                         } else {
                             $locationResults.append("<br/> TO " + data.resourceSets[0].resources[0].address.addressLine);
                         }
                         //}
-                        //lastWp = data.resourceSets[0].resources[0].address.addressLine;
+                        lastWp = data.resourceSets[0].resources[0].address.addressLine;
                     }
                 },
                 error: function (e) {
@@ -184,8 +184,11 @@ function createDirectionsManager() {
             //var viewBoundaries = Microsoft.Maps.LocationRect.fromLocations(new Microsoft.Maps.Location(bbox[0], bbox[1]), new Microsoft.Maps.Location(bbox[2], bbox[3]));
             //map.setView({ bounds: viewBoundaries, zoom: 10 });
             map.setView({ center: new Microsoft.Maps.Location(wpLat[0], wpLong[0]) });
-            map.setValue({ zoom: 15 });
-        }        
+            
+        }
+
+
+        console.log(map.getZoom());
     });
 }
 
