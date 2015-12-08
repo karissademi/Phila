@@ -332,7 +332,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Metadata\deploymentTemplates\apiappconfig.azureresource.json" />
     <Content Include="apiapp.json" />
-    <None Include="Properties\PublishProfiles\Phila.Web.Api.Streets%28Phila%29.pubxml" />
+    <None Include="Properties\PublishProfiles\phila.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />

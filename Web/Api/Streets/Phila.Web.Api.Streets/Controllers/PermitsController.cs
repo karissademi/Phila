@@ -34,8 +34,10 @@ namespace Phila.Web.Api.Streets.Controllers
         [AllowAnonymous]
         [Route("api/permits/CreatePermit")]
         public async Task<IHttpActionResult> CreatePermit(string token, int companyId, int utilityOwnerId,
-            DateTime? effectiveDate, DateTime? expirationDate, DateTime timeOfWork, string purpose, int[] encroachmentTypes, int projectTypes, int permitTypeId, string comments, bool isDraft)
+            DateTime? effectiveDate, DateTime? expirationDate, string purpose, int[] encroachmentTypes, int projectTypes, int permitTypeId, string comments, bool isDraft)//, List<StreetsViewModels.ReferenceSelection> references)
         {
+            //if (encroachmentTypes == null) throw new ArgumentNullException("encroachmentTypes");
+            
             var st = new SecurityToken();
             bool auth = st.IsTokenValid(token);
 
@@ -99,6 +101,36 @@ namespace Phila.Web.Api.Streets.Controllers
             {
                 _db.tblPermits.Add(newPermit);
 
+                //var encroachments = new List<tblPermit_Encroachment>();
+                //for (int i = 0; i < encroachmentTypes.Length; i++)
+                //{
+                //    var seq = i + 1;
+                //    encroachments.Add(new tblPermit_Encroachment
+                //    {
+                //        EncroachmentTypeID = encroachmentTypes[i],
+                //        Permit_Number = newPermit.Permit_Number,
+                //        Seq_Num = (short)seq
+                //    });
+                //}
+                //_db.tblPermit_Encroachment.AddRange(encroachments);
+
+
+                //var refs = new List<tblPermit_References>();
+                //for (int i = 0; i < references.Count; i++)
+                //{
+                //    var seq = i + 1;
+
+                //    refs.Add(new tblPermit_References
+                //    {
+                //        Permit_Number = newPermit.Permit_Number,
+                //        ReferenceTypeID = references[i].ReferenceTypeId,
+                //        ReferenceValue = references[i].ReferenceValue
+                //    });
+                //}
+                //_db.tblPermit_References.AddRange(refs);
+
+
+
             }
             catch (Exception exception)
             {
@@ -121,6 +153,7 @@ namespace Phila.Web.Api.Streets.Controllers
                     throw;
                 }
             }
+
 
             return Ok(newPermit);
         }

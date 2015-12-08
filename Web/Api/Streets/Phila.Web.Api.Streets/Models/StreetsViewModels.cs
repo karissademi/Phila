@@ -124,6 +124,24 @@ namespace Phila.Web.Api.Streets.Models
         {
             public string StreetName { get; set; }
         }
+
+
+        public class ReferenceSelection
+        {
+            public int ReferenceTypeId { get; set; }
+            public string ReferenceValue { get; set; }    
+        }
+
+//            ReferenceTypeId		{3}
+		
+//ReferenceTypeId	:	6
+		
+//ReferenceTypeName	:	Health Dept Permit Number
+		
+//ReferenceValue	:	null
+		
+//ReferenceValue	:	24213gagretwert
+
     }
 
     //[MetadataType(typeof(tblCompanyMetaData))]

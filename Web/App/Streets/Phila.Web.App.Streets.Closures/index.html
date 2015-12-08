@@ -71,7 +71,7 @@
                 <div id="UsersCompaniesSection" class="row" style="display: none">
                     <br />
                     <h2>Your Companies</h2>
-                    <select data-bind="options: $root.companies, optionValue: 'CompanyId', optionsText: 'CompanyName', value: $root.selectedCompany, optionsCaption: 'Choose one...', event:{ change: $root.selectedCompanyChanged }"></select>
+                    <select data-bind="options: $root.companies, optionValue: 'CompanyId', optionsText: 'CompanyName', value: $root.selectedCompany, optionsCaption: 'Choose one...', event:{ change: $root.selectedCompanyChanged }"></select>                                      
                 </div>
                 <!-- end user's companies selection div -->
                 <!-- Begin account section -->
@@ -275,17 +275,13 @@
                         <h2 class="marg-top-20 alternate divide medium-24 columns">New Closure Information</h2>
                         <div class="row">
                             <div class="medium-6 columns">
-                                <label>Effective Date:</label><input type="datetime-local" id="ReqStart" data-bind="value: $root.effectiveDate" />
+                                <label>Effective Date:</label><input type="date" id="ReqStart" data-bind="value: $root.effectiveDate" />
                             </div>
                             <div class="medium-6 columns">
                                 <label>Expiration Date:</label>
-                                <input type="datetime-local" class="form-control" name="EventEndDate" id="ReqEnd" data-bind="value: $root.expirationDate" />
+                                <input type="date" class="form-control" name="EventEndDate" id="ReqEnd" data-bind="value: $root.expirationDate" />
                             </div>
                             <div class="medium-6 columns"></div>
-                            <div class="medium-6 columns">
-                                <label>Time of Work:</label>
-                                <input type="time" name="EventTime" id="ReqTime" data-bind="value: $root.timeOfWork" />
-                            </div>
                         </div>
                         <div class="row">
                             <div class="medium-24 columns">
@@ -325,9 +321,13 @@
                     <!-- end top input div -->
                     <!-- Begin location div  -->
                     <h2 class="marg-top-20 alternate divide medium-24 columns">Location(s)</h2>
+                    
+                    <!--<div id="map"></div>-->
+
                     <div class="row">
                         <label class="medium-12 columns">Start by searching for your starting address. That will add Pin A to the map. Next drag Pin B to the ending address.</label>
                     </div>
+
                     <div class="row">
                         <div class="searchGroup medium-6 columns">
                             <input id="StreetSearch" data-bind="jqAuto: { value: streetSearch, source: $root.getOnStreets, inputProp: 'StreetName', labelProp: 'StreetName', valueProp: 'StreetName' }, event: { 'blur': $root.getPath.bind($data) }" placeholder="search..." />
@@ -337,6 +337,7 @@
                         </div>
                         <div id="mapDiv"></div>
                     </div>
+
                         <!--<div id='directionsItinerary'> </div>-->
                     <div id="locationResults"></div>
                     <table>
@@ -431,6 +432,7 @@
                                     <tr>
                                         <td>
                                             <select data-bind="options: $root.referenceTypes, optionsText: 'ReferenceTypeName', value: $data.ReferenceTypeId.editValue, optionsCaption: 'Choose...', visible: $root.isReferenceEditing($data)"></select>
+
                                             <label class="read" data-bind="text: ReferenceTypeId() ? ReferenceTypeId().ReferenceTypeName : '', visible: !$root.isReferenceEditing($data)"></label>
                                         </td>
                                         <td>
@@ -593,8 +595,9 @@
     <script src="Scripts/app/notification-messages.js"></script>
     <script src="Scripts/app/app.js"></script>
     <script src="Scripts/app/permit-geo.js"></script>
-
     <script src="Scripts/app/patterns.min.js"></script>
+    <!--<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <script src="http://cdn.jsdelivr.net/leaflet.esri/1.0.0/esri-leaflet.js"></script>-->
     <!-- end scripts -->
 </body>
 </html>

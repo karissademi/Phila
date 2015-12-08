@@ -38,16 +38,15 @@ function AppViewModel() {
 
 
     // data used to submit a new permit app
-    self.selectedEncroachmentTypes = ko.observableArray();
-    self.selectedUtilityOwner = ko.observable();
-    self.selectedPermitType = ko.observable();
+    self.selectedEncroachmentTypes = ko.observableArray();//.extend({ required: true });
+    self.selectedUtilityOwner = ko.observable().extend({ required: true });
+    self.selectedPermitType = ko.observable().extend({ required: true });;
     self.selectedCompany = ko.observable(new Company());
     self.references = ko.observableArray();
     self.locations = ko.observableArray();
-    self.effectiveDate = ko.observable();
-    self.expirationDate = ko.observable();
-    self.timeOfWork = ko.observable();
-    self.purpose = ko.observable();
+    self.effectiveDate = ko.observable().extend({ required: true });
+    self.expirationDate = ko.observable().extend({ required: true });
+    self.purpose = ko.observable().extend({ required: true });
     self.comments = ko.observable();
 
     // data for the login email
@@ -55,7 +54,7 @@ function AppViewModel() {
 
 
     self.totalPermitsFound = ko.observable();
-    self.apiUrl = "https://microsoft-apiapp2e9548ef99d54bbea82edae5fe3913a8.azurewebsites.net/"; //"http://localhost/Phila.Web.Api.Streets/"; // 
+    self.apiUrl = "https://phila.azurewebsites.net/";//"https://microsoft-apiapp2e9548ef99d54bbea82edae5fe3913a8.azurewebsites.net/"; //"http://localhost/Phila.Web.Api.Streets/"; //  
     self.streetCode = "";
     self.fromStreets = ko.observableArray();
 
@@ -700,23 +699,35 @@ function AppViewModel() {
     };
 
     self.postPermit = function(isDraft) {
-        var prams = "?token=" + getUrlParameter("token") +
+
+        var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose]);
+        errors.showAllMessages();
+
+        //if (!ko.validation.validateObservable(self.usersEmailAddress))
+        //    return false;
+
+        var refTypes = [];
+        for (var i = 0; i < self.references().length; i++) {
+            refTypes.push({ ReferenceTypeId: self.references()[i].ReferenceTypeId().ReferenceTypeId(), ReferenceValue: self.references()[i].ReferenceValue() });
+        }
+
+        var prams = "token=" + getUrlParameter("token") +
             "&companyId=" + self.selectedCompany().CompanyId() +
             "&utilityOwnerId=" + self.selectedUtilityOwner().OwnerId +
             "&permitTypeId=" + self.selectedPermitType().PermitTypeId +
             "&projectTypes=" + self.selectedProjectTypes.binary2Decimal() +
-            "&encroachmentTypes=" + ko.toJSON(self.selectedEncroachmentTypes) +
+            "&encroachmentTypes=" + JSON.stringify(ko.toJSON(self.selectedEncroachmentTypes)) +
             "&effectiveDate=" + self.effectiveDate() +
             "&expirationDate=" + self.expirationDate() +
-            "&timeOfWork=" + self.timeOfWork() +
             "&purpose=" + self.purpose() +
             "&comments=" + self.comments() +
-            "&isDraft=" + isDraft;
+            "&isDraft=" + isDraft;// +
+            //"&referenceTypes=" + JSON.stringify(refTypes);
         //});
 
 
         $.ajax({
-            url: self.apiUrl + "api/permits/CreatePermit" + prams,
+            url: self.apiUrl + "api/permits/CreatePermit?" + prams,
 
             type: 'POST',
             success: function() {
@@ -738,7 +749,6 @@ function AppViewModel() {
         self.effectiveDate(null);
         self.expirationDate(null);
         self.purpose(null);
-        self.timeOfWork(null);
         self.comments(null);
         self.locations([]);
         self.referenceTypes([]);
@@ -1066,7 +1076,7 @@ function AppViewModel() {
 
     self.permitPath = ko.observableArray();
     self.getPath = function () {
-        createWalkingRoute(self.streetSearch(), self.streetSearch(), self.permitPath);
+        createWalkingRoute(self.streetSearch(), self.streetSearch());
     };
 
     self.selectedProjectTypes =
@@ -1166,6 +1176,7 @@ function AppViewModel() {
         map.getCredentials(function (c) {
             sessionKey = c;
         });
+
         routeLayer = new Microsoft.Maps.EntityCollection();
         map.entities.push(routeLayer);
 
@@ -1244,25 +1255,20 @@ function AppViewModel() {
         directionsUpdatedEventObj = Microsoft.Maps.Events.addHandler(directionsManager, 'directionsUpdated', function (result) {
 
 
-            map.setView({ zoom: 15 });
+            //map.setView({ zoom: 15 });
+
+            // how many waypoints?
             var totalWaypoints = result.route[0].routeLegs[0].subLegs[0].routePath.decodedLongitudes.length;
 
             var wpLat = result.route[0].routeLegs[0].subLegs[0].routePath.decodedLatitudes;
             var wpLong = result.route[0].routeLegs[0].subLegs[0].routePath.decodedLongitudes;
 
-            //var $locationResults = $("#locationResults");
-            //$locationResults.html("<br/>FROM ");
-            var wp = [];
             //var lastWp;
             var order = -1;
-            var locs = [];
             self.permitPath([]);
             for (var i = 0; i < totalWaypoints - 1; i++) {
-                //wp.push(new Microsoft.Maps.Location(wpLat[i], wpLong[i]));
-                //console.log(wpLat[i] + ", " + wpLong[i]);
-                var url = "https://dev.virtualearth.net/REST/v1/Locations/" + wpLat[i] + "," + wpLong[i];// + "?key=AnSM9TY1CIflUjbddXDbTF6-tmK2C0jI3sqgOvsHy0ia0xC9mrQ9moD3yjf1pBZ1";
 
-
+                var url = "https://dev.virtualearth.net/REST/v1/Locations/" + wpLat[i] + "," + wpLong[i];
 
                 $.ajax({
                     type: "GET",
@@ -1273,25 +1279,10 @@ function AppViewModel() {
                         key: sessionKey
                     },
                     success: function (data) {
-                        //console.log(data);
 
                         if (data && data.resourceSets && data.resourceSets.length > 0 && data.resourceSets[0].resources && data.resourceSets[0].resources.length > 0) {
-
-                            //if ($locationResults.html() == "") {
-                            //    $locationResults.append("<br/> FROM " + data.resourceSets[0].resources[0].address.addressLine);
-                            //} else if ($locationResults.html().trim() == "<br>FROM" && data.resourceSets[0].resources[0].address.addressLine != lastWp) {
-                            //    $locationResults.append(data.resourceSets[0].resources[0].address.addressLine);
-                            //} else {
-                            //    $locationResults.append("<br/> TO " + data.resourceSets[0].resources[0].address.addressLine);
-                            //}
-                            ////}
-                            //lastWp = data.resourceSets[0].resources[0].address.addressLine;
-                             
-
                             var lw = new LocationWaypoint(++order, data.resourceSets[0].resources[0].geocodePoints[0].coordinates[0], data.resourceSets[0].resources[0].geocodePoints[0].coordinates[1], data.resourceSets[0].resources[0].address.addressLine, data.resourceSets[0].resources[0].address.formattedAddress);
                             self.permitPath.push(lw);
-                            //console.log(lw);
-                            //console.log(locs);
                         }
 
                         //routeLayer.clear();
@@ -1317,8 +1308,6 @@ function AppViewModel() {
                     jsonp: "jsonp"
                 });
             }
-            //console.log(locs);
-           
 
         });
     }
@@ -1327,8 +1316,6 @@ function AppViewModel() {
     function createWalkingRoute(fromLocation, toLocation) {
         if (fromLocation == undefined || toLocation == undefined) return;
 
-        //fromLocation "1234 MARKET ST, PHILADELPHIA, PA", "1000 MARKET ST, PHILADELPHIA, PA"
-        //console.log(fromLocation, toLocation);
         var phila = ", Philadelphia, PA";
         fromLocation = fromLocation + phila;
         toLocation = toLocation + phila;
@@ -1343,11 +1330,6 @@ function AppViewModel() {
         directionsManager.addWaypoint(waypoint0);
         var waypoint1 = new Microsoft.Maps.Directions.Waypoint({ address: toLocation });
         directionsManager.addWaypoint(waypoint1);
-        //var waypoint2 = new Microsoft.Maps.Directions.Waypoint({ address: 'ZINKOFF BLVD, Philadelphia, PA' });
-        //directionsManager.addWaypoint(waypoint2);
-        // Set the element in which the itinerary will be rendered
-        //directionsManager.setRenderOptions({ itineraryContainer: document.getElementById('directionsItinerary') });
-        //console.log('Calculating directions...');
         directionsManager.calculateDirections();
 
 
@@ -1495,6 +1477,23 @@ $(document).ready(function() {
             window.location.href = "/?ExpiredToken=true";
         }
     });
+
+
+    //var map = L.map('map').setView([39.95, -75.1667], 17);
+
+    //L.esri.basemapLayer('Streets').addTo(map);
+
+    //var centerline = L.esri.featureLayer({
+    //    url: 'http://gis.phila.gov/ArcGIS/rest/services/PhilaOIT-GIS_Transportation/MapServer/2'
+    //}).addTo(map);
+
+    //centerline.bindPopup(function (feature) {
+    //    return L.Util.template('<p>{L_HUNDRED} {STNAME}</p><p>Code: {ST_CODE}</p>', feature.properties);
+    //});
+
+    //centerline.on('click', function (e) {
+    //    console.log('clicked', e);
+    //});
 
 });
 
