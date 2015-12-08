@@ -38,16 +38,36 @@ function AppViewModel() {
 
 
     // data used to submit a new permit app
-    self.selectedEncroachmentTypes = ko.observableArray();//.extend({ required: true });
-    self.selectedUtilityOwner = ko.observable().extend({ required: true });
-    self.selectedPermitType = ko.observable().extend({ required: true });;
+    self.selectedEncroachmentTypes = ko.observableArray().extend({ required: true });
+
+    self.selectedPermitType = ko.observable().extend({ required: true });
+    self.selectedUtilityOwner = ko.observable().extend({
+        required: {
+            onlyIf: function () {
+                if (self.selectedPermitType() != undefined && self.selectedPermitType().PermitTypeId > 10)
+                    return true;
+            }
+        }
+    });
     self.selectedCompany = ko.observable(new Company());
     self.references = ko.observableArray();
-    self.locations = ko.observableArray();
-    self.effectiveDate = ko.observable().extend({ required: true });
-    self.expirationDate = ko.observable().extend({ required: true });
-    self.purpose = ko.observable().extend({ required: true });
+    self.locations = ko.observableArray();//.extend({ required: true });
+    self.effectiveDate = ko.observable().extend( { validPermitDate: 10 });
+    self.expirationDate = ko.observable().extend({
+        validation: {
+            validator: function (expirationDate) {
+                console.log(expirationDate, self.effectiveDate());
+                if (Date.parse(expirationDate) && Date.parse(self.effectiveDate())) {
+                    return Date.parse(expirationDate) >= Date.parse(self.effectiveDate());
+                }
+                return false;
+            },
+            message: 'The expiration date must be on or after the effective date.',
+}
+    });
+        self.purpose = ko.observable().extend({ required: true });
     self.comments = ko.observable();
+    self.permitPath = ko.observableArray();
 
     // data for the login email
     self.usersEmailAddress = ko.observable().extend({ email: true, required: true });
@@ -700,8 +720,10 @@ function AppViewModel() {
 
     self.postPermit = function(isDraft) {
 
-        var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose]);
+        var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose, self.selectedPermitType]);
         errors.showAllMessages();
+
+        if (errors().length > 0) return false;
 
         //if (!ko.validation.validateObservable(self.usersEmailAddress))
         //    return false;
@@ -909,6 +931,9 @@ function AppViewModel() {
 
     //** nav
     self.showNewPermitSection = function() {
+        var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose, self.selectedPermitType]);
+        errors.showAllMessages();
+
         $("#LoginSection").hide();
         $("#AccountSection").hide();
         $("#YourPermitsSection").hide();
@@ -1074,7 +1099,7 @@ function AppViewModel() {
     //    return parseInt(bin, 2);
     //};
 
-    self.permitPath = ko.observableArray();
+    
     self.getPath = function () {
         createWalkingRoute(self.streetSearch(), self.streetSearch());
     };
@@ -1498,11 +1523,6 @@ $(document).ready(function() {
 });
 
 
-
-
-
-
-
 getUrlParameter = function(sParam) {
     var sPageUrl = window.location.search.substring(1);
     var sUrlVariables = sPageUrl.split('&');
@@ -1521,7 +1541,23 @@ Date.prototype.addDays = function(days) {
     return date;
 };
 
+// day is a date
 Date.prototype.dayDiff = function(day) {
     var date = new Date(this.valueOf());
     return Math.round((day - date) / (1000 * 60 * 60 * 24)) + 1;
 };
+
+ko.validation.rules["validPermitDate"] = {
+    validator: function(selectedDate, bufferDays) {
+
+        if (!Date.parse(selectedDate))
+            return false;
+
+        selectedDate = new Date(selectedDate);
+        var today = new Date();
+
+        return selectedDate >= today.addDays(bufferDays);
+    },
+    message: "The date must be {0} full days from today."
+};
+ko.validation.registerExtenders();

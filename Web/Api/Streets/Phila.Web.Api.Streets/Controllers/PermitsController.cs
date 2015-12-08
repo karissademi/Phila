@@ -394,7 +394,7 @@ namespace Phila.Web.Api.Streets.Controllers
         public IQueryable<StreetsViewModels.PermitTypeVm> GetPermitTypes()
         {
             var permitTypes =
-                _db.tblPermitTypes.OrderBy(x => x.PermitTypeName).Select(x => new StreetsViewModels.PermitTypeVm
+                _db.tblPermitTypes.Where(x => x.PermitTypeID != 7).OrderBy(x => x.PermitTypeName).Select(x => new StreetsViewModels.PermitTypeVm
                 {
                     PermitTypeId = x.PermitTypeID,
                     PermitTypeName = x.PermitTypeName,
