@@ -52,22 +52,76 @@ function AppViewModel() {
     self.selectedCompany = ko.observable(new Company());
     self.references = ko.observableArray();
     self.locations = ko.observableArray();//.extend({ required: true });
-    self.effectiveDate = ko.observable().extend( { validPermitDate: 10 });
+
+    self.effectiveDate = ko.observable().extend({ validPermitDate: [10, (new Date().addDays(11).getMonth() + 1) + "/" + new Date().addDays(11).getDate() + "/" + new Date().addDays(11).getFullYear()] });
     self.expirationDate = ko.observable().extend({
         validation: {
-            validator: function (expirationDate) {
-                console.log(expirationDate, self.effectiveDate());
+            validator: function(expirationDate, params) {
+                //params = self.effectiveDate();
                 if (Date.parse(expirationDate) && Date.parse(self.effectiveDate())) {
                     return Date.parse(expirationDate) >= Date.parse(self.effectiveDate());
                 }
                 return false;
             },
-            message: 'The expiration date must be on or after the effective date.',
-}
+            message: "Must be on or after the effective date",
+            //params: 
+    }
     });
-        self.purpose = ko.observable().extend({ required: true });
+
+    self.effectiveTime = ko.observable().extend({
+        validation: {
+            validator: function (val, params) {
+                
+                if (val == undefined) return false;
+
+                var validTime = val.match(/^([1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+                if (validTime == null || validTime.length !== 4) return false;
+
+                return true;
+            },
+            message: "A valid time required",
+        }
+    });
+
+    self.expirationTime = ko.observable().extend({
+        validation: {
+            validator: function (val, params) {
+
+                if (val == undefined) return false;
+
+                var validTime = val.match(/^([1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+                console.log(validTime);
+                if (validTime == null || validTime.length !== 4) return false;
+
+
+                // only validate the time is a valid time
+                if (!ko.validation.validateObservable(self.effectiveDate) || !ko.validation.validateObservable(self.expirationDate) || !ko.validation.validateObservable(self.effectiveTime)) return true;
+
+                var effectiveTime = val.match(/^([1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+                var effectiveDateTime = new Date(self.effectiveDate());
+                var effTimeHours = effectiveTime[3].toLowerCase() === "pm" ? (parseInt(effectiveTime[1]) + 12) : effectiveTime[1];
+                var effTimeMinutes = parseInt(effectiveTime[2]);
+                effectiveDateTime.setHours(effTimeHours);
+                effectiveDateTime.setMinutes(effTimeMinutes);
+
+                var expirationDateTime = new Date(self.expirationDate());
+                var expTimeHours = validTime[3].toLowerCase() === "pm" ? (parseInt(validTime[1]) + 12) : validTime[1];
+                var expTimeMinutes = parseInt(effectiveTime[2]);
+                effectiveDateTime.setHours(expTimeHours);
+                effectiveDateTime.setMinutes(expTimeMinutes);
+
+                if (expirationDateTime > effectiveDateTime) return true;
+
+                return false;
+            },
+            message: "Must be after the effective date and time",
+            //params: 
+        }
+    });
+
+    self.purpose = ko.observable().extend({ required: true });
     self.comments = ko.observable();
-    self.permitPath = ko.observableArray();
+    self.permitPath = ko.observableArray().extend({ required: true });
 
     // data for the login email
     self.usersEmailAddress = ko.observable().extend({ email: true, required: true });
@@ -137,19 +191,6 @@ function AppViewModel() {
         }
     };
 
-    //self.selectedPermitType.subscribe(function (data) {
-    //    if (data.PermitTypeId() > 10) {
-    //        self.selectedUtilityOwner = ko.observable().extend({ required: true });
-    //    } else {
-    //        self.selectedUtilityOwner = ko.observable().extend({ required: false });
-    //    }
-
-    //    if (!ko.validation.validateObservable(self.selectedUtilityOwner)) {
-    //        console.log(false);
-    //    } else {
-    //        console.log(true);
-    //    }
-    //});
 
     self.radioSearchSelectedOptionValue.subscribe(function() { //}(data, event) {
         $("#loading-table").show();
@@ -720,7 +761,7 @@ function AppViewModel() {
 
     self.postPermit = function(isDraft) {
 
-        var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose, self.selectedPermitType]);
+        var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose, self.selectedPermitType, self.selectedProjectTypes.projectTypes, self.permitPath, self.expirationTime, self.effectiveTime]);
         errors.showAllMessages();
 
         if (errors().length > 0) return false;
@@ -931,7 +972,7 @@ function AppViewModel() {
 
     //** nav
     self.showNewPermitSection = function() {
-        var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose, self.selectedPermitType]);
+        var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose, self.selectedPermitType, self.selectedProjectTypes.projectTypes, self.permitPath, self.expirationTime, self.effectiveTime]);
         errors.showAllMessages();
 
         $("#LoginSection").hide();
@@ -948,8 +989,30 @@ function AppViewModel() {
 
         } 
       
+        //var esrimap = L.map('esrimap').setView([39.95, -75.1667], 17);
+
+        //L.esri.basemapLayer('Streets').addTo(esrimap);
 
         
+
+        //var centerline = L.esri.featureLayer({
+        //    url: 'http://gis.phila.gov/ArcGIS/rest/services/PhilaOIT-GIS_Transportation/MapServer/2'
+        //}).addTo(esrimap);
+
+        //centerline.bindPopup(function (feature) {
+        //    return L.Util.template('<p>{L_HUNDRED} {STNAME}</p><p>Code: {ST_CODE}</p>', feature.properties);
+        //});
+
+        //centerline.on('click', function (e) {
+        //    console.log('clicked', e);
+        //});
+        
+        //$(window).resize(function () {
+        //    var $mapDiv = $("#mapDiv");
+        //    map.setOptions({ width: $mapDiv.width() });
+        //    esrimap.invalidateSize.bind(esrimap);
+
+        //});
     };
 
     self.cancelNewPermit = function() {
@@ -1073,40 +1136,13 @@ function AppViewModel() {
     };
 
     //** required support for the PSD's legacy code
-    //self.selectedProjectTypes = ko.observableArray();
-
-    //self.sortProjectTypes = function() {
-    //    return self.sortProjectTypes.sort(function(a, b) { return a - b; });
-    //};
-
-    //self.projectTypesToBinary = function() {
-    //    var a = [];
-    //    for (var i = 0; i < self.projectTypes().length; i++)
-    //        a.push("0");
-
-    //    for (var j = 0; j < self.selectedProjectTypes().length; j++)
-    //        a[parseInt(self.selectedProjectTypes()[j]) - 1] = "1";
-
-    //    var b = "";
-
-    //    for (var k = 0; k < a.length; k++)
-    //        b += a[k];
-
-    //    return b;
-    //};
-
-    //self.projectTypesBinToDecimal = function(bin) {
-    //    return parseInt(bin, 2);
-    //};
-
-    
     self.getPath = function () {
         createWalkingRoute(self.streetSearch(), self.streetSearch());
     };
 
     self.selectedProjectTypes =
     {
-        projectTypes: ko.observableArray(),
+        projectTypes: ko.observableArray().extend({ required: true }),
         sort: function() {
             this.projectTypes(this.projectTypes.sort(function(a, b) { return a - b; }));
         },
@@ -1485,12 +1521,9 @@ $(document).ready(function() {
     });
 
     
-
-
     $(window).resize(function () {
         var $mapDiv = $("#mapDiv");
         map.setOptions({ width: $mapDiv.width() });
-
         //$("div.MicrosoftMap.MapTypeId_auto").css("width", $(".flexible-container").css("width"));
         //$("div.MicrosoftMap.MapTypeId_auto").css("height", "500px");//$(".flexible-container").css("height"));
 
@@ -1504,21 +1537,6 @@ $(document).ready(function() {
     });
 
 
-    //var map = L.map('map').setView([39.95, -75.1667], 17);
-
-    //L.esri.basemapLayer('Streets').addTo(map);
-
-    //var centerline = L.esri.featureLayer({
-    //    url: 'http://gis.phila.gov/ArcGIS/rest/services/PhilaOIT-GIS_Transportation/MapServer/2'
-    //}).addTo(map);
-
-    //centerline.bindPopup(function (feature) {
-    //    return L.Util.template('<p>{L_HUNDRED} {STNAME}</p><p>Code: {ST_CODE}</p>', feature.properties);
-    //});
-
-    //centerline.on('click', function (e) {
-    //    console.log('clicked', e);
-    //});
 
 });
 
@@ -1548,7 +1566,7 @@ Date.prototype.dayDiff = function(day) {
 };
 
 ko.validation.rules["validPermitDate"] = {
-    validator: function(selectedDate, bufferDays) {
+    validator: function(selectedDate, params) {
 
         if (!Date.parse(selectedDate))
             return false;
@@ -1556,8 +1574,11 @@ ko.validation.rules["validPermitDate"] = {
         selectedDate = new Date(selectedDate);
         var today = new Date();
 
-        return selectedDate >= today.addDays(bufferDays);
+        return selectedDate >= today.addDays(params[0]);
     },
-    message: "The date must be {0} full days from today."
+    message: "Must be on or after {1}"
 };
 ko.validation.registerExtenders();
+
+
+
