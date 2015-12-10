@@ -33,8 +33,7 @@ namespace Phila.Web.Api.Streets.Controllers
         [EnableCors(origins: "*", headers: "*", methods: "*")]
         [AllowAnonymous]
         [Route("api/permits/CreatePermit")]
-        public async Task<IHttpActionResult> CreatePermit(string token, int companyId, int utilityOwnerId,
-            DateTime? effectiveDate, DateTime? expirationDate, string purpose, int[] encroachmentTypes, int projectTypes, int permitTypeId, string comments, bool isDraft)//, List<StreetsViewModels.ReferenceSelection> references)
+        public async Task<IHttpActionResult> CreatePermit(string token, int companyId, int utilityOwnerId, string purpose, int[] encroachmentTypes, int projectTypes, int permitTypeId, string comments, bool isDraft, DateTime? effectiveDate, DateTime? expirationDate)//, List<StreetsViewModels.ReferenceSelection> references)
         {
             //if (encroachmentTypes == null) throw new ArgumentNullException("encroachmentTypes");
             

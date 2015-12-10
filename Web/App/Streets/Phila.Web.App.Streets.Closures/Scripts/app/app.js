@@ -46,25 +46,25 @@ function AppViewModel() {
             onlyIf: function () {
                 if (self.selectedPermitType() != undefined && self.selectedPermitType().PermitTypeId > 10)
                     return true;
+
+                return false;
             }
         }
     });
     self.selectedCompany = ko.observable(new Company());
     self.references = ko.observableArray();
-    self.locations = ko.observableArray();//.extend({ required: true });
-
+    self.locations = ko.observableArray().extend({ required: true });
+    //self.selectedLocation = ko.observable();
     self.effectiveDate = ko.observable().extend({ validPermitDate: [10, (new Date().addDays(11).getMonth() + 1) + "/" + new Date().addDays(11).getDate() + "/" + new Date().addDays(11).getFullYear()] });
     self.expirationDate = ko.observable().extend({
         validation: {
             validator: function(expirationDate, params) {
-                //params = self.effectiveDate();
                 if (Date.parse(expirationDate) && Date.parse(self.effectiveDate())) {
                     return Date.parse(expirationDate) >= Date.parse(self.effectiveDate());
                 }
                 return false;
             },
             message: "Must be on or after the effective date",
-            //params: 
     }
     });
 
@@ -90,14 +90,14 @@ function AppViewModel() {
                 if (val == undefined) return false;
 
                 var validTime = val.match(/^([1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
-                console.log(validTime);
+
                 if (validTime == null || validTime.length !== 4) return false;
 
 
                 // only validate the time is a valid time
                 if (!ko.validation.validateObservable(self.effectiveDate) || !ko.validation.validateObservable(self.expirationDate) || !ko.validation.validateObservable(self.effectiveTime)) return true;
 
-                var effectiveTime = val.match(/^([1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+                var effectiveTime = self.effectiveTime().match(/^([1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
                 var effectiveDateTime = new Date(self.effectiveDate());
                 var effTimeHours = effectiveTime[3].toLowerCase() === "pm" ? (parseInt(effectiveTime[1]) + 12) : effectiveTime[1];
                 var effTimeMinutes = parseInt(effectiveTime[2]);
@@ -106,9 +106,9 @@ function AppViewModel() {
 
                 var expirationDateTime = new Date(self.expirationDate());
                 var expTimeHours = validTime[3].toLowerCase() === "pm" ? (parseInt(validTime[1]) + 12) : validTime[1];
-                var expTimeMinutes = parseInt(effectiveTime[2]);
-                effectiveDateTime.setHours(expTimeHours);
-                effectiveDateTime.setMinutes(expTimeMinutes);
+                var expTimeMinutes = parseInt(validTime[2]);
+                expirationDateTime.setHours(expTimeHours);
+                expirationDateTime.setMinutes(expTimeMinutes);
 
                 if (expirationDateTime > effectiveDateTime) return true;
 
@@ -128,11 +128,12 @@ function AppViewModel() {
 
 
     self.totalPermitsFound = ko.observable();
-    self.apiUrl = "https://phila.azurewebsites.net/";//"https://microsoft-apiapp2e9548ef99d54bbea82edae5fe3913a8.azurewebsites.net/"; //"http://localhost/Phila.Web.Api.Streets/"; //  
+    self.apiUrl = "https://phila.azurewebsites.net/"; // "http://localhost/Phila.Web.Api.Streets/"; // 
     self.streetCode = "";
     self.fromStreets = ko.observableArray();
 
     self.toStreets = ko.observableArray();
+    self.locationTypes = ko.observableArray(["Address", "Intersection", "Street Segment"]);
 
     // captions for selects
     self.fromStreetCaption = ko.observable();
@@ -358,19 +359,20 @@ function AppViewModel() {
 
     //** locations
     self.addLocation = function(location) {
-        if (location.ToStreet == undefined)
+        if (location == undefined || location.ToStreet == undefined) {
             location = new Location();
+        }
 
         location.OnStreet.editValue.subscribe(function(data) {
             //console.log(data.trim());
             self.getFromStreets(data.trim());
         });
-
+        
 
         self.fromStreetCaption("Choose an 'On Street'...");
         self.toStreetCaption("Choose an 'On Street'...");
         self.clearFromAndToOa();
-
+        //self.selectedLocation(location);
         self.locations.push(location);
 
         //  begin editing the new item straight away
@@ -405,6 +407,9 @@ function AppViewModel() {
 
             // start the transaction
             location.beginEdit(self.editLocationTransaction);
+
+            //self.selectedLocation(location);
+
             // shows the edit fields
             self.editingLocationItem(location);
 
@@ -412,7 +417,16 @@ function AppViewModel() {
         }
     };
 
-    self.applyLocation = function() {
+    self.applyLocation = function () {
+        
+        var errors = ko.validation.group([self.editingLocationItem.OccupancyType, self.editingLocationItem.OnStreet, self.editingLocationItem.FromStreet, self.editingLocationItem.ToStreet]);
+
+        console.log(ko.toJSON(errors));
+
+        errors.showAllMessages();
+
+        if (errors().length > 0) return false;
+
         //  commit the edit transaction
         self.editLocationTransaction.notifySubscribers(null, "commit");
 
@@ -451,7 +465,7 @@ function AppViewModel() {
     };
 
     self.getFromStreets = function(onStreet) {
-        if (onStreet == undefined)
+        if (onStreet == "")
             return;
 
         self.fromStreetCaption("Loading...");
@@ -735,7 +749,7 @@ function AppViewModel() {
 
     // new permit application actions
     self.cancelPermitApplication = function() {
-        // ToDo: clear new permit application model values
+
         var answer = confirm(notification.cancelNewPermitConfirm);
         if (answer) {
             $.notify(notification.cancelNewPermitSuccess, "info");
@@ -761,8 +775,9 @@ function AppViewModel() {
 
     self.postPermit = function(isDraft) {
 
-        var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose, self.selectedPermitType, self.selectedProjectTypes.projectTypes, self.permitPath, self.expirationTime, self.effectiveTime]);
-        errors.showAllMessages();
+        var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose, self.selectedPermitType, self.selectedProjectTypes.projectTypes, self.locations, self.expirationTime, self.effectiveTime]);
+
+        aerrors.showAllMessages();
 
         if (errors().length > 0) return false;
 
@@ -814,7 +829,7 @@ function AppViewModel() {
         self.purpose(null);
         self.comments(null);
         self.locations([]);
-        self.referenceTypes([]);
+        self.references([]);
     };
 
     //** references
@@ -893,20 +908,6 @@ function AppViewModel() {
         return true;
     };
 
-    //** roles
-    self.getRoles = function() {
-        $.ajax({
-            type: "GET",
-            url: self.apiUrl + "api/contacts/GetRoles",
-            success: function(data) {
-                self.contactRoles(data);
-            },
-            //error: function (xhr, ajaxOptions, thrownError) {
-            //    //ToDo: handle error
-            //}
-        });
-    };
-
     //** documents
     self.addDocument = function() {
         var boundary = (new Date()).getTime();
@@ -972,7 +973,7 @@ function AppViewModel() {
 
     //** nav
     self.showNewPermitSection = function() {
-        var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose, self.selectedPermitType, self.selectedProjectTypes.projectTypes, self.permitPath, self.expirationTime, self.effectiveTime]);
+        var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose, self.selectedPermitType, self.selectedProjectTypes.projectTypes, self.locations, self.expirationTime, self.effectiveTime]);
         errors.showAllMessages();
 
         $("#LoginSection").hide();
@@ -1042,8 +1043,8 @@ function AppViewModel() {
 
         document.body.scrollTop = document.documentElement.scrollTop = 0;
 
-        if (map == null)
-            loadMap();
+        //if (map == null)
+        //    loadMap();
     };
 
     self.showUsersCompaniesSection = function() {
@@ -1138,6 +1139,8 @@ function AppViewModel() {
     //** required support for the PSD's legacy code
     self.getPath = function () {
         createWalkingRoute(self.streetSearch(), self.streetSearch());
+
+        getStreetCodeAndSegId(self.streetSearch());
     };
 
     self.selectedProjectTypes =
@@ -1175,82 +1178,75 @@ function AppViewModel() {
         }
     };
 
+    //var map = null;
+    //var sessionKey;
+    //var routeLayer;
+    //var directionsManager;
+    //var directionsErrorEventObj;
+    //var directionsUpdatedEventObj;
+
+    //function loadMap() {
+    //    //var initialViewBounds = Microsoft.Maps.LocationRect.fromCorners(new Microsoft.Maps.Location(40.142140, -75.305099), new Microsoft.Maps.Location(39.840177, -74.927444));
+
+    //    var latitude;
+    //    var longitude;
+    //    var zoom = 10;
+    //    if (navigator.geolocation) {
+    //        navigator.geolocation.getCurrentPosition(function (loc) {
+    //            latitude = loc.coords.latitude;
+    //            longitude = loc.coords.longitude;
+    //            zoom = 15;
+    //            renderMap(latitude, longitude, zoom);
+    //        },
+    //            function (error) {
+    //                latitude = 39.95;
+    //                longitude = -75.166667;
+    //                renderMap(latitude, longitude, zoom);
+    //            },
+    //            { enableHighAccuracy: false, timeout: 5000, maximumAge: 0 });
+    //    } else {
+    //        latitude = 39.95;
+    //        longitude = -75.166667;
+    //        //console.log("Geolocation is not supported by this browser.");
+
+    //        renderMap(latitude, longitude, zoom);
+    //    }
 
 
+    //}
+
+    //function renderMap(latitude, longitude, zoom) {
+    //    var mapOptions = {
+    //        credentials: "AnSM9TY1CIflUjbddXDbTF6-tmK2C0jI3sqgOvsHy0ia0xC9mrQ9moD3yjf1pBZ1",
+    //        enableSearchLogo: false,
+    //        enableClickableLogo: false,
+    //        mapTypeId: Microsoft.Maps.MapTypeId.road,
+    //        width: 500,//$(".flexible-container").css("width"), //document.body.offsetWidth - 40,
+    //        height: 300,
+    //        //bounds: initialViewBounds,
+    //        zoom: zoom,
+    //        center: new Microsoft.Maps.Location(latitude, longitude),
+    //        showCopyright: false //IMPORTANT: Bing Maps Platform API Terms of Use requires copyright information to be displayed. Only set this option to false when copyright information is displayed through alternate means.
+    //    };
+    //    map = new Microsoft.Maps.Map(document.getElementById("mapDiv"), mapOptions);
+
+    //    map.getCredentials(function (c) {
+    //        sessionKey = c;
+    //    });
+
+    //    routeLayer = new Microsoft.Maps.EntityCollection();
+    //    map.entities.push(routeLayer);
+
+        
+
+    //    Microsoft.Maps.loadModule('Microsoft.Maps.Directions', { callback: createWalkingRoute });
 
 
+    //    //click map to add pushpin and get lat long
+    //    Microsoft.Maps.Events.addHandler(map, 'click', getLatLng);
 
-
-    var map = null;
-    var sessionKey;
-    var routeLayer;
-    var directionsManager;
-    var directionsErrorEventObj;
-    var directionsUpdatedEventObj;
-
-
-    function loadMap() {
-        //var initialViewBounds = Microsoft.Maps.LocationRect.fromCorners(new Microsoft.Maps.Location(40.142140, -75.305099), new Microsoft.Maps.Location(39.840177, -74.927444));
-
-        var latitude;
-        var longitude;
-        var zoom = 10;
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (loc) {
-                latitude = loc.coords.latitude;
-                longitude = loc.coords.longitude;
-                zoom = 15;
-                renderMap(latitude, longitude, zoom);
-            },
-                function (error) {
-                    latitude = 39.95;
-                    longitude = -75.166667;
-                    renderMap(latitude, longitude, zoom);
-                },
-                { enableHighAccuracy: false, timeout: 5000, maximumAge: 0 });
-        } else {
-            latitude = 39.95;
-            longitude = -75.166667;
-            //console.log("Geolocation is not supported by this browser.");
-
-            renderMap(latitude, longitude, zoom);
-        }
-
-
-    }
-
-    function renderMap(latitude, longitude, zoom) {
-        var mapOptions = {
-            credentials: "AnSM9TY1CIflUjbddXDbTF6-tmK2C0jI3sqgOvsHy0ia0xC9mrQ9moD3yjf1pBZ1",
-            enableSearchLogo: false,
-            enableClickableLogo: false,
-            mapTypeId: Microsoft.Maps.MapTypeId.road,
-            width: 500,//$(".flexible-container").css("width"), //document.body.offsetWidth - 40,
-            height: 300,
-            //bounds: initialViewBounds,
-            zoom: zoom,
-            center: new Microsoft.Maps.Location(latitude, longitude),
-            showCopyright: false //IMPORTANT: Bing Maps Platform API Terms of Use requires copyright information to be displayed. Only set this option to false when copyright information is displayed through alternate means.
-        };
-        map = new Microsoft.Maps.Map(document.getElementById("mapDiv"), mapOptions);
-
-        map.getCredentials(function (c) {
-            sessionKey = c;
-        });
-
-        routeLayer = new Microsoft.Maps.EntityCollection();
-        map.entities.push(routeLayer);
-
-        // click map to add pushpin and get lat long
-        //Microsoft.Maps.Events.addHandler(map, 'click', getLatLng);
-
-        Microsoft.Maps.loadModule('Microsoft.Maps.Directions', { callback: createWalkingRoute });
-
-        // Microsoft.Maps.loadModule('Microsoft.Maps.Search', { callback: searchModuleLoaded });
-
-
-    }
-
+    //     //Microsoft.Maps.loadModule('Microsoft.Maps.Search', { callback: searchModuleLoaded });
+    //}
 
     //function getLatLng(e) {
     //    //console.log(e);
@@ -1258,152 +1254,253 @@ function AppViewModel() {
     //        var point = new Microsoft.Maps.Point(e.getX(), e.getY());
     //        var locTemp = e.target.tryPixelToLocation(point);
     //        var location = new Microsoft.Maps.Location(locTemp.latitude, locTemp.longitude);
-    //        console.log(locTemp.latitude + "&" + locTemp.longitude);
+    //        var url = "https://dev.virtualearth.net/REST/v1/Locations/" + locTemp.latitude + "," + locTemp.longitude;
 
+    //        $.ajax({
+    //            type: "GET",
+    //            url: url,
+    //            contentType: "application/json",
+    //            dataType: 'jsonp',
+    //            data: {
+    //                key: sessionKey
+    //            },
+    //            success: function (data) {
+    //                getStreetCodeAndSegId(data.resourceSets[0].resources[0].address.addressLine);
 
-    //        var pin = new Microsoft.Maps.Pushpin(location, { draggable: true });
+    //            },
+    //            error: function (e) {
+    //                console.log("error: " + e.statusText);
+    //            },
+    //            jsonp: "jsonp"
+    //        });
 
-    //        map.entities.push(pin);
+    //        //var pin = new Microsoft.Maps.Pushpin(location, { draggable: true });
+
+    //        //map.entities.push(pin);
 
     //    }
     //}
 
-    //function searchModuleLoaded() {
-    //    //console.log("searchModuleLoaded");
-    //    var searchManager = new Microsoft.Maps.Search.SearchManager(map);
-    //    var searchRequest = { where: '100 S BROAD ST, PHILADELPHIA, PA', count: 5, callback: searchCallback, errorCallback: searchError };
-    //    searchManager.search(searchRequest);
+    //var points = [];
+    //function setPoint(point) {
+    //    points.push(point);
+
+    //    if (points.length === 2) {
+    //        var polyline = new Microsoft.Maps.Polyline(points, null);
+    //        console.log("points", points);
+    //        routeLayer.push(polyline);
+
+    //        points = [];
+    //    }
     //}
 
-    //function searchCallback(searchResponse, userData) {
-    //    //console.log("searchCallback");
-    //    //console.log(searchResponse.parseResults[0].location.location);
-    //    //console.log("The first search result is " + searchResponse.parseResults[0].location.name + ".");
+    //function getStreetCodeAndSegId(street) {
 
-    //    var pushpin = new Microsoft.Maps.Pushpin(map.getCenter(), { draggable: true });
-    //    map.entities.push(pushpin);
-    //    pushpin.setLocation(new Microsoft.Maps.Location(searchResponse.parseResults[0].location.location.latitude, searchResponse.parseResults[0].location.location.longitude));
-    //    //console.log('Pushpin Location Updated to ' + pushpin.getLocation() + '. Pan map to location, if pushpin is not visible');
+    //    $.ajax({
+    //        url: self.apiUrl + "api/Locations/GetStreetSegmentLine?street=" + street,
+    //        type: "GET",
+    //        dataType: "json",
+    //        success: function (data) {
+    //            console.log(data);
+
+
+    //            $(data).each(function(index, item) {
+
+    //                ////routeLayer.clear();
+    //                //var polyline = new Microsoft.Maps.Polyline([new Microsoft.Maps.Location(latlon.latitude - 0.1, latlon.longitude - 0.1), new Microsoft.Maps.Location(latlon.latitude + 0.1, latlon.longitude - 0.1)]
+    //                //, null);
+                    
+    //                var url = "https://dev.virtualearth.net/REST/v1/Locations?q=" + item.FromAddress;                    ;
+
+    //                $.ajax({
+    //                    type: "GET",
+    //                    url: url,
+    //                    contentType: "application/json",
+    //                    dataType: 'jsonp',
+    //                    async: false,
+    //                    data: {
+    //                        key: sessionKey
+    //                    },
+    //                    success: function (result) {
+    //                        console.log("FromStreet result", result);
+    //                        setPoint(new Microsoft.Maps.Location(result.resourceSets[0].resources[0].geocodePoints[1].coordinates[0], result.resourceSets[0].resources[0].geocodePoints[1].coordinates[1]));
+    //                    },
+    //                    error: function (e) {
+    //                        console.log("error: " + e.statusText);
+    //                    },
+    //                    jsonp: "jsonp"
+    //                });
+
+    //                url = "https://dev.virtualearth.net/REST/v1/Locations?q=" + item.ToAddress;
+
+    //                $.ajax({
+    //                    type: "GET",
+    //                    url: url,
+    //                    contentType: "application/json",
+    //                    dataType: 'jsonp',
+    //                    async: false,
+    //                    data: {
+    //                        key: sessionKey
+    //                    },
+    //                    success: function (result) {
+    //                        console.log("ToStreet result", result);
+
+    //                        setPoint(new Microsoft.Maps.Location(result.resourceSets[0].resources[0].geocodePoints[1].coordinates[0], result.resourceSets[0].resources[0].geocodePoints[1].coordinates[1]));
+
+    //                    },
+    //                    error: function (e) {
+    //                        console.log("error: " + e.statusText);
+    //                    },
+    //                    jsonp: "jsonp"
+    //                });
+
+
+                    
+    //            });
+
+                
+
+    //        }
+    //    });
+
+    //}
+
+    ////function searchModuleLoaded() {
+    ////    //console.log("searchModuleLoaded");
+    ////    var searchManager = new Microsoft.Maps.Search.SearchManager(map);
+    ////    var searchRequest = { where: '100 S BROAD ST, PHILADELPHIA, PA', count: 5, callback: searchCallback, errorCallback: searchError };
+    ////    searchManager.search(searchRequest);
+    ////}
+
+    ////function searchCallback(searchResponse, userData) {
+    ////    //console.log("searchCallback");
+    ////    //console.log(searchResponse.parseResults[0].location.location);
+    ////    //console.log("The first search result is " + searchResponse.parseResults[0].location.name + ".");
+
+    ////    var pushpin = new Microsoft.Maps.Pushpin(map.getCenter(), { draggable: true });
+    ////    map.entities.push(pushpin);
+    ////    pushpin.setLocation(new Microsoft.Maps.Location(searchResponse.parseResults[0].location.location.latitude, searchResponse.parseResults[0].location.location.longitude));
+    ////    //console.log('Pushpin Location Updated to ' + pushpin.getLocation() + '. Pan map to location, if pushpin is not visible');
+    ////}
+
+    ////function searchError(searchRequest) {
+    ////    alert("An error occurred.");
+    ////}
+
+    ////ToDo: move to  models
+    //function LocationWaypoint(waypointOrder, latitude, longitude, addressLine, formattedAddress) {
+    //    var self = this;
+
+    //    self.WaypointOrder = waypointOrder;
+    //    self.Latitude = latitude;
+    //    self.Longitude = longitude;
+    //    self.AddressLine = addressLine;
+    //    self.FormattedAddress = formattedAddress;
+    //}
+
+    //function createDirectionsManager() {
+    //    var displayMessage;
+    //    if (!directionsManager) {
+    //        directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
+    //        displayMessage = 'Directions Module loaded\n';
+    //        displayMessage += 'Directions Manager loaded';
+    //    }
+    //    //console.log(displayMessage);
+    //    directionsManager.resetDirections();
+    //    directionsErrorEventObj = Microsoft.Maps.Events.addHandler(directionsManager, 'directionsError', function (arg) {
+    //        // console.log(  arg.message );
+    //    });
+    //    directionsUpdatedEventObj = Microsoft.Maps.Events.addHandler(directionsManager, 'directionsUpdated', function (result) {
+
+
+    //        //map.setView({ zoom: 15 });
+
+    //        // how many waypoints?
+    //        var totalWaypoints = result.route[0].routeLegs[0].subLegs[0].routePath.decodedLongitudes.length;
+
+    //        var wpLat = result.route[0].routeLegs[0].subLegs[0].routePath.decodedLatitudes;
+    //        var wpLong = result.route[0].routeLegs[0].subLegs[0].routePath.decodedLongitudes;
+
+    //        //var lastWp;
+    //        var order = -1;
+    //        self.permitPath([]);
+    //        for (var i = 0; i < totalWaypoints - 1; i++) {
+
+    //            var url = "https://dev.virtualearth.net/REST/v1/Locations/" + wpLat[i] + "," + wpLong[i];
+
+    //            $.ajax({
+    //                type: "GET",
+    //                url: url,
+    //                contentType: "application/json",
+    //                dataType: 'jsonp',
+    //                data: {
+    //                    key: sessionKey
+    //                },
+    //                success: function (data) {
+
+    //                    if (data && data.resourceSets && data.resourceSets.length > 0 && data.resourceSets[0].resources && data.resourceSets[0].resources.length > 0) {
+    //                        var lw = new LocationWaypoint(++order, data.resourceSets[0].resources[0].geocodePoints[0].coordinates[0], data.resourceSets[0].resources[0].geocodePoints[0].coordinates[1], data.resourceSets[0].resources[0].address.addressLine, data.resourceSets[0].resources[0].address.formattedAddress);
+    //                        self.permitPath.push(lw);
+    //                    }
+
+    //                    //routeLayer.clear();
+
+    //                    //var polyline = new Microsoft.Maps.Polyline(wp, null);
+
+    //                    //routeLayer.push(polyline);
+
+    //                    if (result && result.resourceSets && result.resourceSets.length > 0 && result.resourceSets[0].resources && result.resourceSets[0].resources.length > 0) {
+
+    //                        // Set the map view
+    //                        //var bbox = result.resourceSets[0].resources[0].bbox;
+    //                        //var viewBoundaries = Microsoft.Maps.LocationRect.fromLocations(new Microsoft.Maps.Location(bbox[0], bbox[1]), new Microsoft.Maps.Location(bbox[2], bbox[3]));
+    //                        //map.setView({ bounds: viewBoundaries, zoom: 10 });
+    //                        map.setView({ center: new Microsoft.Maps.Location(wpLat[0], wpLong[0]) });
+
+    //                    }
+
+    //                },
+    //                error: function (e) {
+    //                    console.log("error: " + e.statusText);
+    //                },
+    //                jsonp: "jsonp"
+    //            });
+    //        }
+
+    //    });
     //}
 
 
-    //function searchError(searchRequest) {
-    //    alert("An error occurred.");
+    //function createWalkingRoute(fromLocation, toLocation) {
+    //    if (fromLocation == undefined || toLocation == undefined) return;
+
+    //    var phila = ", Philadelphia, PA";
+    //    fromLocation = fromLocation + phila;
+    //    toLocation = toLocation + phila;
+
+
+
+    //    if (!directionsManager) { createDirectionsManager(); }
+    //    directionsManager.resetDirections();
+    //    // Set Route Mode to walking 
+    //    directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.walking });
+    //    var waypoint0 = new Microsoft.Maps.Directions.Waypoint({ address: fromLocation });
+    //    directionsManager.addWaypoint(waypoint0);
+    //    var waypoint1 = new Microsoft.Maps.Directions.Waypoint({ address: toLocation });
+    //    directionsManager.addWaypoint(waypoint1);
+    //    directionsManager.calculateDirections();
+
+
     //}
-    //ToDo: move to  models
-    function LocationWaypoint(waypointOrder, latitude, longitude, addressLine, formattedAddress) {
-        var self = this;
 
-        self.WaypointOrder = waypointOrder;
-        self.Latitude = latitude;
-        self.Longitude = longitude;
-        self.AddressLine = addressLine;
-        self.FormattedAddress = formattedAddress;
-    }
-
-    function createDirectionsManager() {
-        var displayMessage;
-        if (!directionsManager) {
-            directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
-            displayMessage = 'Directions Module loaded\n';
-            displayMessage += 'Directions Manager loaded';
-        }
-        //console.log(displayMessage);
-        directionsManager.resetDirections();
-        directionsErrorEventObj = Microsoft.Maps.Events.addHandler(directionsManager, 'directionsError', function (arg) {
-            // console.log(  arg.message );
-        });
-        directionsUpdatedEventObj = Microsoft.Maps.Events.addHandler(directionsManager, 'directionsUpdated', function (result) {
-
-
-            //map.setView({ zoom: 15 });
-
-            // how many waypoints?
-            var totalWaypoints = result.route[0].routeLegs[0].subLegs[0].routePath.decodedLongitudes.length;
-
-            var wpLat = result.route[0].routeLegs[0].subLegs[0].routePath.decodedLatitudes;
-            var wpLong = result.route[0].routeLegs[0].subLegs[0].routePath.decodedLongitudes;
-
-            //var lastWp;
-            var order = -1;
-            self.permitPath([]);
-            for (var i = 0; i < totalWaypoints - 1; i++) {
-
-                var url = "https://dev.virtualearth.net/REST/v1/Locations/" + wpLat[i] + "," + wpLong[i];
-
-                $.ajax({
-                    type: "GET",
-                    url: url,
-                    contentType: "application/json",
-                    dataType: 'jsonp',
-                    data: {
-                        key: sessionKey
-                    },
-                    success: function (data) {
-
-                        if (data && data.resourceSets && data.resourceSets.length > 0 && data.resourceSets[0].resources && data.resourceSets[0].resources.length > 0) {
-                            var lw = new LocationWaypoint(++order, data.resourceSets[0].resources[0].geocodePoints[0].coordinates[0], data.resourceSets[0].resources[0].geocodePoints[0].coordinates[1], data.resourceSets[0].resources[0].address.addressLine, data.resourceSets[0].resources[0].address.formattedAddress);
-                            self.permitPath.push(lw);
-                        }
-
-                        //routeLayer.clear();
-
-                        //var polyline = new Microsoft.Maps.Polyline(wp, null);
-
-                        //routeLayer.push(polyline);
-
-                        if (result && result.resourceSets && result.resourceSets.length > 0 && result.resourceSets[0].resources && result.resourceSets[0].resources.length > 0) {
-
-                            // Set the map view
-                            //var bbox = result.resourceSets[0].resources[0].bbox;
-                            //var viewBoundaries = Microsoft.Maps.LocationRect.fromLocations(new Microsoft.Maps.Location(bbox[0], bbox[1]), new Microsoft.Maps.Location(bbox[2], bbox[3]));
-                            //map.setView({ bounds: viewBoundaries, zoom: 10 });
-                            map.setView({ center: new Microsoft.Maps.Location(wpLat[0], wpLong[0]) });
-
-                        }
-
-                    },
-                    error: function (e) {
-                        console.log("error: " + e.statusText);
-                    },
-                    jsonp: "jsonp"
-                });
-            }
-
-        });
-    }
-
-
-    function createWalkingRoute(fromLocation, toLocation) {
-        if (fromLocation == undefined || toLocation == undefined) return;
-
-        var phila = ", Philadelphia, PA";
-        fromLocation = fromLocation + phila;
-        toLocation = toLocation + phila;
-
-
-
-        if (!directionsManager) { createDirectionsManager(); }
-        directionsManager.resetDirections();
-        // Set Route Mode to walking 
-        directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.walking });
-        var waypoint0 = new Microsoft.Maps.Directions.Waypoint({ address: fromLocation });
-        directionsManager.addWaypoint(waypoint0);
-        var waypoint1 = new Microsoft.Maps.Directions.Waypoint({ address: toLocation });
-        directionsManager.addWaypoint(waypoint1);
-        directionsManager.calculateDirections();
-
-
-    }
-
-    function createDirections() {
-        if (!directionsManager) {
-            Microsoft.Maps.loadModule('Microsoft.Maps.Directions', { callback: createWalkingRoute });
-        }
-        else {
-            createWalkingRoute();
-        }
-    }
+    //function createDirections() {
+    //    if (!directionsManager) {
+    //        Microsoft.Maps.loadModule('Microsoft.Maps.Directions', { callback: createWalkingRoute });
+    //    }
+    //    else {
+    //        createWalkingRoute();
+    //    }
+    //}
 };
 
 /*----------------------------------------------------------------------*/
@@ -1445,56 +1542,12 @@ $(document).ready(function() {
             }
         });
 
-        //var now = new Date();
-        //now = now.addDays(10);
+        //model.addLocation();
 
-        ////if($("#RefStart")[0].type != "date")
-        ////    $("#RefStart").datepicker();
+        //var location = new Location();
+        //model.selectedLocation(location);
+        //model.editLocation(location);
 
-        //var day = now.getDate();
-        //day = day < 10 ? "0" + day : day
-        //var month = (now.getMonth() + 1);
-        //month = month < 10 ? "0" + month : month;
-        //var year = now.getFullYear();
-        //var minDate = year + "-" + month + "-" + day;
-
-        //console.log(minDate);
-
-        //document.getElementById("RefStart").min = "1999-01-01";
-        //var x = document.getElementById("RefStart").min = "1999-01-01";
-
-        //$("#RefStart").attr("min", minDate);
-        //$("#RefStart").attr("max", minDate);
-
-        //document.getElementById("RefStart").min = minDate;
-
-        //// ToDo: make the start and end dates observable
-        //$("#ReqStart").datepicker({
-        //    format: "mm/dd/yyyy",
-        //    startDate: "+10d",
-        //    autoclose: true
-        //}).on("changeDate", function(e) {
-        //    $(this).datepicker("hide");
-
-        //    var today = new Date();
-        //    $("#ReqEnd").val("");
-
-        //    $("#ReqEnd").datepicker("remove");
-
-        //    $("#ReqEnd").datepicker({
-        //        format: "mm/dd/yyyy",
-        //        startDate: "+" + today.dayDiff(e.date) + "d",
-        //        autoclose: true
-        //    }).on("changeDate", function() { //e) {
-        //        $(this).datepicker("hide");
-        //    });
-        //});
-
-        //$("#ReqEnd").datepicker({
-        //    format: "mm/dd/yyyy",
-        //    startDate: "+10d",
-        //    autoclose: true
-        //});
     } else {
         var expiredToken = getUrlParameter("ExpiredToken");
         console.log(expiredToken);
@@ -1521,13 +1574,10 @@ $(document).ready(function() {
     });
 
     
-    $(window).resize(function () {
-        var $mapDiv = $("#mapDiv");
-        map.setOptions({ width: $mapDiv.width() });
-        //$("div.MicrosoftMap.MapTypeId_auto").css("width", $(".flexible-container").css("width"));
-        //$("div.MicrosoftMap.MapTypeId_auto").css("height", "500px");//$(".flexible-container").css("height"));
-
-    });
+    //$(window).resize(function () {
+    //    var $mapDiv = $("#mapDiv");
+    //    map.setOptions({ width: $mapDiv.width() });
+    //});
 
 
     $(document).ajaxError(function (event, request, settings) {

@@ -4,6 +4,8 @@
 # Dev web.config transformation file
 *.config
 
+EmailHelper.cs
+
 # User-specific files
 *.suo
 *.user

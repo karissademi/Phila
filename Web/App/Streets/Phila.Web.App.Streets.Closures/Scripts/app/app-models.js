@@ -54,34 +54,55 @@ Company.prototype.beginEdit = function (transaction) {
     this.PhiladelphiaTaxId.beginEdit(transaction);
 };
 
-function Location(onStreetName, onStreetCode, onStreetSegmentId, fromStreetName, fromStreetCode, fromStreetSegmentId, fromStreetNodeId, atStreetName, atStreetCode, atStreetSegmentId, toStreetName, toStreetCode, toStreetSegmentId, toStreetNodeId, occupancyType, referenceType, referenceValue, highTrafficArea, isIntersection) {
+function Location(onStreetName, onStreetCode, onStreetSegmentId, fromStreetName, fromStreetCode, fromStreetSegmentId, fromStreetNodeId, atStreetName, atStreetCode, atStreetSegmentId, toStreetName, toStreetCode, toStreetSegmentId, toStreetNodeId, occupancyType, referenceType, referenceValue, highTrafficArea, locationType) {
     var self = this;
 
-    //if (onStreetName == undefined) onStreetName = { st_name: "blank" };
+    //if (onStreetName == undefined) onStreetName = { st_name: "" };
     if (fromStreetName == undefined) fromStreetName = { st_name: "blank" };
     if (toStreetName == undefined) toStreetName = { st_name: "blank" };
 
-    self.OnStreet = ko.observable(onStreetName).extend({ editable: true });
+    self.OnStreet = ko.observable(onStreetName).extend({ editable: true }).extend({ required: true });;
     self.OnStreetCode = ko.observable(onStreetCode).extend({ editable: true });
     self.OnStreetNodeId = ko.observable(onStreetSegmentId).extend({ editable: true });
 
-    self.FromStreet = ko.observable(fromStreetName).extend({ editable: true });
+    self.FromStreet = ko.observable(fromStreetName).extend({ editable: true }).extend({
+        required: {
+            onlyIf: function () {
+                console.log(ko.toJSON(self));
+
+                if (self.LocationType !== undefined && self.LocationType() !== "Address")
+                    return true;
+
+                return false;
+            }
+        }
+    });
     self.FromStreetCode = ko.observable(fromStreetCode).extend({ editable: true });
     self.FromStreetNodeId = ko.observable(fromStreetNodeId).extend({ editable: true });
 
-    self.AtStreet = ko.observable(atStreetName).extend({ editable: true });
-    self.AtStreetCode = ko.observable(atStreetCode).extend({ editable: true });
-    self.AtStreetSegmentId = ko.observable(atStreetSegmentId).extend({ editable: true });
+    //self.AtStreet = ko.observable(atStreetName).extend({ editable: true });
+    //self.AtStreetCode = ko.observable(atStreetCode).extend({ editable: true });
+    //self.AtStreetSegmentId = ko.observable(atStreetSegmentId).extend({ editable: true });
 
-    self.ToStreet = ko.observable(toStreetName).extend({ editable: true });
+    self.ToStreet = ko.observable(toStreetName).extend({ editable: true }).extend({
+        required: {
+            onlyIf: function () {
+                console.log(ko.toJSON(self));
+                if (self.LocationType !== undefined && self.LocationType() === "Street Segment")
+                    return true;
+
+                return false;
+            }
+        }
+    });
     self.ToStreetCode = ko.observable(toStreetCode).extend({ editable: true });
     self.ToStreetNodeId = ko.observable(toStreetNodeId).extend({ editable: true });
 
-    self.OccupancyType = ko.observable(occupancyType).extend({ editable: true });
+    self.OccupancyType = ko.observable(occupancyType).extend({ editable: true }).extend({ required: true });;
     self.ReferenceType = ko.observable(referenceType).extend({ editable: true });
     self.ReferenceValue = ko.observable(referenceValue).extend({ editable: true });
     self.HighTrafficArea = ko.observable(highTrafficArea).extend({ editable: true });
-    self.IsIntersection = ko.observable(isIntersection).extend({ editable: true });
+    self.LocationType = ko.observable(locationType).extend({ editable: true });
 }
 
 Location.prototype.beginEdit = function (transaction) {
@@ -91,9 +112,9 @@ Location.prototype.beginEdit = function (transaction) {
     this.FromStreet.beginEdit(transaction);
     this.FromStreetCode.beginEdit(transaction);
     this.FromStreetNodeId.beginEdit(transaction);
-    this.AtStreet.beginEdit(transaction);
-    this.AtStreetCode.beginEdit(transaction);
-    this.AtStreetSegmentId.beginEdit(transaction);
+    //this.AtStreet.beginEdit(transaction);
+    //this.AtStreetCode.beginEdit(transaction);
+    //this.AtStreetSegmentId.beginEdit(transaction);
     this.ToStreet.beginEdit(transaction);
     this.ToStreetCode.beginEdit(transaction);
     this.ToStreetNodeId.beginEdit(transaction);
@@ -101,7 +122,7 @@ Location.prototype.beginEdit = function (transaction) {
     this.ReferenceType.beginEdit(transaction);
     this.ReferenceValue.beginEdit(transaction);
     this.HighTrafficArea.beginEdit(transaction);
-    this.IsIntersection.beginEdit(transaction);
+    this.LocationType.beginEdit(transaction);
 };
 
 function Permit(permitId, purpose, permitLocation, startDate, endDate, permitStatus) {
