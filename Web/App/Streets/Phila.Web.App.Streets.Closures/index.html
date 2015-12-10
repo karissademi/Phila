@@ -1,32 +1,32 @@
 ﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="description" content="City of Philadelphia Streets Department's street Closure application" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Philadelphia Street Department: Street Closures</title>
-        <link rel='icon' type='image/x-icon' href="https://cityofphiladelphia.github.io/patterns/images/favicon.ico" />
-        
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="City of Philadelphia Streets Department's street Closure application" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Philadelphia Street Department: Street Closures</title>
+    <link rel='icon' type='image/x-icon' href="https://cityofphiladelphia.github.io/patterns/images/favicon.ico" />
 
-        <!-- ToDo: bundle and minify css before publishing to production -->
-        <link href="Content/bootstrap.css" rel="stylesheet" />
-        <!--<link href="Content/bootstrap-datepicker.css" rel="stylesheet" />-->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-        <link href="Content/app/jquery-ui-smoothness-1.11.4.css" rel="stylesheet" />
-        <link href="Content/app/ionicons.min-2.0.1.css" rel="stylesheet" />
-        <link href="Content/app/patterns-0.8.1.css" rel="stylesheet" />
-        <link href="Content/app/site.css" rel="stylesheet" />
-        <!--<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />-->
 
-        
-        <!--<script charset="UTF-8" type="text/javascript" src="https://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0&s=1">
-    </script>-->
 
-        
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
-    </head>
+    <!-- ToDo: bundle and minify css before publishing to production -->
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://cityofphiladelphia.github.io/patterns/dist/0.12.6/css/patterns.css" />
+
+    <link href="Content/app/jquery-ui-smoothness-1.11.4.css" rel="stylesheet" />
+    <link href="Content/app/ionicons.min-2.0.1.css" rel="stylesheet" />
+    <!--<link href="Content/app/patterns-0.8.1.css" rel="stylesheet" />-->
+    <link href="Content/app/site.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+   
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+</head>
 <body>
 
     <!-- Begin header -->
@@ -35,7 +35,7 @@
 
             <div class="small-24 medium-24 column">
                 <a href="http://alpha.phila.gov"><img src="https://cityofphiladelphia.github.io/patterns/images/city-of-philadelphia-logo.png" class="logo no-scale" alt="City of Philadelphia" /></a>
-                <h1 class="page-title"><a href="#">Street Closure Request</a></h1>
+                <h1 class="page-title"><a href="#">Commercial Street Closure Request</a></h1>
             </div>
         </div>
     </header>
@@ -95,7 +95,7 @@
                                     <h4>Company Name</h4>
 
                                     <input type="text" class="edit" data-bind="value: CompanyName.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: CompanyName, visible: !$root.isCompanyEditing($data)"></label>
+                                    <h2><label class="read" data-bind="text: CompanyName, visible: !$root.isCompanyEditing($data)"></label></h2>
                                 </div>
                                 <div class="medium-7 columns">
                                     <h4>Company Phone</h4>
@@ -278,12 +278,12 @@
                             <label>
                                 Start Date:&nbsp;
                                 <abbr rel="tooltip" title="The start date must be <em>10 days</em> after today."><i class="fa fa-info-circle"></i></abbr>
-                               
+
                             </label><input type="date" data-bind="value: $root.effectiveDate" />
                         </div>
                         <div class="medium-6 columns">
                             <label>Start Time:</label>
-                            <input type="text" class="form-control" placeholder="hh:mm AM/PM" data-bind="value: $root.effectiveTime" />
+                            <input type="text" class="form-control" placeholder="hh:mm xm" data-bind="value: $root.effectiveTime" /><!--data-bind="inputmask: { value: $root.effectiveTime, mask: 'h:s t\\m', placeholder: 'hh:mm xm', alias: 'datetime', hourFormat: '12'}" />-->
                         </div>
                         <div class="medium-6 columns">
                             <label>End Date:</label>
@@ -291,7 +291,7 @@
                         </div>
                         <div class="medium-6 columns">
                             <label>End Time:</label>
-                            <input type="text" class="form-control" placeholder="hh:mm AM/PM" data-bind="value: $root.expirationTime" />
+                            <input type="text" class="form-control" placeholder="hh:mm xm" data-bind="value: $root.expirationTime" /><!--data-bind="inputmask: { value: $root.expirationTime, mask: 'h:s t\\m', placeholder: 'hh:mm xm', alias: 'datetime', hourFormat: '12'}"/>-->
                         </div>
                     </div>
                     <div class="row">
@@ -349,32 +349,33 @@
                             <label><input type="radio" name="locTypeGroup" value="segment" data-bind="checked: $data.LocationType.bind($data)" /> Street Segment</label>-->
                 <!--<select data-bind="options: $root.locationTypes, selectedOptions: $data.LocationType.editValue(), value: $data.LocationType.editValue, optionsCaption: 'Choose...'"></select>
 
-                                    </div>
-                                    <div data-bind="visible: $data.LocationType.editValue() != undefined">
-                                        <div class="medium-6 columns">
-                                            <label>Occupancy Type:</label>
-                                            <select data-bind="options: $root.occupancyTypes, optionsText: 'OccupancyTypeName', value: $data.OccupancyType.editValue, optionsCaption: 'Choose...', visible: $root.isLocationEditing($data)"></select>
-                                        </div>
-                                        <div class="medium-10 columns">
-                                            <label data-bind="text: $data.LocationType.editValue() == 'Address' ? 'Address:' : 'On Street:'"></label>
-                                            <input id="OnStreet" data-bind="jqAuto: { value: OnStreet.editValue, source: $root.getOnStreets, inputProp: 'StreetName', labelProp: 'StreetName', valueProp: 'StreetName' }, visible: $root.isLocationEditing($data)" />
-                                        </div>
-                                        <div class="medium-10 columns" data-bind="visible: $data.LocationType.editValue()!= 'Address'">
-                                            <label data-bind="text: $data.LocationType.editValue() == 'Intersection' ? 'Cross Street:' : 'From Street:'"></label>
-                                            <select class="ddFromStreet" data-bind="options: $root.fromStreets, selectedOptions: $data.FromStreet.editValue, optionsText: 'st_name', value: $data.FromStreet.editValue, optionsCaption: $root.fromStreetCaption, visible: $root.isLocationEditing($data), event: { change: $root.getToStreets.bind($data, $data.OnStreet.editValue, $data.FromStreet.editValue) },  enable: $root.fromStreets() != undefined && $root.fromStreets().length > 0 ? true : false"></select>
-                                        </div>
-                                        <div class="medium-10 columns" data-bind="visible: $data.LocationType.editValue() == 'Street Segment'">
-                                            <label>To Street:</label>
-                                            <select class="ddToStreet" data-bind="options: $root.toStreets, optionsText: 'st_name', value: $data.ToStreet.editValue, selectedOptions: $data.ToStreet.editValue.st_name, optionsCaption: $root.toStreetCaption, visible: $root.isLocationEditing($data),  enable: $root.toStreets() != undefined && $root.toStreets().length > 0 ? true : false">"></select>
-                                        </div>
-                                        <br />
-                                        <div class="row marg-top-20 medium-24 columns">
-                                            <button data-bind="click: $root.applyLocation">Save</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="validationMessage" data-bind="validationMessage: $root.locations"></span>
-                -->
+                </div>
+                    <div data-bind="visible: $data.LocationType.editValue() != undefined">
+                        <div class="medium-6 columns">
+                            <label>Occupancy Type:</label>
+                            <select data-bind="options: $root.occupancyTypes, optionsText: 'OccupancyTypeName', value: $data.OccupancyType.editValue, optionsCaption: 'Choose...', visible: $root.isLocationEditing($data)"></select>
+                        </div>
+                        <div class="medium-10 columns">
+                            <label data-bind="text: $data.LocationType.editValue() == 'Address' ? 'Address:' : 'On Street:'"></label>
+                            <input id="OnStreet" data-bind="jqAuto: { value: OnStreet.editValue, source: $root.getOnStreets, inputProp: 'StreetName', labelProp: 'StreetName', valueProp: 'StreetName' }, visible: $root.isLocationEditing($data)" />
+                        </div>
+                        <div class="medium-10 columns" data-bind="visible: $data.LocationType.editValue()!= 'Address'">
+                            <label data-bind="text: $data.LocationType.editValue() == 'Intersection' ? 'Cross Street:' : 'From Street:'"></label>
+                            <select class="ddFromStreet" data-bind="options: $root.fromStreets, selectedOptions: $data.FromStreet.editValue, optionsText: 'st_name', value: $data.FromStreet.editValue, optionsCaption: $root.fromStreetCaption, visible: $root.isLocationEditing($data), event: { change: $root.getToStreets.bind($data, $data.OnStreet.editValue, $data.FromStreet.editValue) },  enable: $root.fromStreets() != undefined && $root.fromStreets().length > 0 ? true : false"></select>
+                        </div>
+                        <div class="medium-10 columns" data-bind="visible: $data.LocationType.editValue() == 'Street Segment'">
+                            <label>To Street:</label>
+                            <select class="ddToStreet" data-bind="options: $root.toStreets, optionsText: 'st_name', value: $data.ToStreet.editValue, selectedOptions: $data.ToStreet.editValue.st_name, optionsCaption: $root.toStreetCaption, visible: $root.isLocationEditing($data),  enable: $root.toStreets() != undefined && $root.toStreets().length > 0 ? true : false">"></select>
+                        </div>
+                        <br />
+                        <div class="row marg-top-20 medium-24 columns">
+                            <button data-bind="click: $root.applyLocation">Save</button>
+                        </div>
+                    </div>
+                </div>
+                    <span class="validationMessage" data-bind="validationMessage: $root.locations"></span>
+                    -->
+
                 <div>
                     <table>
                         <!--<thead>
@@ -402,8 +403,8 @@
                                 </td>
 
                                 <td>
-                                    <strong><label>Location Type:<abbr rel="tooltip" title="[insert location type tooltip here]"><i class="fa fa-info-circle"></i></abbr>
-</label></strong>
+                                    <strong><label>Location Type:&nbsp;<abbr rel="tooltip" title="Select a location type."><i class="fa fa-info-circle"></i></abbr></label></strong>
+
                                     <select data-bind="options: $root.locationTypes, selectedOptions: $data.LocationType.editValue(), visible: $root.isLocationEditing($data), value: $data.LocationType.editValue, optionsCaption: 'Choose...'"></select>
                                     <label class="read" data-bind="text: LocationType() ? LocationType() : 'blank', visible: !$root.isLocationEditing($data)"></label>
                                 </td>
@@ -424,9 +425,17 @@
                                     <!--Cross|From Street-->
                                     <div class="medium-10 columns" data-bind="visible:  $data.LocationType.editValue()!= undefined && $data.LocationType.editValue()!= 'Address'">
 
-                                        <strong><label data-bind="text: $data.LocationType.editValue() == 'Intersection' ? 'Cross Street:' : 'From Street:'"></label></strong>
+                                        <strong><label data-bind="text: $data.LocationType.editValue() === 'Intersection' ? 'Cross Street:' : 'From Street:'"></label></strong>
 
-                                        <abbr rel="tooltip" title="[insert location type tooltip here]"><i class="fa fa-info-circle"></i></abbr>
+                                        <!--cross street tooltip-->
+                                        <div data-bind="visible: $data.LocationType.editValue() === 'Intersection'">
+                                            &nbsp;<abbr rel="tooltip" title="Select the cross street."><i class="fa fa-info-circle"></i></abbr>
+                                        </div>
+
+                                        <!--from street tooltip-->
+                                        <div data-bind="visible: $data.LocationType.editValue() === 'Street Segment'">
+                                            &nbsp;<abbr rel="tooltip" title="Select the starting cross street."><i class="fa fa-info-circle"></i></abbr>
+                                        </div>
 
                                         <select class="ddFromStreet" data-bind="options: $root.fromStreets, selectedOptions: $data.FromStreet.editValue, optionsText: 'st_name', value: $data.FromStreet.editValue, optionsCaption: $root.fromStreetCaption, visible: $root.isLocationEditing($data), event: { change: $root.getToStreets.bind($data, $data.OnStreet.editValue, $data.FromStreet.editValue) },  enable: $root.fromStreets() != undefined && $root.fromStreets().length > 0 ? true : false"></select>
 
@@ -546,13 +555,13 @@
                 </div>
                 <!-- end reference div -->
                 <!-- Begin file upload div -->
-                <div>
+                <!--<div>
                     <h2 class="marg-top-20 alternate divide medium-24 columns">File Attachment(s)</h2>
                     <form enctype="multipart/form-data">
                         <input type="file" id="fileInput" name="fileInput" id="fileInput" />
                     </form>
                     <progress id="UploadDocumentProgress" style="display: none"></progress>
-                </div>
+                </div>-->
                 <!-- end file upload div -->
                 <!-- Begin application actions div -->
                 <div class="large-24 columns pad-25">
@@ -620,6 +629,10 @@
         <p>&copy; 2016 - City of Philadelphia | Office of Innovation and Technology</p>
     </footer>
     <!-- end footer -->
+    
+   
+    
+
     <!-- Begin templates -->
     <!-- Begin status button template -->
     <script type="text/html" id="status-template">
@@ -683,15 +696,30 @@
     <script src="Scripts/knockout.validation.js"></script>
     <script src="Scripts/knockout-jqAutocomplete.js"></script>
     <script src="Scripts/app/ko.editable.js"></script>
+
     <script src="Scripts/notify.js"></script>
     <script src="Scripts/app/app-models.js"></script>
     <script src="Scripts/app/notification-messages.js"></script>
     <script src="Scripts/app/app-tooltips.js"></script>
     <script src="Scripts/app/app.js"></script>
     <script src="Scripts/app/permit-geo.js"></script>
-    <script src="Scripts/app/patterns.min.js"></script>
+    <!--<script src="Scripts/app/patterns.min.js"></script>-->
+    
+    
+    <script type='text/javascript' src='https://cityofphiladelphia.github.io/patterns/dist/0.12.6/js/patterns.min.js'></script>
+    
+    
+    <!--<script src="Scripts/jquery.inputmask/inputmask.js"></script>
+    <script src="Scripts/jquery.inputmask/inputmask.extensions.js"></script>
+    <script src="Scripts/jquery.inputmask/inputmask.regex.extensions.js"></script>
+    <script src="Scripts/jquery.inputmask/inputmask.date.extensions.js"></script>
+    <script src="Scripts/jquery.inputmask/jquery.inputmask.js"></script>
+    <script src="Scripts/app/ko.inputmask.js"></script>-->
+
     <!--<script src='http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js'></script>
     <script src='http://cdn.jsdelivr.net/leaflet.esri/1.0.0/esri-leaflet.js'></script>-->
     <!-- end scripts -->
+    
+
 </body>
 </html>

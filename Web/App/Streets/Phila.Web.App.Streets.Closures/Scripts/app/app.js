@@ -777,16 +777,16 @@ function AppViewModel() {
 
         var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose, self.selectedPermitType, self.selectedProjectTypes.projectTypes, self.locations, self.expirationTime, self.effectiveTime]);
 
-        aerrors.showAllMessages();
+        errors.showAllMessages();
 
         if (errors().length > 0) return false;
 
         //if (!ko.validation.validateObservable(self.usersEmailAddress))
         //    return false;
 
-        var refTypes = [];
+        var refs = [];
         for (var i = 0; i < self.references().length; i++) {
-            refTypes.push({ ReferenceTypeId: self.references()[i].ReferenceTypeId().ReferenceTypeId(), ReferenceValue: self.references()[i].ReferenceValue() });
+            refs.push({ ReferenceTypeId: self.references()[i].ReferenceTypeId().ReferenceTypeId(), ReferenceValue: self.references()[i].ReferenceValue() });
         }
 
         var prams = "token=" + getUrlParameter("token") +
@@ -799,8 +799,9 @@ function AppViewModel() {
             "&expirationDate=" + self.expirationDate() +
             "&purpose=" + self.purpose() +
             "&comments=" + self.comments() +
-            "&isDraft=" + isDraft;// +
-            //"&referenceTypes=" + JSON.stringify(refTypes);
+            "&isDraft=" + isDraft; //+
+            //"&references=" + JSON.stringify(refs) +
+            //"&locations";
         //});
 
 
@@ -830,6 +831,17 @@ function AppViewModel() {
         self.comments(null);
         self.locations([]);
         self.references([]);
+
+        self.selectedUtilityOwner.clearError();
+        self.selectedPermitType.clearError();
+        self.selectedProjectTypes.projectTypes.clearError();
+        self.selectedEncroachmentTypes.clearError();
+        self.effectiveDate.clearError();
+        self.expirationDate.clearError();
+        self.purpose.clearError();
+        self.comments(null).clearError();
+        self.locations.clearError();
+        self.references.clearError();
     };
 
     //** references
@@ -973,8 +985,8 @@ function AppViewModel() {
 
     //** nav
     self.showNewPermitSection = function() {
-        var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose, self.selectedPermitType, self.selectedProjectTypes.projectTypes, self.locations, self.expirationTime, self.effectiveTime]);
-        errors.showAllMessages();
+        //var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose, self.selectedPermitType, self.selectedProjectTypes.projectTypes, self.locations, self.expirationTime, self.effectiveTime]);
+        //errors.showAllMessages();
 
         $("#LoginSection").hide();
         $("#AccountSection").hide();
@@ -1025,6 +1037,8 @@ function AppViewModel() {
         $("#YourPermitsSection").show();
 
         document.body.scrollTop = document.documentElement.scrollTop = 0;
+
+        
     };
 
     self.showMainSections = function() {
