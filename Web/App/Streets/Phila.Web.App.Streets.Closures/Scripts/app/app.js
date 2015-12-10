@@ -316,10 +316,10 @@ function AppViewModel() {
                 $("#AccountDetailsEdit").hide();
                 $("#AccountDetails").show();
 
-                $.notify(notification.success, "success");
+                $.notify(notification.success, { className: "success", globalPosition: "top center" });
             },
             error: function() { //(xhr, ajaxOptions, thrownError) {
-                $.notify(notification.error, "error");
+                $.notify(notification.error, { className: "info", globalPosition: "top center" } );
             }
         });
     };
@@ -637,10 +637,10 @@ function AppViewModel() {
             type: 'POST',
 
             success: function() {
-                $.notify(notification.recordSaved, "success");
+                $.notify(notification.recordSaved, { className: "success", globalPosition: "top center" });
             },
             error: function() {
-                $.notify(notification.recordNotSaved, "error");
+                $.notify(notification.recordNotSaved, { className: "error", globalPosition: "top center" });
             }
         });
     };
@@ -752,7 +752,7 @@ function AppViewModel() {
 
         var answer = confirm(notification.cancelNewPermitConfirm);
         if (answer) {
-            $.notify(notification.cancelNewPermitSuccess, "info");
+            $.notify(notification.cancelNewPermitSuccess, { className: "info", globalPosition: "top center" });
             self.showMainSections();
             self.resetNewPermitFields();
         }
@@ -760,7 +760,7 @@ function AppViewModel() {
 
     self.savePermitApplicationDraft = function() {
         // ToDo: submit permit application draft
-        $.notify(notification.savePermitAppDraftSuccess, "success");
+        $.notify(notification.savePermitAppDraftSuccess, { className: "success", globalPosition: "top center" });
         self.showMainSections();
     };
 
@@ -809,12 +809,12 @@ function AppViewModel() {
 
             type: 'POST',
             success: function() {
-                $.notify(notification.submitNewAppSuccess, "success");
+                $.notify(notification.submitNewAppSuccess, { className: "success", globalPosition: "top center" });
                 self.showMainSections();
                 self.resetNewPermitFields();
             },
             error: function() {
-                $.notify(notification.recordNotSaved, "error");
+                $.notify(notification.recordNotSaved, { className: "error", globalPosition: "top center" });
             }
         });
     };
@@ -897,8 +897,8 @@ function AppViewModel() {
                 $Loading.hide();
             },
             error: function() { //}xhr, ajaxOptions, thrownError) {
-                $RequestLoginBtn.notify(notification.errorSendingSecToken, "error",
-                    { position: "right" }
+                $RequestLoginBtn.notify(notification.errorSendingSecToken, 
+                    { elementPosition: "right", className: "error" }
                 );
                 $Loading.hide();
                 $RequestLoginBtn.prop('disabled', false);
@@ -923,9 +923,9 @@ function AppViewModel() {
                 "Content-Length": $("#fileInput")[0].length
             }
         }).done(function() {
-            $.notify("Document uploaded.", "success");
+            $.notify("Document uploaded.", { globalPosition: "top center", className: "success" });
         }).fail(function() {
-            $.notify("An error occurred, the files couldn't be sent!", "error");
+            $.notify("An error occurred, the files couldn't be sent!", { globalPosition: "top center", className: "error" });
         });
 
         $("#UploadDocumentProgress").hide();
@@ -1552,7 +1552,7 @@ $(document).ready(function() {
         var expiredToken = getUrlParameter("ExpiredToken");
         console.log(expiredToken);
         if (expiredToken == "true") {
-            $.notify("Please request a new login email.", "info");
+            $.notify("Please request a new login email.", { globalPosition: "top center", className: "info" });
         }
         $("#LoginSection").show();
         $("#PageLoadingProgress").hide();

@@ -275,18 +275,22 @@
                     <h2 class="marg-top-20 alternate divide medium-24 columns">New Closure Information</h2>
                     <div class="row">
                         <div class="medium-6 columns">
-                            <label>Effective Date:</label><input type="date" data-bind="value: $root.effectiveDate" />
+                            <label>
+                                Start Date:&nbsp;
+                                <abbr rel="tooltip" title="The start date must be <em>10 days</em> after today."><i class="fa fa-info-circle"></i></abbr>
+                               
+                            </label><input type="date" data-bind="value: $root.effectiveDate" />
                         </div>
                         <div class="medium-6 columns">
-                            <label>Effective Time:</label>
+                            <label>Start Time:</label>
                             <input type="text" class="form-control" placeholder="hh:mm AM/PM" data-bind="value: $root.effectiveTime" />
                         </div>
                         <div class="medium-6 columns">
-                            <label>Expiration Date:</label>
+                            <label>End Date:</label>
                             <input type="date" class="form-control" data-bind="value: $root.expirationDate" />
                         </div>
                         <div class="medium-6 columns">
-                            <label>Expiration Time:</label>
+                            <label>End Time:</label>
                             <input type="text" class="form-control" placeholder="hh:mm AM/PM" data-bind="value: $root.expirationTime" />
                         </div>
                     </div>
@@ -333,9 +337,9 @@
                 <h2 class="marg-top-20 alternate divide medium-24 columns">Location(s)</h2>
                 <i class="marg-top-5  fa fa-plus fa-2x addNewButton" data-bind="click: $root.addLocation, visible: $root.isLocationEditing()"></i>
                 <span class="validationMessage" data-bind="validationMessage: $root.locations"></span>
-                
+
                 <!--<i class="marg-top-5  fa fa-plus fa-2x addNewButton" data-bind="click: $root.addLocation, visible: $root.isLocationEditing()"></i>
-                
+
 
                 <div class="row marg-top-20 medium-24 columns" data-bind="with: $root.editingLocationItem, visible: !$root.isLocationEditing($data)">
                     <div class="marg-top-20 medium-24 columns">
@@ -343,35 +347,34 @@
                         <label><input type="radio" name="locTypeGroup" value="address" data-bind="checked: $data.LocationType.bind($data)" /> Address</label>
                             <label><input type="radio" name="locTypeGroup" value="intersection" data-bind="checked: $data.LocationType.bind($data)" /> Intersection</label>
                             <label><input type="radio" name="locTypeGroup" value="segment" data-bind="checked: $data.LocationType.bind($data)" /> Street Segment</label>-->
-                       
-                        <!--<select data-bind="options: $root.locationTypes, selectedOptions: $data.LocationType.editValue(), value: $data.LocationType.editValue, optionsCaption: 'Choose...'"></select>
+                <!--<select data-bind="options: $root.locationTypes, selectedOptions: $data.LocationType.editValue(), value: $data.LocationType.editValue, optionsCaption: 'Choose...'"></select>
 
-                    </div>
-                    <div data-bind="visible: $data.LocationType.editValue() != undefined">
-                        <div class="medium-6 columns">
-                            <label>Occupancy Type:</label>
-                            <select data-bind="options: $root.occupancyTypes, optionsText: 'OccupancyTypeName', value: $data.OccupancyType.editValue, optionsCaption: 'Choose...', visible: $root.isLocationEditing($data)"></select>
-                        </div>
-                        <div class="medium-10 columns">
-                            <label data-bind="text: $data.LocationType.editValue() == 'Address' ? 'Address:' : 'On Street:'"></label>
-                            <input id="OnStreet" data-bind="jqAuto: { value: OnStreet.editValue, source: $root.getOnStreets, inputProp: 'StreetName', labelProp: 'StreetName', valueProp: 'StreetName' }, visible: $root.isLocationEditing($data)" />
-                        </div>
-                        <div class="medium-10 columns" data-bind="visible: $data.LocationType.editValue()!= 'Address'">
-                            <label data-bind="text: $data.LocationType.editValue() == 'Intersection' ? 'Cross Street:' : 'From Street:'"></label>
-                            <select class="ddFromStreet" data-bind="options: $root.fromStreets, selectedOptions: $data.FromStreet.editValue, optionsText: 'st_name', value: $data.FromStreet.editValue, optionsCaption: $root.fromStreetCaption, visible: $root.isLocationEditing($data), event: { change: $root.getToStreets.bind($data, $data.OnStreet.editValue, $data.FromStreet.editValue) },  enable: $root.fromStreets() != undefined && $root.fromStreets().length > 0 ? true : false"></select>
-                        </div>
-                        <div class="medium-10 columns" data-bind="visible: $data.LocationType.editValue() == 'Street Segment'">
-                            <label>To Street:</label>
-                            <select class="ddToStreet" data-bind="options: $root.toStreets, optionsText: 'st_name', value: $data.ToStreet.editValue, selectedOptions: $data.ToStreet.editValue.st_name, optionsCaption: $root.toStreetCaption, visible: $root.isLocationEditing($data),  enable: $root.toStreets() != undefined && $root.toStreets().length > 0 ? true : false">"></select>
-                        </div>
-                        <br />
-                        <div class="row marg-top-20 medium-24 columns">
-                            <button data-bind="click: $root.applyLocation">Save</button>
-                        </div>
-                    </div>
-                </div>
-                <span class="validationMessage" data-bind="validationMessage: $root.locations"></span>
--->
+                                    </div>
+                                    <div data-bind="visible: $data.LocationType.editValue() != undefined">
+                                        <div class="medium-6 columns">
+                                            <label>Occupancy Type:</label>
+                                            <select data-bind="options: $root.occupancyTypes, optionsText: 'OccupancyTypeName', value: $data.OccupancyType.editValue, optionsCaption: 'Choose...', visible: $root.isLocationEditing($data)"></select>
+                                        </div>
+                                        <div class="medium-10 columns">
+                                            <label data-bind="text: $data.LocationType.editValue() == 'Address' ? 'Address:' : 'On Street:'"></label>
+                                            <input id="OnStreet" data-bind="jqAuto: { value: OnStreet.editValue, source: $root.getOnStreets, inputProp: 'StreetName', labelProp: 'StreetName', valueProp: 'StreetName' }, visible: $root.isLocationEditing($data)" />
+                                        </div>
+                                        <div class="medium-10 columns" data-bind="visible: $data.LocationType.editValue()!= 'Address'">
+                                            <label data-bind="text: $data.LocationType.editValue() == 'Intersection' ? 'Cross Street:' : 'From Street:'"></label>
+                                            <select class="ddFromStreet" data-bind="options: $root.fromStreets, selectedOptions: $data.FromStreet.editValue, optionsText: 'st_name', value: $data.FromStreet.editValue, optionsCaption: $root.fromStreetCaption, visible: $root.isLocationEditing($data), event: { change: $root.getToStreets.bind($data, $data.OnStreet.editValue, $data.FromStreet.editValue) },  enable: $root.fromStreets() != undefined && $root.fromStreets().length > 0 ? true : false"></select>
+                                        </div>
+                                        <div class="medium-10 columns" data-bind="visible: $data.LocationType.editValue() == 'Street Segment'">
+                                            <label>To Street:</label>
+                                            <select class="ddToStreet" data-bind="options: $root.toStreets, optionsText: 'st_name', value: $data.ToStreet.editValue, selectedOptions: $data.ToStreet.editValue.st_name, optionsCaption: $root.toStreetCaption, visible: $root.isLocationEditing($data),  enable: $root.toStreets() != undefined && $root.toStreets().length > 0 ? true : false">"></select>
+                                        </div>
+                                        <br />
+                                        <div class="row marg-top-20 medium-24 columns">
+                                            <button data-bind="click: $root.applyLocation">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="validationMessage" data-bind="validationMessage: $root.locations"></span>
+                -->
                 <div>
                     <table>
                         <!--<thead>
@@ -387,24 +390,25 @@
                         </thead>-->
                         <tbody data-bind="foreach: locations">
                             <tr>
-                                
-                               
+
+
                                 <td>
-                                    <strong><label>Occupancy Type:</label></strong> 
-                                    
+                                    <strong><label>Occupancy Type:</label></strong>
+
                                     <select data-bind="options: $root.occupancyTypes, optionsText: 'OccupancyTypeName', value: $data.OccupancyType.editValue, optionsCaption: 'Choose...', visible: $root.isLocationEditing($data)"></select>
 
                                     <label class="read" data-bind="text: OccupancyType() ? OccupancyType().OccupancyTypeName : 'blank', visible: !$root.isLocationEditing($data)"></label>
 
                                 </td>
-                                
+
                                 <td>
-                                    <strong><label>Location Type:</label></strong>  
+                                    <strong><label>Location Type:<abbr rel="tooltip" title="[insert location type tooltip here]"><i class="fa fa-info-circle"></i></abbr>
+</label></strong>
                                     <select data-bind="options: $root.locationTypes, selectedOptions: $data.LocationType.editValue(), visible: $root.isLocationEditing($data), value: $data.LocationType.editValue, optionsCaption: 'Choose...'"></select>
                                     <label class="read" data-bind="text: LocationType() ? LocationType() : 'blank', visible: !$root.isLocationEditing($data)"></label>
                                 </td>
                                 <td>
-                                    
+
                                     <div class="medium-10 columns" data-bind="visible: $data.LocationType.editValue() != undefined">
                                         <strong><label data-bind="text: $data.LocationType.editValue() == 'Address' ? 'Address:' : 'On Street:'"></label></strong>
                                         <input id="OnStreet" data-bind="jqAuto: { value: OnStreet.editValue, source: $root.getOnStreets, inputProp: 'StreetName', labelProp: 'StreetName', valueProp: 'StreetName' }, visible: $root.isLocationEditing($data)" />
@@ -412,14 +416,18 @@
 
                                         <label class="read" data-bind="text: OnStreet() != undefined ? OnStreet() : 'blank', visible: !$root.isLocationEditing($data)"></label>
                                     </div>
-                                    
+
 
                                 </td>
-                                <td>                                 
-                                    
-                                    
+                                <td>
+
+                                    <!--Cross|From Street-->
                                     <div class="medium-10 columns" data-bind="visible:  $data.LocationType.editValue()!= undefined && $data.LocationType.editValue()!= 'Address'">
-                                        <strong><label data-bind="text: $data.LocationType.editValue() == 'Intersection' ? 'Cross Street:' : 'From Street:'"></label></strong>  
+
+                                        <strong><label data-bind="text: $data.LocationType.editValue() == 'Intersection' ? 'Cross Street:' : 'From Street:'"></label></strong>
+
+                                        <abbr rel="tooltip" title="[insert location type tooltip here]"><i class="fa fa-info-circle"></i></abbr>
+
                                         <select class="ddFromStreet" data-bind="options: $root.fromStreets, selectedOptions: $data.FromStreet.editValue, optionsText: 'st_name', value: $data.FromStreet.editValue, optionsCaption: $root.fromStreetCaption, visible: $root.isLocationEditing($data), event: { change: $root.getToStreets.bind($data, $data.OnStreet.editValue, $data.FromStreet.editValue) },  enable: $root.fromStreets() != undefined && $root.fromStreets().length > 0 ? true : false"></select>
 
                                         <label class="read" data-bind="text: FromStreet() != undefined ? FromStreet().st_name : 'blank', visible: !$root.isLocationEditing($data)"></label>
@@ -428,12 +436,12 @@
                                 </td>
                                 <td>
                                     <div class="medium-10 columns" data-bind="visible: $data.LocationType.editValue() == 'Street Segment'">
-                                        <strong><label>To Street:</label></strong> 
+                                        <strong><label>To Street:</label></strong>
                                         <select class="ddToStreet" data-bind="options: $root.toStreets, optionsText: 'st_name', value: $data.ToStreet.editValue, selectedOptions: $data.ToStreet.editValue.st_name, optionsCaption: $root.toStreetCaption, visible: $root.isLocationEditing($data),  enable: $root.toStreets() != undefined && $root.toStreets().length > 0 ? true : false">"></select>
                                         <label class="read" data-bind="text: ToStreet() != undefined ? ToStreet().st_name : 'blank', visible: !$root.isLocationEditing($data)"></label>
                                     </div>
 
-                                  
+
 
                                 </td>
                                 <td class="tools">
@@ -534,7 +542,7 @@
                             </tr>
                         </tbody>
                     </table>
-                   
+
                 </div>
                 <!-- end reference div -->
                 <!-- Begin file upload div -->
@@ -678,6 +686,7 @@
     <script src="Scripts/notify.js"></script>
     <script src="Scripts/app/app-models.js"></script>
     <script src="Scripts/app/notification-messages.js"></script>
+    <script src="Scripts/app/app-tooltips.js"></script>
     <script src="Scripts/app/app.js"></script>
     <script src="Scripts/app/permit-geo.js"></script>
     <script src="Scripts/app/patterns.min.js"></script>
