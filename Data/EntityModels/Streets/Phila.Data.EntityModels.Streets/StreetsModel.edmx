@@ -330,8 +330,6 @@ warning 6002: The table/view 'SCBPPS.dbo.tblOccupancyTypes' does not have a prim
           <Property Name="Unit (t)" Type="nvarchar" MaxLength="15" />
           <Property Name="Active" Type="bit" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'SCBPPS.dbo.tblPermit_Location_GIS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="tblPermit_Location_GIS">
           <Key>
             <PropertyRef Name="Permit_Number" />
@@ -885,6 +883,7 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <EntitySet Name="tblPermit_Encroachment" EntityType="Self.tblPermit_Encroachment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPermit_Extensions" EntityType="Self.tblPermit_Extensions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPermit_Fees" EntityType="Self.tblPermit_Fees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPermit_Location_GIS" EntityType="Self.tblPermit_Location_GIS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPermit_Locations" EntityType="Self.tblPermit_Locations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPermit_Reasons" EntityType="Self.tblPermit_Reasons" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPermit_References" EntityType="Self.tblPermit_References" Schema="dbo" store:Type="Tables" />
@@ -972,15 +971,6 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
     [tblOccupancyTypes].[OT_Description] AS [OT_Description], 
     [tblOccupancyTypes].[OT_DisplayColor] AS [OT_DisplayColor]
     FROM [dbo].[tblOccupancyTypes] AS [tblOccupancyTypes]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="tblPermit_Location_GIS" EntityType="Self.tblPermit_Location_GIS" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [tblPermit_Location_GIS].[Permit_Number] AS [Permit_Number], 
-    [tblPermit_Location_GIS].[Seq_Num] AS [Seq_Num], 
-    [tblPermit_Location_GIS].[lElementTypeID] AS [lElementTypeID], 
-    [tblPermit_Location_GIS].[Element_Id] AS [Element_Id], 
-    [tblPermit_Location_GIS].[DateCreated] AS [DateCreated]
-    FROM [dbo].[tblPermit_Location_GIS] AS [tblPermit_Location_GIS]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="tblStatusCodes" EntityType="Self.tblStatusCodes" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 

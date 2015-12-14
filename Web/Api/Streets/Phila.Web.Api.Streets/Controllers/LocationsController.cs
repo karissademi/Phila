@@ -94,7 +94,12 @@ namespace Phila.Web.Api.Streets.Controllers
             if (onStreetCode.StreetCode == null)
                 return NotFound();
 
-            return Ok(_db.Get_CrossStreetsFromStCode_new(onStreetCode.StreetCode));
+            return Ok(_db.Get_CrossStreetsFromStCode_new(onStreetCode.StreetCode).Select(x => new
+            {
+                StreetCode = x.St_Code,
+                StreetName = x.st_name,
+                x.NodeOrder
+            }).ToList());
         }
 
 
@@ -126,8 +131,13 @@ namespace Phila.Web.Api.Streets.Controllers
                 if (startingSegment == null)
                     return Ok("No additional segments");
 
-                IEnumerable<Get_CrossStreetsFromStCode_new_Result> result =
-                    streetSegments.Where(x => x.NodeOrder > startingSegment.NodeOrder);
+                var result =
+                    streetSegments.Where(x => x.NodeOrder > startingSegment.NodeOrder).Select(x => new
+                    {
+                        StreetCode = x.St_Code,
+                        StreetName = x.st_name,
+                        x.NodeOrder
+                    }).ToList();
                 return Ok(result);
             }
             catch (Exception exception)
@@ -209,7 +219,16 @@ namespace Phila.Web.Api.Streets.Controllers
                                  &&
                                  x.R_T_ADD >= streetNumber
                             )
-                            .GroupBy(x => new {x.StreetName, StreetCode = x.ST_CODE, SegmentId = x.SEG_ID, FromAddress = x.R_F_ADD, ToAddress = x.R_T_ADD})
+                            .GroupBy(
+                                x =>
+                                    new
+                                    {
+                                        x.StreetName,
+                                        StreetCode = x.ST_CODE,
+                                        SegmentId = x.SEG_ID,
+                                        FromAddress = x.R_F_ADD,
+                                        ToAddress = x.R_T_ADD
+                                    })
                             .Select(x => new
                             {
                                 StreetName = streetNumber + " " + x.Key.StreetName,
@@ -237,7 +256,16 @@ namespace Phila.Web.Api.Streets.Controllers
                          &&
                          x.L_T_ADD >= streetNumber
                     )
-                    .GroupBy(x => new { x.StreetName, StreetCode = x.ST_CODE, SegmentId = x.SEG_ID, FromAddress = x.L_F_ADD, ToAddress = x.L_T_ADD })
+                    .GroupBy(
+                        x =>
+                            new
+                            {
+                                x.StreetName,
+                                StreetCode = x.ST_CODE,
+                                SegmentId = x.SEG_ID,
+                                FromAddress = x.L_F_ADD,
+                                ToAddress = x.L_T_ADD
+                            })
                     .Select(x => new
                     {
                         StreetName = streetNumber + " " + x.Key.StreetName,
@@ -252,10 +280,9 @@ namespace Phila.Web.Api.Streets.Controllers
                     );
             }
             return Ok();
-
         }
 
-        private StreetsViewModels.LocationDetails GetStreetCode(string location, bool trimLeadingNumbers = true)
+        public StreetsViewModels.LocationDetails GetStreetCode(string location, bool trimLeadingNumbers = true)
         {
             if (trimLeadingNumbers)
                 location = location.TrimStart(new[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'});

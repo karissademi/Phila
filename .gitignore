@@ -192,3 +192,4 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+Web/Api/Streets/Phila.Web.Api.Streets/Helpers/EmailHelper.cs

@@ -132,6 +132,45 @@ namespace Phila.Web.Api.Streets.Models
             public string ReferenceValue { get; set; }    
         }
 
+        public class PostedPermit
+        {
+            public string PermitNumber { get; set; }
+            public string Token { get; set; }
+            public int CompanyId { get; set; }
+            public int? UtilityOwnerId { get; set; }
+            public int? PermitTypeId { get; set; }
+            public int? ProjectTypes { get; set; }
+            public int[] EncroachmentTypes { get; set; }
+            public DateTime? EffectiveDate { get; set; }
+            public DateTime? ExpirationDate { get; set; }
+            public string Purpose { get; set; }
+            public string Comments { get; set; }
+            public bool IsDraft { get; set; }
+            public List<PostedReference> References { get; set; }
+            public List<PostedLocation> Locations { get; set; }
+
+        }
+
+        public class PostedReference
+        {
+            public int ReferenceTypeId { get; set; }
+            public string ReferenceValue { get; set; }
+        }
+
+        public class PostedLocation
+        {
+            public int SequenceNumber { get; set; }
+            public int OccupancyTypeId { get; set; }
+            public string LocationType { get; set; }
+            public string OnStreetName { get; set; }
+            public string FromStreetName { get; set; }
+            public int? FromStreetCode { get; set; }
+            public int? FromStreetNode { get; set; }
+            public string ToStreetName { get; set; }
+            public int? ToStreetCode { get; set; }
+            public int? ToStreetNode { get; set; }
+        }
+
 //            ReferenceTypeId		{3}
 		
 //ReferenceTypeId	:	6

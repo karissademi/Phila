@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\enterprise.mobility\Source\Repos\Phila\Phila\Data\EntityModels\Streets\Phila.Data.EntityModels.Streets\StreetsModel.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\enterprise.mobility\Documents\GitHub\Phila\Data\EntityModels\Streets\Phila.Data.EntityModels.Streets\StreetsModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -9,245 +9,229 @@
     <link rel='icon' type='image/x-icon' href="https://cityofphiladelphia.github.io/patterns/images/favicon.ico" />
 
 
-
-
     <!-- ToDo: bundle and minify css before publishing to production -->
-    <link href="Content/bootstrap.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="https://cityofphiladelphia.github.io/patterns/dist/0.12.6/css/patterns.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cityofphiladelphia.github.io/patterns/dist/0.12.6/css/patterns.css" />
 
     <link href="Content/app/jquery-ui-smoothness-1.11.4.css" rel="stylesheet" />
     <link href="Content/app/ionicons.min-2.0.1.css" rel="stylesheet" />
     <!--<link href="Content/app/patterns-0.8.1.css" rel="stylesheet" />-->
     <link href="Content/app/site.css" rel="stylesheet" />
 
-    <link rel="stylesheet" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
-   
-
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
 </head>
 <body>
 
-    <!-- Begin header -->
-    <header data-swiftype-index='false' class="site-header app" role="banner">
-        <div class="row">
+    <!-- Begin main page div -->
+    <div class="site" id="page">
 
-            <div class="small-24 medium-24 column">
-                <a href="http://alpha.phila.gov"><img src="https://cityofphiladelphia.github.io/patterns/images/city-of-philadelphia-logo.png" class="logo no-scale" alt="City of Philadelphia" /></a>
-                <h1 class="page-title"><a href="#">Commercial Street Closure Request</a></h1>
-            </div>
-        </div>
-    </header>
-    <!-- end header -->
-    <!-- Begin page container -->
-    <div class="container body-content">
-
-        <!-- Begin main page div -->
-        <div class="site" id="page">
-            <div style="text-align: center">
-                <img id="PageLoadingProgress" src="Content/app/images/loading25.gif" />
-            </div>
-            <img id="Loading" alt="loading..." style="display: none" src="Content/app/images/loading.gif" />
+        <!-- Begin header -->
+        <header data-swiftype-index="false" class="site-header app" role="banner">
             <div class="row">
-                <div class="small-24 columns">
-                    <div class="divider"></div>
-                </div>
-            </div>
-
-            <!-- Begin login section -->
-            <div id="LoginSection" class="row" style="display: none">
-                <br />
-                <div id="LoginMain">
-                    <h2>Secure login without a password</h2>
-                    <h3>Enter your email address.</h3>
-                    <div style="overflow: hidden; padding-right: .5em;">
-                        <input id="LoginEmail" type="email" data-bind="value: usersEmailAddress" style="width: 100%;" placeholder="email@example.com" />
-                    </div>
-                    <button id="RequestLoginBtn" data-bind="click: requestLogin" style="float: right">request login email</button>
-                </div>
-            </div>
-            <!-- end login section -->
-            <!-- Begin user's companies selection div -->
-            <div id="UsersCompaniesSection" class="row" style="display: none">
-                <br />
-                <h2>Your Companies</h2>
-                <select data-bind="options: $root.companies, optionValue: 'CompanyId', optionsText: 'CompanyName', value: $root.selectedCompany, optionsCaption: 'Choose one...', event:{ change: $root.selectedCompanyChanged }"></select>
-            </div>
-            <!-- end user's companies selection div -->
-            <!-- Begin account section -->
-            <div id="AccountSection" class="marg-top-20 row" style="display: none">
                 <div class="large-24 columns">
-                    <div id="AccountDetails" data-bing="with: selectedContact">
-                        <div id="account-details" class="details background-color" data-bind="with: selectedCompany">
-                            <div class="row">
-                                <div id="AccountHeader" class="medium-22 columns">
-                                    <h3 style="margin-top: 5px">Company Information</h3>
-                                </div>
-                                <div class="medium-2 columns">
-                                    <i class="fa fa-pencil fa-2x" data-bind="click: $root.editCompany.bind($root), visible: !$root.isCompanyEditing($data)" style="margin-top: 5px"></i>
-                                    <i class="fa fa-floppy-o fa-2x" data-bind="click: $root.applyCompany.bind($root), visible: $root.isCompanyEditing($data)"></i>
-                                    <i class="fa fa-times fa-2x" data-bind="click: $root.cancelEditCompany.bind($root), visible: $root.isCompanyEditing($data)"></i>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="medium-17 columns">
-                                    <h4>Company Name</h4>
-
-                                    <input type="text" class="edit" data-bind="value: CompanyName.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <h2><label class="read" data-bind="text: CompanyName, visible: !$root.isCompanyEditing($data)"></label></h2>
-                                </div>
-                                <div class="medium-7 columns">
-                                    <h4>Company Phone</h4>
-
-                                    <input type="tel" class="edit" data-bind="value: CompanyPhoneNumber.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: CompanyPhoneNumber, visible: !$root.isCompanyEditing($data)"></label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="medium-17 columns">
-                                    <h4 class="">Web Site</h4>
-
-                                    <input type="url" class="edit" data-bind="value: Website.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: Website, visible: !$root.isCompanyEditing($data)"></label>
-                                </div>
-                                <div class="medium-7 columns">
-                                    <h4>Company Fax</h4>
-
-                                    <input type="tel" class="edit" data-bind="value: CompanyFaxNumber.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: CompanyFaxNumber, visible: !$root.isCompanyEditing($data)"></label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="medium-17 columns">
-                                    <h4>
-                                        Address 1
-                                    </h4>
-                                    <input type="text" class="edit" data-bind="value: BillingStreetAddress1.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: BillingStreetAddress1, visible: !$root.isCompanyEditing($data)"></label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="medium-17 columns">
-                                    <h4 class="">Address 2</h4>
-
-                                    <input type="text" class="edit" data-bind="value: BillingStreetAddress2.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: BillingStreetAddress2, visible: !$root.isCompanyEditing($data)"></label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="medium-17 columns">
-                                    <h4 class="">Address 3</h4>
-
-                                    <input type="text" class="edit" data-bind="value: BillingStreetAddress3.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: BillingStreetAddress3, visible: !$root.isCompanyEditing($data)"></label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="medium-5 columns">
-                                    <h4 class="">City</h4>
-
-                                    <input type="text" class="edit" data-bind="value: BillingCity.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: BillingCity, visible: !$root.isCompanyEditing($data)"></label>
-                                </div>
-                                <div class="medium-2 columns">
-                                    <h4 class="">State</h4>
-
-                                    <input type="text" class="edit" data-bind="value: BillingState.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: BillingState, visible: !$root.isCompanyEditing($data)"></label>
-                                </div>
-                                <div class="medium-5 columns">
-                                    <h4 class="">Zip</h4>
-
-                                    <input type="number" class="edit" data-bind="value: BillingZipCode.editValue, visible: $root.isCompanyEditing($data)" />
-                                    <label class="read" data-bind="text: BillingZipCode, visible: !$root.isCompanyEditing($data)"></label>
-                                </div>
-                                <div class="medium-12 columns"></div>
+                    <div class="row collapse">
+                        <div class="small-6 columns">
+                            <a href="http://alpha.phila.gov">
+                                <img src="https://cityofphiladelphia.github.io/patterns/images/city-of-philadelphia-logo-mobile.png" alt="City of Philadelphia" class="logo show-for-small-only" />
+                                <img src="https://cityofphiladelphia.github.io/patterns/images/city-of-philadelphia-logo.png" alt="City of Philadelphia" class="logo show-for-medium-up" />
+                            </a>
+                            <h1 class="site-title">phila.gov</h1>
+                            <h2 class="site-description">City of Philadelphia</h2>
+                        </div>
+                        <div class="small-18 columns">
+                            <div class="page-title-container">
+                                <a href="/">
+                                    <h1 class="page-title">Commercial Street Closure Request</h1>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- end account section -->
-            <!-- Begin user's details section -->
-            <div id="UserDetailsSection" style="display: none">
-                <div id="UserHeader" class="row background-color details" data-bind="with: selectedContact()">
-                    <h3 class="medium-23 columns">My Account Information</h3>
+        </header>
+        <!-- end header -->
+        <div class="row">
+            <div class="small-24 columns">
+                <div class="divider"></div>
+            </div>
+        </div>
+        <div style="text-align: center">
+            <img id="PageLoadingProgress" src="Content/app/images/loading25.gif" />
+        </div>
+        <img id="Loading" alt="loading..." style="display: none" src="Content/app/images/loading.gif" />
 
-                    <a class="button toolButton" href="#" data-bind="click: $root.editContact.bind($root), visible: !$root.isContactEditing($data)">Edit</a>
+        <!-- Begin login section -->
+        <div id="LoginSection" class="row" style="display: none">
+            <div class="columns">
+                <div id="LoginMain">
+                    <h2>Secure login without a password</h2>
+                    <h3>Enter your email address.</h3>
+                    <input id="LoginEmail" type="email" data-bind="value: usersEmailAddress" placeholder="email@example.com" />
 
-                    <i class="fa fa-floppy-o fa-2x" data-bind="click: $root.applyContact.bind($root), visible: $root.isContactEditing($data)"></i>
-
-                    <a class="button toolButton" href="#" data-bind="click: $root.cancelEditContact.bind($root), visible: $root.isContactEditing($data)">Cancel</a>
-                    <i class="fa fa-times fa-2x" data-bind="click: $root.cancelEditContact.bind($root), visible: $root.isContactEditing($data)"></i>
-
-                    <label>First name:</label>
-                    <input type="text" class="edit FirstName" data-bind="value: ContactFirstName.editValue, visible: $root.isContactEditing($data)" />
-                    <label class="read" data-bind="text: ContactFirstName, visible: !$root.isContactEditing($data)"></label>
-                    <label>Last name:</label>
-                    <input type="text" class="edit LastName" data-bind="value: ContactLastName.editValue, visible: $root.isContactEditing($data)" />
-                    <label class="read" data-bind="text: ContactLastName, visible: !$root.isContactEditing($data)"></label>
-                    <label>Phone number:</label>
-                    <input type="text" class="edit UserPhone" data-bind="value: ContactPhoneNumber.editValue, visible: $root.isContactEditing($data)" />
-                    <label class="read" data-bind="text: ContactPhoneNumber, visible: !$root.isContactEditing($data)"></label>
-                    <label>Email address:</label>
-                    <input type="text" class="edit UserEmail" data-bind="value: ContactEmailAddress.editValue, visible: $root.isContactEditing($data)" />
-                    <label class="read" data-bind="text: ContactEmailAddress, visible: !$root.isContactEditing($data)"></label>
+                    <a class="button" id="RequestLoginBtn" data-bind="click: requestLogin">Request Login Email</a>
                 </div>
             </div>
-            <!-- end user's details section -->
-            <!-- Begin your permits section -->
-            <div id="YourPermitsSection" class="row" style="display: none">
+        </div>
+        <!-- end login section -->
+        <!-- Begin user's companies selection div -->
+        <div id="UsersCompaniesSection" class="row" style="display: none">
+            <div class="columns">
+                <h2>Your Companies</h2>
+                <select data-bind="options: $root.companies, optionsText: 'CompanyName', value: $root.selectedCompany, optionsCaption: 'Choose one...', event:{ change: $root.selectedCompanyChanged }"></select>
+            </div>
+        </div>
+        <!-- end user's companies selection div -->
+        <!-- Begin account section -->
+        <div id="AccountSection" class="marg-top-20 row" style="display: none">
+            <div class="large-24 columns">
+                <div id="AccountDetails" data-bing="with: selectedContact">
+                    <div id="account-details" class="details background-color" data-bind="with: selectedCompany">
+                        <div class="row">
+                            <div id="AccountHeader" class="medium-20 columns">
+                                <h3 style="margin-top: 5px">Company Information</h3>
+                            </div>
+                            <div class="medium-4 columns">
+                                <i class="fa fa-pencil fa-2x" data-bind="click: $root.editCompany.bind($root), visible: !$root.isCompanyEditing($data)" style="margin-top: 5px"></i>
+                                <i class="fa fa-floppy-o fa-2x" data-bind="click: $root.applyCompany.bind($root), visible: $root.isCompanyEditing($data)"></i>
+                                <i class="fa fa-times fa-2x" data-bind="click: $root.cancelEditCompany.bind($root), visible: $root.isCompanyEditing($data)"></i>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="medium-15 columns">
+                                <h4>Company Name</h4>
+                                <input type="text" class="edit" data-bind="value: CompanyName.editValue, visible: $root.isCompanyEditing($data)" />
+                                <h2><label class="read" data-bind="text: CompanyName, visible: !$root.isCompanyEditing($data)"></label></h2>
+                            </div>
+                            <div class="medium-9 columns">
+                                <h4>Company Phone</h4>
+
+                                <input type="tel" class="edit" data-bind="value: CompanyPhoneNumber.editValue, visible: $root.isCompanyEditing($data)" />
+                                <label class="read" data-bind="text: CompanyPhoneNumber, visible: !$root.isCompanyEditing($data)"></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="medium-15 columns">
+                                <h4 class="">Web Site</h4>
+
+                                <input type="url" class="edit" data-bind="value: Website.editValue, visible: $root.isCompanyEditing($data)" />
+                                <label class="read" data-bind="text: Website, visible: !$root.isCompanyEditing($data)"></label>
+                            </div>
+                            <div class="medium-9 columns">
+                                <h4>Company Fax</h4>
+
+                                <input type="tel" class="edit" data-bind="value: CompanyFaxNumber.editValue, visible: $root.isCompanyEditing($data)" />
+                                <label class="read" data-bind="text: CompanyFaxNumber, visible: !$root.isCompanyEditing($data)"></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="medium-15 columns">
+                                <h4>Address 1</h4>
+                                <input type="text" class="edit" data-bind="value: BillingStreetAddress1.editValue, visible: $root.isCompanyEditing($data)" />
+                                <label class="read" data-bind="text: BillingStreetAddress1, visible: !$root.isCompanyEditing($data)"></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="medium-15 columns">
+                                <h4>Address 2</h4>
+
+                                <input type="text" class="edit" data-bind="value: BillingStreetAddress2.editValue, visible: $root.isCompanyEditing($data)" />
+                                <label class="read" data-bind="text: BillingStreetAddress2, visible: !$root.isCompanyEditing($data)"></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="medium-15 columns">
+                                <h4>Address 3</h4>
+
+                                <input type="text" class="edit" data-bind="value: BillingStreetAddress3.editValue, visible: $root.isCompanyEditing($data)" />
+                                <label class="read" data-bind="text: BillingStreetAddress3, visible: !$root.isCompanyEditing($data)"></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="medium-5 columns">
+                                <h4>City</h4>
+
+                                <input type="text" class="edit" data-bind="value: BillingCity.editValue, visible: $root.isCompanyEditing($data)" />
+                                <label class="read" data-bind="text: BillingCity, visible: !$root.isCompanyEditing($data)"></label>
+                            </div>
+                            <div class="medium-2 columns">
+                                <h4>State</h4>
+
+                                <input type="text" class="edit" data-bind="value: BillingState.editValue, visible: $root.isCompanyEditing($data)" />
+                                <label class="read" data-bind="text: BillingState, visible: !$root.isCompanyEditing($data)"></label>
+                            </div>
+                            <div class="medium-5 columns">
+                                <h4>Zip</h4>
+
+                                <input type="number" class="edit" data-bind="value: BillingZipCode.editValue, visible: $root.isCompanyEditing($data)" />
+                                <label class="read" data-bind="text: BillingZipCode, visible: !$root.isCompanyEditing($data)"></label>
+                            </div>
+                            <div class="medium-12 columns"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end account section -->
+        <!-- Begin user's details section -->
+        <div id="UserDetailsSection" class="row background-color" style="display: none; padding-left: 12.5px; padding-right: 12.5px;">
+            <div id="UserHeader" data-bind="with: selectedContact">
+                <h3 class="medium-23 columns">My Account Information</h3>
+
+                <a class="button toolButton" href="#" data-bind="click: $root.editContact.bind($root), visible: !$root.isContactEditing($data)">Edit</a>
+
+                <i class="fa fa-floppy-o fa-2x" data-bind="click: $root.applyContact.bind($root), visible: $root.isContactEditing($data)"></i>
+
+                <a class="button toolButton" href="#" data-bind="click: $root.cancelEditContact.bind($root), visible: $root.isContactEditing($data)">Cancel</a>
+                <i class="fa fa-times fa-2x" data-bind="click: $root.cancelEditContact.bind($root), visible: $root.isContactEditing($data)"></i>
+
+                <label>First name:</label>
+                <input type="text" class="edit FirstName" data-bind="value: ContactFirstName.editValue, visible: $root.isContactEditing($data)" />
+                <label class="read" data-bind="text: ContactFirstName, visible: !$root.isContactEditing($data)"></label>
+                <label>Last name:</label>
+                <input type="text" class="edit LastName" data-bind="value: ContactLastName.editValue, visible: $root.isContactEditing($data)" />
+                <label class="read" data-bind="text: ContactLastName, visible: !$root.isContactEditing($data)"></label>
+                <label>Phone number:</label>
+                <input type="text" class="edit UserPhone" data-bind="value: ContactPhoneNumber.editValue, visible: $root.isContactEditing($data)" />
+                <label class="read" data-bind="text: ContactPhoneNumber, visible: !$root.isContactEditing($data)"></label>
+                <label>Email address:</label>
+                <input type="text" class="edit UserEmail" data-bind="value: ContactEmailAddress.editValue, visible: $root.isContactEditing($data)" />
+                <label class="read" data-bind="text: ContactEmailAddress, visible: !$root.isContactEditing($data)"></label>
+            </div>
+        </div>
+        <!-- end user's details section -->
+        <hr/>
+        <!-- Begin your permits section -->
+            <div id="YourPermitsSection" class="row" style="display: none; padding: 12.5px;">
                 <div class="columns medium-24 marg-bottom-20">
 
-                    <h2 class="alternate divide marg-top-20">Your Permits</h2>
-                    <div class="row"><button data-bind="click: showNewPermitSection" id="ShowAddResourcePageButtonTOP"><i class="fa fa-plus fa-2x addNewButton" data-bind="click: $root.showNewPermitSection"></i>&nbsp;<strong>Add New Permit</strong></button></div>
+                    <h2>Your Permits</h2>
+
+                    <a class="button icon" href="#/" data-bind="click: showNewPermitSection" id="ShowAddResourcePageButtonTOP">Add New Permit <i class="fa fa-plus fa-2x addNewButton" data-bind="click: $root.showNewPermitSection"></i></a>
+
                     <h4>Step 1: filter your permits by status</h4>
-                    <div class="row">
-                        <div data-bind="template: { name: 'status-template', foreach: permitStatusCodes }"></div>
-                    </div>
+
+                    <div data-bind="template: { name: 'status-template', foreach: permitStatusCodes }"></div>
                 </div>
 
-                <div id="Search" class="columns medium-24 marg-bottom-20">
-                    <h4>Step 2: search for specific permits with the filtered status</h4>
-
-                    <div class="searchGroup">
-                        <input placeholder="search" type="text" data-bind="value: permitSearch, valueUpdate: 'afterkeydown', event: { 'keyup': $root.getPermitsForCompany.bind($data) }" />
+                <div class="row">
+                    <div id="Search" class="columns medium-20 marg-bottom-20">
+                        <input placeholder="Filter list" type="text" data-bind="value: permitSearch, valueUpdate: 'afterkeydown', event: { 'keyup': $root.getPermitsForCompany.bind($data) }" />
                     </div>
-                    <div class="searchGroup">
-                        <i class="fa fa-search" data-bind="click: $root.getPermitsForCompany.bind($data)"></i>
-                    </div>
-                </div>
-                <div class="columns medium-24 marg-bottom-20">
-
-                    <div class="searchGroup">
-                        <label><input type="radio" value="all" data-bind="checked: radioSearchSelectedOptionValue" />&nbsp;All Fields</label>
-                    </div>
-                    <div class="searchGroup">
-                        <label><input type="radio" value="permitid" data-bind="checked: radioSearchSelectedOptionValue" />&nbsp;ID</label>
-                    </div>
-                    <div class="searchGroup">
-                        <label><input type="radio" value="purpose" data-bind="checked: radioSearchSelectedOptionValue" />&nbsp;Purpose</label>
-                    </div>
-                    <div class="searchGroup">
-                        <label><input type="radio" value="permitlocation" data-bind="checked: radioSearchSelectedOptionValue" />&nbsp;Location</label>
-                    </div>
-                    <div class="searchGroup">
-                        <label><input type="radio" value="startdate" data-bind="checked: radioSearchSelectedOptionValue" />&nbsp;Start Date</label>
-                    </div>
-                    <div class="searchGroup">
-                        <label><input type="radio" value="enddate" data-bind="checked: radioSearchSelectedOptionValue" />&nbsp;End Date</label>
-                    </div>
-                    <div class="searchGroup">
+                    <div class="medium-4 columns">
                         <select data-bind="options: pageSizes, value: $root.selectedPageSize, event:{ change: $root.getPermitsForCompany.bind($data) }"></select>
                     </div>
-                    <div>
-                        <img src="Content/app/images/loading.gif" alt="loading..." id="loading-table" style="float: right" />
+                </div>
+                <div class="row">
+                    <div class="columns medium-24 marg-bottom-20">
+                        <div>
+                            <img src="Content/app/images/loading.gif" alt="loading..." id="loading-table" style="float: right" />
+                        </div>
                     </div>
                 </div>
                 <div class="mask"></div>
                 <div id="PermitSection">
-                    <table id="permitsTable" class="ui-widget-content resize">
+                    <table id="permitsTable" class="ui-widget-content resize no-borders">
                         <thead>
                             <tr>
                                 <th data-bind="click: sortPermits.bind($data, 'permitid')">Permit ID&nbsp;<i class="fa fa-sort"></i></th>
@@ -267,313 +251,212 @@
                     Total permits:&nbsp;<span data-bind="text: $root.totalPermitsFound"></span>
                 </div>
             </div>
-            <!-- end your permits section -->
-            <!-- Begin add new permit section-->
-            <div id="AddNewPermitSection" class="row section add-permit" style="display: none">
-                <!-- Begin top input div -->
-                <div id="AddResourcePage" class="marg-top-20">
-                    <h2 class="marg-top-20 alternate divide medium-24 columns">New Closure Information</h2>
-                    <div class="row">
-                        <div class="medium-6 columns">
-                            <label>
-                                Start Date:&nbsp;
-                                <abbr rel="tooltip" title="The start date must be <em>10 days</em> after today."><i class="fa fa-info-circle"></i></abbr>
-
-                            </label><input type="date" data-bind="value: $root.effectiveDate" />
-                        </div>
-                        <div class="medium-6 columns">
-                            <label>Start Time:</label>
-                            <input type="text" class="form-control" placeholder="hh:mm xm" data-bind="value: $root.effectiveTime" /><!--data-bind="inputmask: { value: $root.effectiveTime, mask: 'h:s t\\m', placeholder: 'hh:mm xm', alias: 'datetime', hourFormat: '12'}" />-->
-                        </div>
-                        <div class="medium-6 columns">
-                            <label>End Date:</label>
-                            <input type="date" class="form-control" data-bind="value: $root.expirationDate" />
-                        </div>
-                        <div class="medium-6 columns">
-                            <label>End Time:</label>
-                            <input type="text" class="form-control" placeholder="hh:mm xm" data-bind="value: $root.expirationTime" /><!--data-bind="inputmask: { value: $root.expirationTime, mask: 'h:s t\\m', placeholder: 'hh:mm xm', alias: 'datetime', hourFormat: '12'}"/>-->
+        <!-- end your permits section -->
+        <!-- Begin add new permit section-->
+        <div id="AddNewPermitSection" class="row add-permit" style="display: none">
+            <!-- Begin top input div -->
+            <div id="AddResourcePage" class="columns marg-top-20">
+                <h2>New Closure Request Form</h2>
+                <div class="row">
+                    <div class="medium-6 columns">
+                        <label for="start-date">
+                            Start Date:&nbsp;
+                            <abbr rel="tooltip" title="The start date must be <em>10 days</em> after today."><i class="fa fa-info-circle"></i></abbr>
+                        </label>
+                        <input type="date" data-bind="value: $root.effectiveDate" id="start-date" />
+                    </div>
+                    <div class="medium-6 columns">
+                        <label>Start Time:</label>
+                        <input type="text" class="form-control" placeholder="hh:mm xm" data-bind="value: $root.effectiveTime" /><!--data-bind="inputmask: { value: $root.effectiveTime, mask: 'h:s t\\m', placeholder: 'hh:mm xm', alias: 'datetime', hourFormat: '12'}" />-->
+                    </div>
+                    <div class="medium-6 columns">
+                        <label>End Date:</label>
+                        <input type="date" class="form-control" data-bind="value: $root.expirationDate" />
+                    </div>
+                    <div class="medium-6 columns">
+                        <label>End Time:</label>
+                        <input type="text" class="form-control" placeholder="hh:mm xm" data-bind="value: $root.expirationTime" /><!--data-bind="inputmask: { value: $root.expirationTime, mask: 'h:s t\\m', placeholder: 'hh:mm xm', alias: 'datetime', hourFormat: '12'}"/>-->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="medium-24 columns">
+                        <label>Purpose:</label>
+                        <textarea id="ReqPurpose" name="EventDesc" data-bind="value: $root.purpose"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="medium-12 columns">
+                        <label>Permit Type: </label>
+                        <select data-bind="options: permitTypes, optionsText: 'PermitTypeName', value: selectedPermitType, optionsCaption: 'Choose...'"></select>
+                    </div>
+                    <div class="medium-12 columns" data-bind="visible: $root.selectedPermitType() != undefined && $root.selectedPermitType().PermitTypeId > 10">
+                        <label>Utility Owner: </label>
+                        <select data-bind="options: utilityOwners, optionsText: 'Name', value: selectedUtilityOwner, optionsCaption: 'Choose...'"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="medium-24 columns">
+                        <label>Comments: </label>
+                        <textarea id="ReqComments" data-bind="value: $root.comments"></textarea>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="columns">
+                        <h2>Project Type(s)</h2>
+                        <span class="validationMessage" data-bind="validationMessage: $root.selectedProjectTypes.projectTypes"></span>
+                        <div data-bind="validationOptions: {insertMessages: false}">
+                            <ul class="checkbox-columns no-bullet" data-bind="foreach: projectTypes">
+                                <li>
+                                    <label><input type="checkbox" data-bind="checkedValue: ProjectTypeId, checked: $root.selectedProjectTypes.projectTypes" /><span data-bind="text: '&nbsp;' + ProjectName"></span></label>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="medium-24 columns">
-                            <label>Purpose:</label>
-                            <textarea id="ReqPurpose" name="EventDesc" data-bind="value: $root.purpose"></textarea>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="medium-12 columns">
-                            <label>Permit Type: </label>
-                            <select data-bind="options: permitTypes, optionsText: 'PermitTypeName', value: selectedPermitType, optionsCaption: 'Choose...'"></select>
-                        </div>
-                        <div class="medium-12 columns" data-bind="visible: $root.selectedPermitType() != undefined && $root.selectedPermitType().PermitTypeId > 10">
-                            <label>Utility Owner: </label>
-                            <select data-bind="options: utilityOwners, optionsText: 'Name', value: selectedUtilityOwner, optionsCaption: 'Choose...'"></select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="medium-24 columns">
-                            <label>Comments: </label>
-                            <textarea id="ReqComments" data-bind="value: $root.comments"></textarea>
-                        </div>
-                    </div>
-                    <h2 class="marg-top-20 alternate divide medium-24 columns">Project Type(s)</h2>
-                    <span class="validationMessage" data-bind="validationMessage: $root.selectedProjectTypes.projectTypes"></span>
-                    <div data-bind="validationOptions: {insertMessages: false}">
-                        <ul class="medium-24 columns checkbox-grid" data-bind="foreach: projectTypes">
-                            <li>
-                                <label><input type="checkbox" data-bind="checkedValue: ProjectTypeId, checked: $root.selectedProjectTypes.projectTypes" /><span data-bind="text: '&nbsp;' + ProjectName"></span></label>
-                            </li>
-                        </ul>
-                        <h2 class="marg-top-20 alternate divide medium-24 columns">Encroachment Type(s)</h2>
-                        <ul class="medium-24 columns checkbox-grid" data-bind="foreach: encroachmentTypes">
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="columns">
+                        <h2>Encroachment Type(s)</h2>
+                        <ul class="checkbox-columns no-bullet" data-bind="foreach: encroachmentTypes">
                             <li>
                                 <label><input type="checkbox" value="" data-bind="checkedValue: EncroachmentTypeID, checked: $root.selectedEncroachmentTypes" /><span data-bind="text: '&nbsp;' + EncroachmentTypeName"></span></label>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <!-- end top input div -->
-                <!-- Begin location div  -->
-                <h2 class="marg-top-20 alternate divide medium-24 columns">Location(s)</h2>
-                <i class="marg-top-5  fa fa-plus fa-2x addNewButton" data-bind="click: $root.addLocation, visible: $root.isLocationEditing()"></i>
-                <span class="validationMessage" data-bind="validationMessage: $root.locations"></span>
-
-                <!--<i class="marg-top-5  fa fa-plus fa-2x addNewButton" data-bind="click: $root.addLocation, visible: $root.isLocationEditing()"></i>
-
-
-                <div class="row marg-top-20 medium-24 columns" data-bind="with: $root.editingLocationItem, visible: !$root.isLocationEditing($data)">
-                    <div class="marg-top-20 medium-24 columns">
-                        Location Type:
-                        <label><input type="radio" name="locTypeGroup" value="address" data-bind="checked: $data.LocationType.bind($data)" /> Address</label>
-                            <label><input type="radio" name="locTypeGroup" value="intersection" data-bind="checked: $data.LocationType.bind($data)" /> Intersection</label>
-                            <label><input type="radio" name="locTypeGroup" value="segment" data-bind="checked: $data.LocationType.bind($data)" /> Street Segment</label>-->
-                <!--<select data-bind="options: $root.locationTypes, selectedOptions: $data.LocationType.editValue(), value: $data.LocationType.editValue, optionsCaption: 'Choose...'"></select>
-
-                </div>
-                    <div data-bind="visible: $data.LocationType.editValue() != undefined">
-                        <div class="medium-6 columns">
-                            <label>Occupancy Type:</label>
-                            <select data-bind="options: $root.occupancyTypes, optionsText: 'OccupancyTypeName', value: $data.OccupancyType.editValue, optionsCaption: 'Choose...', visible: $root.isLocationEditing($data)"></select>
-                        </div>
-                        <div class="medium-10 columns">
-                            <label data-bind="text: $data.LocationType.editValue() == 'Address' ? 'Address:' : 'On Street:'"></label>
-                            <input id="OnStreet" data-bind="jqAuto: { value: OnStreet.editValue, source: $root.getOnStreets, inputProp: 'StreetName', labelProp: 'StreetName', valueProp: 'StreetName' }, visible: $root.isLocationEditing($data)" />
-                        </div>
-                        <div class="medium-10 columns" data-bind="visible: $data.LocationType.editValue()!= 'Address'">
-                            <label data-bind="text: $data.LocationType.editValue() == 'Intersection' ? 'Cross Street:' : 'From Street:'"></label>
-                            <select class="ddFromStreet" data-bind="options: $root.fromStreets, selectedOptions: $data.FromStreet.editValue, optionsText: 'st_name', value: $data.FromStreet.editValue, optionsCaption: $root.fromStreetCaption, visible: $root.isLocationEditing($data), event: { change: $root.getToStreets.bind($data, $data.OnStreet.editValue, $data.FromStreet.editValue) },  enable: $root.fromStreets() != undefined && $root.fromStreets().length > 0 ? true : false"></select>
-                        </div>
-                        <div class="medium-10 columns" data-bind="visible: $data.LocationType.editValue() == 'Street Segment'">
-                            <label>To Street:</label>
-                            <select class="ddToStreet" data-bind="options: $root.toStreets, optionsText: 'st_name', value: $data.ToStreet.editValue, selectedOptions: $data.ToStreet.editValue.st_name, optionsCaption: $root.toStreetCaption, visible: $root.isLocationEditing($data),  enable: $root.toStreets() != undefined && $root.toStreets().length > 0 ? true : false">"></select>
-                        </div>
-                        <br />
-                        <div class="row marg-top-20 medium-24 columns">
-                            <button data-bind="click: $root.applyLocation">Save</button>
+            </div>
+            <hr />
+            <!-- end top input div -->
+            <!-- Begin location div  -->
+            <div style="padding-left: 12.5px; padding-right: 12.5px;">
+                    <div class="row">
+                        <div class="columns">
+                            <h2>Location(s)</h2>
+                            <span class="validationMessage" data-bind="validationMessage: $root.locations"></span>
                         </div>
                     </div>
-                </div>
-                    <span class="validationMessage" data-bind="validationMessage: $root.locations"></span>
-                    -->
-
-                <div>
-                    <table>
-                        <!--<thead>
-                            <tr>
-                                <th>Occupancy Type</th>
-                                    <th>On (street)</th>
-                                    <th>between</th>
-                                    <th>and</th>
-                                    <th>options</th>
-                                <th></th>
-                                <th colspan="5"></th>
-                            </tr>
-                        </thead>-->
-                        <tbody data-bind="foreach: locations">
-                            <tr>
 
 
-                                <td>
-                                    <strong><label>Occupancy Type:</label></strong>
+                    <div data-bind="foreach: locations">
+                        <div class="row">
+                            <div class="columns">
+                                <i class="fa fa-pencil fa-2x" data-bind="click: $root.editLocation.bind($data), visible: !$root.isLocationEditing($data)"></i>
+                                <i class="fa fa-times fa-2x" data-bind="click: $root.removeLocation.bind($data), visible: !$root.isLocationEditing($data)"></i>
+                                <i class="fa fa-floppy-o fa-2x" data-bind="click: $root.applyLocation.bind($data), visible: $root.isLocationEditing($data)"></i>
+                                <i class="fa fa-times fa-2x" data-bind="click: $root.cancelEditLocation.bind($data), visible: $root.isLocationEditing($data)"></i>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="medium-12 columns">
+                                <strong><label>Occupancy Type:</label></strong>
 
-                                    <select data-bind="options: $root.occupancyTypes, optionsText: 'OccupancyTypeName', value: $data.OccupancyType.editValue, optionsCaption: 'Choose...', visible: $root.isLocationEditing($data)"></select>
+                                <select data-bind="options: $root.occupancyTypes, optionsText: 'OccupancyTypeName', value: $data.OccupancyType.editValue, optionsCaption: 'Choose...', visible: $root.isLocationEditing($data)"></select>
 
-                                    <label class="read" data-bind="text: OccupancyType() ? OccupancyType().OccupancyTypeName : 'blank', visible: !$root.isLocationEditing($data)"></label>
+                                <label class="read" data-bind="text: OccupancyType() ? OccupancyType().OccupancyTypeName : 'blank', visible: !$root.isLocationEditing($data)"></label>
+                            </div>
+                            <div class="medium-12 columns">
+                                <strong><label>Location Type:&nbsp;<abbr rel="tooltip" title="Select a location type."><i class="fa fa-info-circle"></i></abbr></label></strong>
 
-                                </td>
+                                <select data-bind="options: $root.locationTypes, selectedOptions: $data.LocationType.editValue(), visible: $root.isLocationEditing($data), value: $data.LocationType.editValue, optionsCaption: 'Choose...'"></select>
+                                <label class="read" data-bind="text: LocationType() ? LocationType() : 'blank', visible: !$root.isLocationEditing($data)"></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="medium-12 columns" data-bind="visible: $data.LocationType.editValue() != undefined">
+                                <strong><label data-bind="text: $data.LocationType.editValue() == 'Address' ? 'Address:' : 'On Street:'"></label></strong>
+                                <input id="OnStreet" data-bind="jqAuto: { value: OnStreet.editValue, source: $root.getOnStreets, inputProp: 'StreetName', labelProp: 'StreetName', valueProp: 'StreetName' }, visible: $root.isLocationEditing($data)" type="text" />
 
-                                <td>
-                                    <strong><label>Location Type:&nbsp;<abbr rel="tooltip" title="Select a location type."><i class="fa fa-info-circle"></i></abbr></label></strong>
+                                <label class="read" data-bind="text: OnStreet() != undefined ? OnStreet() : 'blank', visible: !$root.isLocationEditing($data)"></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!--Cross|From Street-->
+                            <div class="medium-12 columns" data-bind="visible:  $data.LocationType.editValue()!= undefined && $data.LocationType.editValue()!= 'Address'">
 
-                                    <select data-bind="options: $root.locationTypes, selectedOptions: $data.LocationType.editValue(), visible: $root.isLocationEditing($data), value: $data.LocationType.editValue, optionsCaption: 'Choose...'"></select>
-                                    <label class="read" data-bind="text: LocationType() ? LocationType() : 'blank', visible: !$root.isLocationEditing($data)"></label>
-                                </td>
-                                <td>
+                                <strong><label data-bind="text: $data.LocationType.editValue() === 'Intersection' ? 'Cross Street:' : 'From Street:'"></label></strong>
 
-                                    <div class="medium-10 columns" data-bind="visible: $data.LocationType.editValue() != undefined">
-                                        <strong><label data-bind="text: $data.LocationType.editValue() == 'Address' ? 'Address:' : 'On Street:'"></label></strong>
-                                        <input id="OnStreet" data-bind="jqAuto: { value: OnStreet.editValue, source: $root.getOnStreets, inputProp: 'StreetName', labelProp: 'StreetName', valueProp: 'StreetName' }, visible: $root.isLocationEditing($data)" />
+                                <!--cross street tooltip-->
+                                <div class="tooltip-icon" data-bind="visible: $data.LocationType.editValue() === 'Intersection'">
+                                    &nbsp;<abbr rel="tooltip" title="Select the cross street."><i class="fa fa-info-circle"></i></abbr>
+                                </div>
 
+                                <!--from street tooltip-->
+                                <div class="tooltip-icon" data-bind="visible: $data.LocationType.editValue() === 'Street Segment'">
+                                    &nbsp;<abbr rel="tooltip" title="Select the starting cross street."><i class="fa fa-info-circle"></i></abbr>
+                                </div>
 
-                                        <label class="read" data-bind="text: OnStreet() != undefined ? OnStreet() : 'blank', visible: !$root.isLocationEditing($data)"></label>
-                                    </div>
+                                <select class="ddFromStreet" data-bind="options: $root.fromStreets, selectedOptions: $data.FromStreet.editValue, optionsText: 'StreetName', value: $data.FromStreet.editValue, optionsCaption: $root.fromStreetCaption, visible: $root.isLocationEditing($data), event: { change: $root.getToStreets.bind($data, $data.OnStreet.editValue, $data.FromStreet.editValue) },  enable: $root.fromStreets() != undefined && $root.fromStreets().length > 0 ? true : false"></select>
 
+                                <label class="read" data-bind="text: FromStreet() != undefined ? FromStreet().StreetName : 'blank', visible: !$root.isLocationEditing($data)"></label>
+                            </div>
 
-                                </td>
-                                <td>
-
-                                    <!--Cross|From Street-->
-                                    <div class="medium-10 columns" data-bind="visible:  $data.LocationType.editValue()!= undefined && $data.LocationType.editValue()!= 'Address'">
-
-                                        <strong><label data-bind="text: $data.LocationType.editValue() === 'Intersection' ? 'Cross Street:' : 'From Street:'"></label></strong>
-
-                                        <!--cross street tooltip-->
-                                        <div data-bind="visible: $data.LocationType.editValue() === 'Intersection'">
-                                            &nbsp;<abbr rel="tooltip" title="Select the cross street."><i class="fa fa-info-circle"></i></abbr>
-                                        </div>
-
-                                        <!--from street tooltip-->
-                                        <div data-bind="visible: $data.LocationType.editValue() === 'Street Segment'">
-                                            &nbsp;<abbr rel="tooltip" title="Select the starting cross street."><i class="fa fa-info-circle"></i></abbr>
-                                        </div>
-
-                                        <select class="ddFromStreet" data-bind="options: $root.fromStreets, selectedOptions: $data.FromStreet.editValue, optionsText: 'st_name', value: $data.FromStreet.editValue, optionsCaption: $root.fromStreetCaption, visible: $root.isLocationEditing($data), event: { change: $root.getToStreets.bind($data, $data.OnStreet.editValue, $data.FromStreet.editValue) },  enable: $root.fromStreets() != undefined && $root.fromStreets().length > 0 ? true : false"></select>
-
-                                        <label class="read" data-bind="text: FromStreet() != undefined ? FromStreet().st_name : 'blank', visible: !$root.isLocationEditing($data)"></label>
-                                    </div>
-
-                                </td>
-                                <td>
-                                    <div class="medium-10 columns" data-bind="visible: $data.LocationType.editValue() == 'Street Segment'">
-                                        <strong><label>To Street:</label></strong>
-                                        <select class="ddToStreet" data-bind="options: $root.toStreets, optionsText: 'st_name', value: $data.ToStreet.editValue, selectedOptions: $data.ToStreet.editValue.st_name, optionsCaption: $root.toStreetCaption, visible: $root.isLocationEditing($data),  enable: $root.toStreets() != undefined && $root.toStreets().length > 0 ? true : false">"></select>
-                                        <label class="read" data-bind="text: ToStreet() != undefined ? ToStreet().st_name : 'blank', visible: !$root.isLocationEditing($data)"></label>
-                                    </div>
-
-
-
-                                </td>
-                                <td class="tools">
-                                    <i class="fa fa-pencil fa-2x" data-bind="click: $root.editLocation.bind($data), visible: !$root.isLocationEditing($data)"></i>
-                                    <i class="fa fa-times fa-2x" data-bind="click: $root.removeLocation.bind($data), visible: !$root.isLocationEditing($data)"></i>
-                                    <i class="fa fa-floppy-o fa-2x" data-bind="click: $root.applyLocation.bind($data), visible: $root.isLocationEditing($data)"></i>
-                                    <i class="fa fa-times fa-2x" data-bind="click: $root.cancelEditLocation.bind($data), visible: $root.isLocationEditing($data)"></i>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
-                <!--<span class="validationMessage" data-bind="validationMessage: $root.permitPath"></span>
-                <div class="row">
-                     <label class="medium-12 columns">Start by searching for your starting address. That will add Pin A to the map. Next drag Pin B to the ending address.</label>
-                 </div>
-
-                 <div class="row">
-
-                     <div class="searchGroup medium-6 columns">
-                         <input id="StreetSearch" data-bind="jqAuto: { value: streetSearch, source: $root.getOnStreets, inputProp: 'StreetName', labelProp: 'StreetName', valueProp: 'StreetName' }, event: { 'blur': $root.getPath.bind($data) }" placeholder="search..." />
-                     </div>
-                     <div class="searchGroup medium-6 columns">
-                         <button>Go</button>
-                     </div>
-                     <div id="mapDiv"></div>
-
-                 </div>
-                 <div id="locationResults"></div>
-                 <table>
-                     <thead>
-                         <tr>
-                             <th>Waypoint Order</th>
-                             <th>Formatted Address</th>
-                             <th>Short Address </th>
-                             <th>Latitude</th>
-                             <th>Longitude</th>
-                         </tr>
-                     </thead>
-                     <tbody data-bind="foreach: $root.permitPath">
-                         <tr>
-                             <td>
-                                 <label class="read" data-bind="text: WaypointOrder"></label>
-                             </td>
-
-                             <td>
-                                 <label class="read" data-bind="text: $data.FormattedAddress == undefined ? '' : $data.FormattedAddress "></label>
-                             </td>
-                             <td>
-                                 <label class="read" data-bind="text: $data.AddressLine == undefined  ? '' : $data.AddressLine"></label>
-                             </td>
-                             <td>
-                                 <label class="read" data-bind="text: $data.Latitude == undefined ? '' : $data.Latitude"></label>
-                             </td>
-                             <td>
-                                 <label class="read" data-bind="text: $data.Longitude == undefined ? '' : $data.Longitude"></label>
-                             </td>
-                         </tr>
-                     </tbody>
-                 </table>-->
-
-                <br />
-                <!--<div id="esrimap" class="leaflet-container leaflet-touch leaflet-fade-anim"></div>-->
-                <br />
-
-                <!-- end location div -->
-                <!-- Begin reference div -->
-                <div>
-                    <h2 class="marg-top-20 alternate divide medium-24 columns">Reference(s)</h2>
-                    <i class="fa fa-plus fa-2x addNewButton" data-bind="click: $root.addReference, visible: $root.isReferenceEditing()"></i>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Reference Type</th>
-                                <th>Reference </th>
-                                <th>options</th>
-                            </tr>
-                        </thead>
-                        <tbody data-bind="foreach: references">
-                            <tr>
-                                <td>
-                                    <select data-bind="options: $root.referenceTypes, optionsText: 'ReferenceTypeName', value: $data.ReferenceTypeId.editValue, optionsCaption: 'Choose...', visible: $root.isReferenceEditing($data)"></select>
-
-                                    <label class="read" data-bind="text: ReferenceTypeId() ? ReferenceTypeId().ReferenceTypeName : '', visible: !$root.isReferenceEditing($data)"></label>
-                                </td>
-                                <td>
-                                    <input class="edit" data-bind="value: ReferenceValue.editValue, visible: $root.isReferenceEditing($data)" />
-
-                                    <label class="read" data-bind="text: ReferenceValue, visible: !$root.isReferenceEditing($data)"></label>
-                                </td>
-                                <td class="tools">
-                                    <i class="fa fa-pencil fa-2x" data-bind="click: $root.editReference.bind($data), visible: !$root.isReferenceEditing($data)"></i>
-                                    <i class="fa fa-times fa-2x" data-bind="click: $root.removeReference.bind($data), visible: !$root.isReferenceEditing($data)"></i>
-                                    <i class="fa fa-floppy-o fa-2x" data-bind="click: $root.applyReference.bind($data), visible: $root.isReferenceEditing($data)"></i>
-                                    <i class="fa fa-times fa-2x" data-bind="click: $root.cancelEditReference.bind($data), visible: $root.isReferenceEditing($data)"></i>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
-                <!-- end reference div -->
-                <!-- Begin file upload div -->
-                <!--<div>
-                    <h2 class="marg-top-20 alternate divide medium-24 columns">File Attachment(s)</h2>
-                    <form enctype="multipart/form-data">
-                        <input type="file" id="fileInput" name="fileInput" id="fileInput" />
-                    </form>
-                    <progress id="UploadDocumentProgress" style="display: none"></progress>
-                </div>-->
-                <!-- end file upload div -->
-                <!-- Begin application actions div -->
-                <div class="large-24 columns pad-25">
-                    <button data-bind="click: submitPermitApplication">Submit Application</button>
-                    <button data-bind="click: submitPermitDraftApplication">Save Draft</button>
-                    <button data-bind="click: cancelPermitApplication">Cancel</button>
-                </div>
-                <!-- End application actions div -->
+                            <div class="medium-12 columns" data-bind="visible: $data.LocationType.editValue() == 'Street Segment'">
+                                <strong><label>To Street:</label></strong>
+                                <br />
+                                <select class="ddToStreet" data-bind="options: $root.toStreets, optionsText: 'StreetName', value: $data.ToStreet.editValue, selectedOptions: $data.ToStreet.editValue.StreetName, optionsCaption: $root.toStreetCaption, visible: $root.isLocationEditing($data),  enable: $root.toStreets() != undefined && $root.toStreets().length > 0 ? true : false">"></select>
+                                <label class="read" data-bind="text: ToStreet() != undefined ? ToStreet().StreetName : 'blank', visible: !$root.isLocationEditing($data)"></label>
+                            </div>
+                        </div>
+                        <hr />
+                    </div>
+                    <i class="marg-top-5 fa fa-plus fa-2x addNewButton" data-bind="click: $root.addLocation, visible: $root.isLocationEditing()"></i>
             </div>
-            <!-- Begin add new permit section-->
+            <!-- end location div -->
+            <!-- Begin reference div -->
+            <hr />
+            <div style="padding-left: 12.5px; padding-right: 12.5px;">
+                <h2>Reference(s)</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Reference Type</th>
+                            <th>Reference </th>
+                            <th>options</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: references">
+                        <tr>
+                            <td>
+                                <select data-bind="options: $root.referenceTypes, optionsText: 'ReferenceTypeName', value: $data.ReferenceTypeId.editValue, optionsCaption: 'Choose...', visible: $root.isReferenceEditing($data)"></select>
+
+                                <label class="read" data-bind="text: ReferenceTypeId() ? ReferenceTypeId().ReferenceTypeName : '', visible: !$root.isReferenceEditing($data)"></label>
+                            </td>
+                            <td>
+                                <input class="edit" data-bind="value: ReferenceValue.editValue, visible: $root.isReferenceEditing($data)" type="text" />
+
+                                <label class="read" data-bind="text: ReferenceValue, visible: !$root.isReferenceEditing($data)"></label>
+                            </td>
+                            <td class="tools">
+                                <i class="fa fa-pencil fa-2x" data-bind="click: $root.editReference.bind($data), visible: !$root.isReferenceEditing($data)"></i>
+                                <i class="fa fa-times fa-2x" data-bind="click: $root.removeReference.bind($data), visible: !$root.isReferenceEditing($data)"></i>
+                                <i class="fa fa-floppy-o fa-2x" data-bind="click: $root.applyReference.bind($data), visible: $root.isReferenceEditing($data)"></i>
+                                <i class="fa fa-times fa-2x" data-bind="click: $root.cancelEditReference.bind($data), visible: $root.isReferenceEditing($data)"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <i class="fa fa-plus fa-2x addNewButton" data-bind="click: $root.addReference, visible: $root.isReferenceEditing()"></i>
+            </div>
+            <!-- end reference div -->
+            <!-- Begin file upload div -->
+            <!--<div>
+                <h2 class="marg-top-20 alternate divide medium-24 columns">File Attachment(s)</h2>
+                <form enctype="multipart/form-data">
+                    <input type="file" id="fileInput" name="fileInput" id="fileInput" />
+                </form>
+                <progress id="UploadDocumentProgress" style="display: none"></progress>
+            </div>-->
+            <!-- end file upload div -->
+            <!-- Begin application actions div -->
+            <div class="large-24 columns pad-25">
+                <button data-bind="click: submitPermitApplication">Submit Application</button>
+                <button data-bind="click: submitPermitDraftApplication">Save Draft</button>
+                <button data-bind="click: cancelPermitApplication">Cancel</button>
+            </div>
+            <!-- End application actions div -->
         </div>
-        <!-- End main page div -->
+        <!-- End add new permit section-->
     </div>
     <!-- end page container -->
     <!-- Begin footer -->
@@ -613,10 +496,10 @@
             </div>
         </section>
         <div class="row classic">
-            <div class="large-6 columns">
-                <a href="#">Feedback</a>
+            <div class="large-14 columns">
+                <a href="#/">Feedback</a> <span class="small-text">&copy; 2016 - City of Philadelphia | Office of Innovation and Technology</span>
             </div>
-            <div class="large-12 columns">
+            <div class="large-10 columns">
                 <nav>
                     <ul class="inline-list">
                         <li><a href="http://alpha.phila.gov/terms-of-use">Terms of use</a></li>
@@ -626,13 +509,8 @@
                 </nav>
             </div>
         </div>
-        <p>&copy; 2016 - City of Philadelphia | Office of Innovation and Technology</p>
     </footer>
     <!-- end footer -->
-    
-   
-    
-
     <!-- Begin templates -->
     <!-- Begin status button template -->
     <script type="text/html" id="status-template">
@@ -704,22 +582,22 @@
     <script src="Scripts/app/app.js"></script>
     <script src="Scripts/app/permit-geo.js"></script>
     <!--<script src="Scripts/app/patterns.min.js"></script>-->
-    
-    
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/js/foundation.min.js"></script>
+
     <script type='text/javascript' src='https://cityofphiladelphia.github.io/patterns/dist/0.12.6/js/patterns.min.js'></script>
-    
-    
+
+
     <!--<script src="Scripts/jquery.inputmask/inputmask.js"></script>
     <script src="Scripts/jquery.inputmask/inputmask.extensions.js"></script>
     <script src="Scripts/jquery.inputmask/inputmask.regex.extensions.js"></script>
     <script src="Scripts/jquery.inputmask/inputmask.date.extensions.js"></script>
     <script src="Scripts/jquery.inputmask/jquery.inputmask.js"></script>
     <script src="Scripts/app/ko.inputmask.js"></script>-->
-
     <!--<script src='http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js'></script>
     <script src='http://cdn.jsdelivr.net/leaflet.esri/1.0.0/esri-leaflet.js'></script>-->
     <!-- end scripts -->
-    
+
 
 </body>
 </html>

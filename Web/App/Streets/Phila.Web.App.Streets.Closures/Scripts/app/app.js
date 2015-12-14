@@ -119,7 +119,7 @@ function AppViewModel() {
         }
     });
 
-    self.purpose = ko.observable().extend({ required: true });
+    self.purpose = ko.observable().extend({ reqsuuired: true });
     self.comments = ko.observable();
     self.permitPath = ko.observableArray().extend({ required: true });
 
@@ -128,7 +128,7 @@ function AppViewModel() {
 
 
     self.totalPermitsFound = ko.observable();
-    self.apiUrl = "https://phila.azurewebsites.net/"; // "http://localhost/Phila.Web.Api.Streets/"; // 
+    self.apiUrl = "https://phila.azurewebsites.net/"; //  "http://localhost/Phila.Web.Api.Streets/"; //
     self.streetCode = "";
     self.fromStreets = ko.observableArray();
 
@@ -179,6 +179,7 @@ function AppViewModel() {
 
     //** subscriptions
     self.selectedCompanyChanged = function() {
+
         if (self.selectedCompany() === undefined) {
             self.showUsersCompaniesSection();
             return;
@@ -316,10 +317,10 @@ function AppViewModel() {
                 $("#AccountDetailsEdit").hide();
                 $("#AccountDetails").show();
 
-                $.notify(notification.success, { className: "success", globalPosition: "top center" });
+                $.notify(notification.success, { className: "success", globalPosition: "top left" });
             },
             error: function() { //(xhr, ajaxOptions, thrownError) {
-                $.notify(notification.error, { className: "info", globalPosition: "top center" } );
+                $.notify(notification.error, { className: "info", globalPosition: "top left" } );
             }
         });
     };
@@ -419,13 +420,11 @@ function AppViewModel() {
 
     self.applyLocation = function () {
         
-        var errors = ko.validation.group([self.editingLocationItem.OccupancyType, self.editingLocationItem.OnStreet, self.editingLocationItem.FromStreet, self.editingLocationItem.ToStreet]);
-
-        console.log(ko.toJSON(errors));
+        var errors = ko.validation.group([self.locations, self.editingLocationItem.OnStreet, self.editingLocationItem.FromStreet, self.editingLocationItem.ToStreet], { deep: true, observable: true, live: true });
 
         errors.showAllMessages();
-
-        if (errors().length > 0) return false;
+        console.log(ko.toJSON(errors()));
+        //if (errors().length > 0) return false;
 
         //  commit the edit transaction
         self.editLocationTransaction.notifySubscribers(null, "commit");
@@ -455,7 +454,7 @@ function AppViewModel() {
         if (self.toStreetCaption() != "Choose an 'On Street'...")
             self.toStreets("Choose an 'On Street'...");
 
-        self.clearFromAndToOa();
+        //self.clearFromAndToOa();
 
         $.ajax({
             dataType: "json",
@@ -470,15 +469,20 @@ function AppViewModel() {
 
         self.fromStreetCaption("Loading...");
         self.toStreetCaption("Choose a 'From/At Street'...");
-        //var $ddFromStreet = $(".ddFromStreet");
 
         $.ajax({
             dataType: "json",
             type: "GET",
             url: self.apiUrl + "api/locations/GetFromStreets?onStreet=" + onStreet,
-            success: function(data) {
-                self.fromStreets(data);
-                self.fromStreetCaption("Choose...");
+            success: function (data) {
+                console.log("fromStreet", data);
+                self.fromStreets(data)
+                //self.fromStreets([]);
+                //$(data).each(function(index, item) {
+                //    fromStreets.push(new PermitLocation())
+                //});
+
+               self.fromStreetCaption("Choose...");
             },
             error: function(event, jqXhr, ajaxSettings, thrownError) {
                 self.fromStreetCaption("Choose an 'On Street'...");
@@ -509,9 +513,9 @@ function AppViewModel() {
 
 
         try {
-            console.log("setting onStreet...");
+            //console.log("setting onStreet...");
             onStreet = onStreet();
-            console.log("onStreet set to " + onStreet);
+            //console.log("onStreet set to " + onStreet);
         } catch (e) {
             console.log("onStreet: " + e);
             console.log(ko.toJSON(onStreet));
@@ -521,12 +525,12 @@ function AppViewModel() {
         var fromNodeNumber;
 
         try {
-            console.log("setting fromNodeNumber...");
+            //console.log("setting fromNodeNumber...");
             fromNodeNumber = fromStreet().NodeOrder;
-            console.log("fromNodeOrder set to " + fromNodeNumber);
-            console.log("setting fromStreet...");
-            fromStreet = fromStreet().st_name.trim();
-            console.log("fromStreet set to " + fromStreet);
+            //console.log("fromNodeOrder set to " + fromNodeNumber);
+            //console.log("setting fromStreet...");
+            fromStreet = fromStreet().StreetName.trim();
+            //console.log("fromStreet set to " + fromStreet);
         } catch (e) {
 
             console.log("fromStreetError: " + e);
@@ -637,10 +641,10 @@ function AppViewModel() {
             type: 'POST',
 
             success: function() {
-                $.notify(notification.recordSaved, { className: "success", globalPosition: "top center" });
+                $.notify(notification.recordSaved, { className: "success", globalPosition: "top left" });
             },
             error: function() {
-                $.notify(notification.recordNotSaved, { className: "error", globalPosition: "top center" });
+                $.notify(notification.recordNotSaved, { className: "error", globalPosition: "top left" });
             }
         });
     };
@@ -752,7 +756,7 @@ function AppViewModel() {
 
         var answer = confirm(notification.cancelNewPermitConfirm);
         if (answer) {
-            $.notify(notification.cancelNewPermitSuccess, { className: "info", globalPosition: "top center" });
+            $.notify(notification.cancelNewPermitSuccess, { className: "info", globalPosition: "top left" });
             self.showMainSections();
             self.resetNewPermitFields();
         }
@@ -760,11 +764,13 @@ function AppViewModel() {
 
     self.savePermitApplicationDraft = function() {
         // ToDo: submit permit application draft
-        $.notify(notification.savePermitAppDraftSuccess, { className: "success", globalPosition: "top center" });
+        $.notify(notification.savePermitAppDraftSuccess, { className: "success", globalPosition: "top left" });
         self.showMainSections();
     };
 
-    self.submitPermitApplication = function() {
+    self.submitPermitApplication = function () {
+        
+
         // ToDo: submit permit application
         self.postPermit(false);
     };
@@ -773,7 +779,11 @@ function AppViewModel() {
         self.postPermit(true);
     };
 
+    
+
     self.postPermit = function(isDraft) {
+        self.applyLocation();
+        self.applyReference();
 
         var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose, self.selectedPermitType, self.selectedProjectTypes.projectTypes, self.locations, self.expirationTime, self.effectiveTime]);
 
@@ -783,39 +793,88 @@ function AppViewModel() {
 
         //if (!ko.validation.validateObservable(self.usersEmailAddress))
         //    return false;
+        
 
         var refs = [];
         for (var i = 0; i < self.references().length; i++) {
-            refs.push({ ReferenceTypeId: self.references()[i].ReferenceTypeId().ReferenceTypeId(), ReferenceValue: self.references()[i].ReferenceValue() });
+            refs.push(new PermitReference(self.references()[i].ReferenceTypeId().ReferenceTypeId(), self.references()[i].ReferenceValue()));
         }
 
-        var prams = "token=" + getUrlParameter("token") +
-            "&companyId=" + self.selectedCompany().CompanyId() +
-            "&utilityOwnerId=" + self.selectedUtilityOwner().OwnerId +
-            "&permitTypeId=" + self.selectedPermitType().PermitTypeId +
-            "&projectTypes=" + self.selectedProjectTypes.binary2Decimal() +
-            "&encroachmentTypes=" + JSON.stringify(ko.toJSON(self.selectedEncroachmentTypes)) +
-            "&effectiveDate=" + self.effectiveDate() +
-            "&expirationDate=" + self.expirationDate() +
-            "&purpose=" + self.purpose() +
-            "&comments=" + self.comments() +
-            "&isDraft=" + isDraft; //+
-            //"&references=" + JSON.stringify(refs) +
-            //"&locations";
-        //});
+        var locs = [];
+        for (var j = 0; j < self.locations().length; j++) {
+            console.log(self.locations()[j]);
+            var loc = new PermitLocation(
+                j + 1,
+                self.locations()[j].OccupancyType().OccupancyTypeID,
+                self.locations()[j].LocationType(),
+                self.locations()[j].OnStreet(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+                );
 
+            if (self.locations()[j].LocationType().toLowerCase() === "intersection" || self.locations()[j].LocationType().toLowerCase() === "street segment") {
+                    loc.FromStreetName = self.locations()[j].FromStreet().StreetName;
+                    loc.FromStreetCode = self.locations()[j].FromStreet().StreetCode;
+                    loc.FromStreetNode = self.locations()[j].FromStreet().NodeOrder;
+
+                    if (self.locations()[j].LocationType().toLowerCase() === "street segment"){
+                        loc.ToStreetName = self.locations()[j].ToStreet().StreetName;
+                        loc.ToStreetCode = self.locations()[j].ToStreet().StreetCode;
+                        loc.ToStreetNode = self.locations()[j].ToStreet().NodeOrder;
+                    }
+            }
+
+            locs.push(loc);
+        }
+
+
+        var effectiveTime = self.effectiveTime().match(/^([1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+        var effectiveDateTime = new Date(self.effectiveDate());
+        var effTimeHours = effectiveTime[3].toLowerCase() === "pm" ? (parseInt(effectiveTime[1]) + 12) : effectiveTime[1];
+        var effTimeMinutes = parseInt(effectiveTime[2]);
+        effectiveDateTime.setHours(effTimeHours);
+        effectiveDateTime.setMinutes(effTimeMinutes);
+
+        var expirationTime = self.expirationTime().match(/^([1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+        var expirationDateTime = new Date(self.expirationDate());
+        var expTimeHours = expirationTime[3].toLowerCase() === "pm" ? (parseInt(expirationTime[1]) + 12) : expirationTime[1];
+        var expTimeMinutes = parseInt(expirationTime[2]);
+        expirationDateTime.setHours(expTimeHours);
+        expirationDateTime.setMinutes(expTimeMinutes);
+
+        var permit = {
+            Token: getUrlParameter("token"),
+            CompanyId: self.selectedCompany().CompanyId(),
+            UtilityOwnerId: self.selectedUtilityOwner() != undefined ? self.selectedUtilityOwner().OwnerId : null,
+            PermitTypeId: self.selectedPermitType().PermitTypeId,
+            ProjectTypes: self.selectedProjectTypes.binary2Decimal(),
+            EncroachmentTypes: self.selectedEncroachmentTypes(),
+            EffectiveDate: effectiveDateTime,
+            ExpirationDate: expirationDateTime,
+            Purpose: self.purpose(),
+            Comments: self.comments(),
+            IsDraft: isDraft,
+            References: refs,
+            Locations: locs
+        }
 
         $.ajax({
-            url: self.apiUrl + "api/permits/CreatePermit?" + prams,
-
+            url: self.apiUrl + "api/permits/CreatePermit",
+            data: JSON.stringify(permit),
             type: 'POST',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
             success: function() {
-                $.notify(notification.submitNewAppSuccess, { className: "success", globalPosition: "top center" });
+                $.notify(notification.submitNewAppSuccess, { className: "success", globalPosition: "top left" });
                 self.showMainSections();
                 self.resetNewPermitFields();
             },
             error: function() {
-                $.notify(notification.recordNotSaved, { className: "error", globalPosition: "top center" });
+                $.notify(notification.recordNotSaved, { className: "error", globalPosition: "top left" });
             }
         });
     };
@@ -839,7 +898,6 @@ function AppViewModel() {
         self.effectiveDate.clearError();
         self.expirationDate.clearError();
         self.purpose.clearError();
-        self.comments(null).clearError();
         self.locations.clearError();
         self.references.clearError();
     };
@@ -901,6 +959,8 @@ function AppViewModel() {
         $Loading.show();
         $RequestLoginBtn.val("sending request...");
         $RequestLoginBtn.prop('disabled', true);
+        $("#LoginMain").html(notification.checkLoginEmail);
+        $Loading.hide();
         $.ajax({
             type: "POST",
             url: self.apiUrl + "api/authentication/authenticate?emailAddress=" + self.usersEmailAddress(),
@@ -935,9 +995,9 @@ function AppViewModel() {
                 "Content-Length": $("#fileInput")[0].length
             }
         }).done(function() {
-            $.notify("Document uploaded.", { globalPosition: "top center", className: "success" });
+            $.notify("Document uploaded.", { globalPosition: "top left", className: "success" });
         }).fail(function() {
-            $.notify("An error occurred, the files couldn't be sent!", { globalPosition: "top center", className: "error" });
+            $.notify("An error occurred, the files couldn't be sent!", { globalPosition: "top left", className: "error" });
         });
 
         $("#UploadDocumentProgress").hide();
@@ -1151,11 +1211,6 @@ function AppViewModel() {
     };
 
     //** required support for the PSD's legacy code
-    self.getPath = function () {
-        createWalkingRoute(self.streetSearch(), self.streetSearch());
-
-        getStreetCodeAndSegId(self.streetSearch());
-    };
 
     self.selectedProjectTypes =
     {
@@ -1566,14 +1621,15 @@ $(document).ready(function() {
         var expiredToken = getUrlParameter("ExpiredToken");
         console.log(expiredToken);
         if (expiredToken == "true") {
-            $.notify("Please request a new login email.", { globalPosition: "top center", className: "info" });
+            $.notify("Please request a new login email.", { globalPosition: "top left", className: "info" });
         }
         $("#LoginSection").show();
         $("#PageLoadingProgress").hide();
     }
     ko.validation.init({
-        decorateElement: true,
-        messagesOnModified: true, // Show straight away
+        decorateElement: false,
+        messagesOnModified: true
+        //,grouping: { deep: true }
     });
 
     $(".resize tr th").resizable({
@@ -1581,10 +1637,10 @@ $(document).ready(function() {
     });
 
     $(document).ajaxStart(function() {
-        $('.mask').addClass('ajax');
+        $(".mask").addClass("ajax");
     });
     $(document).ajaxComplete(function() {
-        $('.mask').removeClass('ajax');
+        $(".mask").removeClass("ajax");
     });
 
     
@@ -1638,7 +1694,7 @@ ko.validation.rules["validPermitDate"] = {
         selectedDate = new Date(selectedDate);
         var today = new Date();
 
-        return selectedDate >= today.addDays(params[0]);
+        return selectedDate >= today.addDays(params[0]).setHours(0,0,0,0);
     },
     message: "Must be on or after {1}"
 };

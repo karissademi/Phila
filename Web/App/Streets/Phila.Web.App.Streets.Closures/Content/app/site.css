@@ -1,27 +1,15 @@
-body {
-    background-color: #ffffff;
-    color: #333333;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 13px;
-    line-height: 18px;
-    margin: 0;
-    padding-bottom: 20px;
-    padding-top: 50px;
+#LoginEmail{
+  width:50%;
+  display: inline-block;
+}
+.checkbox-columns{
+  -webkit-columns: 230px;
+     -moz-columns: 230px;
+          columns: 230px;
 }
 
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    width: 100%;
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-
-
-
-
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
+/* Override the default bootstrap behavior where horizontal description lists
+   will truncate terms that are too long to fit in the left column
 */
 
 .dl-horizontal dt { white-space: normal; }
@@ -34,7 +22,7 @@ textarea { /*max-width: 280px;*/ }
 
 .marg-top-20 { margin-top: 20px; }
 
-label { display: block; }
+label { display: inline-block; }
 
 .validationMessage { color: Red; }
 
@@ -58,18 +46,6 @@ label { display: block; }
     float: left;
     margin-left: 1em;
     width: auto;
-}
-
-
-
-a {
-    color: #0088cc;
-    text-decoration: none;
-}
-
-a:hover {
-    color: #005580;
-    text-decoration: underline;
 }
 
 h2 { padding-top: 20px; }
@@ -201,7 +177,7 @@ ul { padding: 0; }
     width: 100%;
 }
 
-.map-container .map 
+.map-container .map
 {
     height: 100%;
 }*/
@@ -216,8 +192,8 @@ ul { padding: 0; }
     overflow: hidden;
 }
 
-.Flexible-container iframe,   
-.Flexible-container object,  
+.Flexible-container iframe,
+.Flexible-container object,
 .Flexible-container embed {
     position: absolute;
     top: 0;
@@ -250,7 +226,7 @@ ul { padding: 0; }
 
 .details {
     margin-top: 5px;
-    padding: 2px;
+    padding: 10px;
 }
 
 .GetCodeButton { margin: 10px 0; }
@@ -347,8 +323,6 @@ ul { padding: 0; }
     z-index: 1000; /*puts on top of everything*/
 }
 
-
-
 /*#esrimap {
     width: 100%;
     height: 400px;
@@ -357,6 +331,9 @@ ul { padding: 0; }
     position: relative;
 }*/
 
+.tooltip-icon{
+  display: inline-block;
+}
 #tooltip
 {
     text-align: center;
@@ -366,7 +343,7 @@ ul { padding: 0; }
     z-index: 100;
     padding: 15px;
 }
- 
+
     #tooltip:after /* triangle decoration */
     {
         width: 0;
@@ -380,7 +357,7 @@ ul { padding: 0; }
         bottom: -10px;
         margin-left: -10px;
     }
- 
+
         #tooltip.top:after
         {
             border-top-color: transparent;
@@ -388,13 +365,13 @@ ul { padding: 0; }
             top: -20px;
             bottom: auto;
         }
- 
+
         #tooltip.left:after
         {
             left: 10px;
             margin: 0;
         }
- 
+
         #tooltip.right:after
         {
             right: 10px;

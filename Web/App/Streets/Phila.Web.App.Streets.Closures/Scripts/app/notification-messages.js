@@ -7,7 +7,7 @@
     attempingToSendEmail: "Attempting to send email...",
     success: "Success!",
     error: "Error [:*-^((]-[==='",
-    checkLoginEmail: "<strong>Please check your inbox for login instructions.</strong><br/><br/><strong>CHECK YOUR SPAM OR JUNK FOLDER IF YOU DO NOT SEE THE EMAIL IN YOUR INBOX</strong>",
+    checkLoginEmail: "<h2>Please check your inbox for login instructions.</h2><div data-alert class='alert-box info'><p>Check your spam or junk folder if you do not see the email in your inbox.</p></div>",
     cancelNewPermitConfirm: "Are you sure that you would like to cancel this application?",
     cancelNewPermitSuccess: "Your application has been canceled successfully.",
     savePermitAppDraftSuccess: "Your draft has been saved successfully.",

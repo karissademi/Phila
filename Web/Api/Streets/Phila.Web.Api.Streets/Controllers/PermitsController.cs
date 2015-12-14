@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -26,24 +26,26 @@ namespace Phila.Web.Api.Streets.Controllers
 
 
         /// <summary>
-        /// Posts the permit.
+        ///     Posts the permit.
         /// </summary>
         /// <param name="tblPermit">The table permit.</param>
         /// <returns></returns>
         [EnableCors(origins: "*", headers: "*", methods: "*")]
         [AllowAnonymous]
         [Route("api/permits/CreatePermit")]
-        public async Task<IHttpActionResult> CreatePermit(string token, int companyId, int utilityOwnerId, string purpose, int[] encroachmentTypes, int projectTypes, int permitTypeId, string comments, bool isDraft, DateTime? effectiveDate, DateTime? expirationDate)//, List<StreetsViewModels.ReferenceSelection> references)
+        [HttpPost]
+        public async Task<IHttpActionResult> CreatePermit([FromBody] StreetsViewModels.PostedPermit permit)
+            //, List<StreetsViewModels.ReferenceSelection> references)
         {
             //if (encroachmentTypes == null) throw new ArgumentNullException("encroachmentTypes");
-            
+
             var st = new SecurityToken();
-            bool auth = st.IsTokenValid(token);
+            bool auth = st.IsTokenValid(permit.Token);
 
             if (!auth)
                 return Unauthorized();
 
-            var validCompanyId = IsCompanyIdValid(token, companyId);
+            bool validCompanyId = IsCompanyIdValid(permit.Token, permit.CompanyId);
 
             // is the user auth to get permits of companyId?
             if (validCompanyId)
@@ -53,15 +55,15 @@ namespace Phila.Web.Api.Streets.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var company = _db.tblCompanies.FirstOrDefault(x => x.CompanyId == companyId);
+            tblCompany company = _db.tblCompanies.FirstOrDefault(x => x.CompanyId == permit.CompanyId);
             if (company == null)
                 return Unauthorized();
 
-            var user = _db.UserTokens.FirstOrDefault(x => x.Token == token);
+            UserToken user = _db.UserTokens.FirstOrDefault(x => x.Token == permit.Token);
             if (user == null)
                 return Unauthorized();
 
-            var userInfo = _db.tblContacts.FirstOrDefault(x => x.EMailAddress == user.EmailAddress);
+            tblContact userInfo = _db.tblContacts.FirstOrDefault(x => x.EMailAddress == user.EmailAddress);
 
             if (userInfo == null)
                 return Unauthorized();
@@ -70,17 +72,17 @@ namespace Phila.Web.Api.Streets.Controllers
             {
                 ApplicationDate = DateTime.Now,
                 EntryDate = DateTime.Now,
-                OwnerId = utilityOwnerId,
-                CompanyId = companyId,
-                Comments = comments,
-                EffectiveDate = effectiveDate,
-                ExpirationDate = expirationDate,
+                OwnerId = permit.UtilityOwnerId,
+                CompanyId = permit.CompanyId,
+                Comments = permit.Comments,
+                EffectiveDate = permit.EffectiveDate,
+                ExpirationDate = permit.ExpirationDate,
                 Permit_Number = GetNewPermitNumber(),
-                Purpose = purpose,
-                DecisionId = isDraft == false ? (short)3 : (short)8,
-                ProjectType = projectTypes,
+                Purpose = permit.Purpose,
+                DecisionId = permit.IsDraft == false ? (short) 3 : (short) 8,
+                ProjectType = permit.ProjectTypes,
                 Rec_DateTime = DateTime.Now,
-                PermitTypeId = permitTypeId,
+                PermitTypeId = permit.PermitTypeId,
                 Company_Name = company.Name,
                 Address1 = company.Address1,
                 Address2 = company.Address2,
@@ -92,48 +94,133 @@ namespace Phila.Web.Api.Streets.Controllers
                 Contact_First_Name = userInfo.FirstName,
                 Contact_Mid_Name = userInfo.MiddleName,
                 Contact_Last_Name = userInfo.LastName,
-                ContactId = userInfo.ContactId//,
-                //Rec_UserId = user.EmailAddress
+                ContactId = userInfo.ContactId,
+                Rec_UserId = "StreetClosureWebUser"
             };
+
 
             try
             {
                 _db.tblPermits.Add(newPermit);
 
-                //var encroachments = new List<tblPermit_Encroachment>();
-                //for (int i = 0; i < encroachmentTypes.Length; i++)
-                //{
-                //    var seq = i + 1;
-                //    encroachments.Add(new tblPermit_Encroachment
-                //    {
-                //        EncroachmentTypeID = encroachmentTypes[i],
-                //        Permit_Number = newPermit.Permit_Number,
-                //        Seq_Num = (short)seq
-                //    });
-                //}
-                //_db.tblPermit_Encroachment.AddRange(encroachments);
+                var encroachments = new List<tblPermit_Encroachment>();
+                for (int i = 0; i < permit.EncroachmentTypes.Length; i++)
+                {
+                    int seq = i + 1;
+                    encroachments.Add(new tblPermit_Encroachment
+                    {
+                        EncroachmentTypeID = permit.EncroachmentTypes[i],
+                        Permit_Number = newPermit.Permit_Number,
+                        Seq_Num = (short) seq
+                    });
+                }
+                _db.tblPermit_Encroachment.AddRange(encroachments);
 
 
-                //var refs = new List<tblPermit_References>();
-                //for (int i = 0; i < references.Count; i++)
-                //{
-                //    var seq = i + 1;
+                var refs = new List<tblPermit_References>();
+                for (int i = 0; i < permit.References.Count; i++)
+                {
+                    int seq = i + 1;
 
-                //    refs.Add(new tblPermit_References
-                //    {
-                //        Permit_Number = newPermit.Permit_Number,
-                //        ReferenceTypeID = references[i].ReferenceTypeId,
-                //        ReferenceValue = references[i].ReferenceValue
-                //    });
-                //}
-                //_db.tblPermit_References.AddRange(refs);
+                    refs.Add(new tblPermit_References
+                    {
+                        Permit_Number = newPermit.Permit_Number,
+                        ReferenceTypeID = permit.References[i].ReferenceTypeId,
+                        ReferenceValue = permit.References[i].ReferenceValue
+                    });
+                }
+                _db.tblPermit_References.AddRange(refs);
+
+                var locs = new List<tblPermit_Locations>();
+                var gisLocs = new List<tblPermit_Location_GIS>();
+                foreach (StreetsViewModels.PostedLocation permitLocation in permit.Locations)
+                {
+                    //ToDo: check if location is valid
+
+                    var lc = new LocationsController();
+                    StreetsViewModels.LocationDetails stCode = lc.GetStreetCode(permitLocation.OnStreetName, true);
 
 
+                    if (stCode.StreetCode != null)
+                    {
+                        switch (permitLocation.LocationType.ToLower())
+                        {
+                            case "address":
 
+                                locs.Add(new tblPermit_Locations
+                                {
+                                    Permit_Number = newPermit.Permit_Number,
+                                    Seq_Num = (short) permitLocation.SequenceNumber,
+                                    OccupancyTypeID = (short) permitLocation.OccupancyTypeId,
+                                    OnSTCODE = (int) stCode.StreetCode//,
+                                    //ToSTCODE = (int)stCode.StreetCode,
+                                });
+
+
+                                break;
+                            case "intersection":
+
+                                ObjectResult<get_OnStreetElementsBetweenOrderedPair_Result> intResult =
+                                    _db.get_OnStreetElementsBetweenOrderedPair(stCode.StreetCode,
+                                        permitLocation.FromStreetNode, permitLocation.FromStreetNode);
+
+                                gisLocs.AddRange(intResult.Select(x => new tblPermit_Location_GIS
+                                {
+                                    Permit_Number = newPermit.Permit_Number,
+                                    Seq_Num = (short) permitLocation.SequenceNumber,
+                                    DateCreated = DateTime.Now,
+                                    Element_Id = (int) x.ElementId,
+                                    lElementTypeID = x.ElementTypeId
+                                }));
+
+                                locs.Add(new tblPermit_Locations
+                                {
+                                    Permit_Number = newPermit.Permit_Number,
+                                    Seq_Num = (short) permitLocation.SequenceNumber,
+                                    OccupancyTypeID = (short) permitLocation.OccupancyTypeId,
+                                    OnSTCODE = (int) stCode.StreetCode,
+                                    FromSTCODE = permitLocation.FromStreetCode
+                                });
+
+                                break;
+                            case "street segment":
+
+                                locs.Add(new tblPermit_Locations
+                                {
+                                    Permit_Number = newPermit.Permit_Number,
+                                    Seq_Num = (short) permitLocation.SequenceNumber,
+                                    OccupancyTypeID = (short) permitLocation.OccupancyTypeId,
+                                    OnSTCODE = (int) stCode.StreetCode,
+                                    FromSTCODE = permitLocation.FromStreetCode,
+                                    ToSTCODE = permitLocation.ToStreetCode
+                                });
+
+                                ObjectResult<get_OnStreetElementsBetweenOrderedPair_Result> spResult =
+                                    _db.get_OnStreetElementsBetweenOrderedPair(stCode.StreetCode,
+                                        permitLocation.FromStreetNode, permitLocation.ToStreetNode);
+
+                                gisLocs.AddRange(spResult.Select(x => new tblPermit_Location_GIS
+                                {
+                                    Permit_Number = newPermit.Permit_Number,
+                                    Seq_Num = (short) permitLocation.SequenceNumber,
+                                    DateCreated = DateTime.Now,
+                                    Element_Id = (int) x.ElementId,
+                                    lElementTypeID = x.ElementTypeId
+                                }));
+
+                                break;
+                        }
+                    }
+                }
+
+                //insert into tblPermit_Locations
+                _db.tblPermit_Locations.AddRange(locs);
+
+                //insert into tblPermit_LocationsGIS
+                _db.tblPermit_Location_GIS.AddRange(gisLocs);
             }
             catch (Exception exception)
             {
-                
                 throw exception;
             }
 
@@ -147,10 +234,7 @@ namespace Phila.Web.Api.Streets.Controllers
                 {
                     return Conflict();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
 
@@ -158,7 +242,7 @@ namespace Phila.Web.Api.Streets.Controllers
         }
 
         /// <summary>
-        /// Gets the encroachment types.
+        ///     Gets the encroachment types.
         /// </summary>
         /// <returns></returns>
         [EnableCors(origins: "*", headers: "*", methods: "*")]
@@ -171,7 +255,7 @@ namespace Phila.Web.Api.Streets.Controllers
 
 
         /// <summary>
-        /// Gets the occupancy types.
+        ///     Gets the occupancy types.
         /// </summary>
         /// <returns></returns>
         [EnableCors(origins: "*", headers: "*", methods: "*")]
@@ -213,7 +297,7 @@ namespace Phila.Web.Api.Streets.Controllers
                 return Unauthorized();
             }
 
-            var validCompanyId = IsCompanyIdValid(token, companyId);
+            bool validCompanyId = IsCompanyIdValid(token, companyId);
 
             // is the user auth to get permits of companyId?
             if (validCompanyId)
@@ -258,7 +342,7 @@ namespace Phila.Web.Api.Streets.Controllers
 
                         try
                         {
-                            var pc = permits.Any(p => p.PermitLocation != null && p.PermitLocation.Contains(search));
+                            bool pc = permits.Any(p => p.PermitLocation != null && p.PermitLocation.Contains(search));
                             if (pc)
                                 permits =
                                     permits.Where(p => p.PermitLocation != null && p.PermitLocation.Contains(search))
@@ -361,7 +445,7 @@ namespace Phila.Web.Api.Streets.Controllers
             }
 
             int totalPermits = permits.Count();
-            int totalPages = totalPermits % pageSize;
+            int totalPages = totalPermits%pageSize;
             totalPages = totalPages > 0 ? (totalPermits/pageSize) + 1 : (totalPermits/pageSize);
             permits = permits.Skip((page - 1)*pageSize).Take(pageSize).ToList();
 
@@ -392,20 +476,22 @@ namespace Phila.Web.Api.Streets.Controllers
         [Route("api/permits/GetPermitTypes")]
         public IQueryable<StreetsViewModels.PermitTypeVm> GetPermitTypes()
         {
-            var permitTypes =
-                _db.tblPermitTypes.Where(x => x.PermitTypeID != 7).OrderBy(x => x.PermitTypeName).Select(x => new StreetsViewModels.PermitTypeVm
-                {
-                    PermitTypeId = x.PermitTypeID,
-                    PermitTypeName = x.PermitTypeName,
-                    PermitTypeAbbrev = x.PermitTypeAbbrev
-                });
+            IQueryable<StreetsViewModels.PermitTypeVm> permitTypes =
+                _db.tblPermitTypes.Where(x => x.PermitTypeID != 7)
+                    .OrderBy(x => x.PermitTypeName)
+                    .Select(x => new StreetsViewModels.PermitTypeVm
+                    {
+                        PermitTypeId = x.PermitTypeID,
+                        PermitTypeName = x.PermitTypeName,
+                        PermitTypeAbbrev = x.PermitTypeAbbrev
+                    });
 
             return permitTypes;
         }
 
 
         /// <summary>
-        /// Gets the permit PDF.
+        ///     Gets the permit PDF.
         /// </summary>
         /// <param name="token">The token.</param>
         /// <param name="permitId">The permit identifier.</param>
@@ -457,7 +543,7 @@ namespace Phila.Web.Api.Streets.Controllers
 
 
         /// <summary>
-        /// Gets the reference types.
+        ///     Gets the reference types.
         /// </summary>
         /// <returns></returns>
         [EnableCors(origins: "*", headers: "*", methods: "*")]
@@ -505,7 +591,7 @@ namespace Phila.Web.Api.Streets.Controllers
                 return Unauthorized();
             }
 
-            var validCompanyId = IsCompanyIdValid(token, companyId);
+            bool validCompanyId = IsCompanyIdValid(token, companyId);
 
             // is the user auth to get permits of companyId?
             if (validCompanyId)
@@ -516,7 +602,7 @@ namespace Phila.Web.Api.Streets.Controllers
             IQueryable<StreetsViewModels.StatusSummary> permits = _db.tblPermits.Include(x => x.tblDecision)
                 .Where(x => x.CompanyId == companyId)
                 .GroupBy(x => new {x.DecisionId, x.tblDecision.DecisionName})
-                .Select(g => new StreetsViewModels.StatusSummary()
+                .Select(g => new StreetsViewModels.StatusSummary
                 {
                     StatusCodeId = (int) g.Key.DecisionId,
                     StatusCodeName = g.Key.DecisionName,
@@ -527,7 +613,7 @@ namespace Phila.Web.Api.Streets.Controllers
 
 
         /// <summary>
-        /// Gets the encroachment types.
+        ///     Gets the encroachment types.
         /// </summary>
         /// <returns></returns>
         [EnableCors(origins: "*", headers: "*", methods: "*")]
@@ -560,7 +646,7 @@ namespace Phila.Web.Api.Streets.Controllers
 
 
         /// <summary>
-        /// Gets the utility owners.
+        ///     Gets the utility owners.
         /// </summary>
         /// <returns></returns>
         [EnableCors(origins: "*", headers: "*", methods: "*")]
@@ -594,11 +680,11 @@ namespace Phila.Web.Api.Streets.Controllers
 
         private string GetNewPermitNumber()
         {
-            var lastPermitNumber =
+            string lastPermitNumber =
                 _db.tblPermits.OrderByDescending(x => x.Permit_Number).Select(x => x.Permit_Number).FirstOrDefault();
             Char delimiter = '-';
-            var substrings = lastPermitNumber.Split(delimiter);
-            var num = Convert.ToInt32(substrings[1]);
+            string[] substrings = lastPermitNumber.Split(delimiter);
+            int num = Convert.ToInt32(substrings[1]);
             return string.Format("{0}-{1}", substrings[0], ++num);
         }
 
