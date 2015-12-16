@@ -53,20 +53,30 @@ namespace Phila.Web.Api.Streets.Models
         public class PermitVm
         {
             public string PermitId { get; set; }
-            public string Purpose { get; set; }
-            public string PermitLocation { get; set; }
+            public string PermitStatus { get; set; }
 
             [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public DateTime? StartDate { get; set; }
 
             [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public DateTime? EndDate { get; set; }
-            public string PermitStatus { get; set; }
+
+            public string Purpose { get; set; }
+            public int? PermitTypeId { get; set; }
+            public string Comments { get; set; }
+            public int? ProjectTypes { get; set; }
+            public int[] EncroachmentTypes { get; set; }
+            public List<PostedLocation> Locations { get; set; } 
+            
+            public string PermitLocation { get; set; }
+
+            public List<PostedReference> References { get; set; } 
+
         }
 
         public class PermitsPage
         {
-            public List<PermitVm> Permits { get; set; }
+            public List<PostedPermit> Permits { get; set; }
             public int TotalPermits { get; set; }
             public int PageSize { get; set; }
             public int TotalPages { get; set; }
@@ -136,16 +146,18 @@ namespace Phila.Web.Api.Streets.Models
         {
             public string PermitNumber { get; set; }
             public string Token { get; set; }
-            public int CompanyId { get; set; }
+            public int? CompanyId { get; set; }
+            public string CompanyName { get; set; }
             public int? UtilityOwnerId { get; set; }
             public int? PermitTypeId { get; set; }
             public int? ProjectTypes { get; set; }
-            public int[] EncroachmentTypes { get; set; }
+            public List<int> EncroachmentTypes { get; set; }
             public DateTime? EffectiveDate { get; set; }
             public DateTime? ExpirationDate { get; set; }
             public string Purpose { get; set; }
             public string Comments { get; set; }
             public bool IsDraft { get; set; }
+            public string PermitStatus { get; set; }
             public List<PostedReference> References { get; set; }
             public List<PostedLocation> Locations { get; set; }
 
@@ -153,7 +165,7 @@ namespace Phila.Web.Api.Streets.Models
 
         public class PostedReference
         {
-            public int ReferenceTypeId { get; set; }
+            public int? ReferenceTypeId { get; set; }
             public string ReferenceValue { get; set; }
         }
 
@@ -163,6 +175,7 @@ namespace Phila.Web.Api.Streets.Models
             public int OccupancyTypeId { get; set; }
             public string LocationType { get; set; }
             public string OnStreetName { get; set; }
+            public int? OnStreetCode { get; set; }
             public string FromStreetName { get; set; }
             public int? FromStreetCode { get; set; }
             public int? FromStreetNode { get; set; }

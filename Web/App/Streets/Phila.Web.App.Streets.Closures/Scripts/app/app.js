@@ -23,7 +23,7 @@ function AppViewModel() {
     self.permitStatusCodes = ko.observableArray();
     self.selectedStatusCode = ko.observable(1);
 
-    self.newPermit = ko.observable(new Permit());
+    //self.newPermit = ko.observable(new Permit());
 
     self.streetSearch = ko.observable();
 
@@ -35,100 +35,14 @@ function AppViewModel() {
     self.permitTypes = ko.observableArray();
     self.occupancyTypes = ko.observableArray();
     self.utilityOwners = ko.observableArray();
-
-
-    // data used to submit a new permit app
-    self.selectedEncroachmentTypes = ko.observableArray().extend({ required: true });
-
-    self.selectedPermitType = ko.observable().extend({ required: true });
-    self.selectedUtilityOwner = ko.observable().extend({
-        required: {
-            onlyIf: function () {
-                if (self.selectedPermitType() != undefined && self.selectedPermitType().PermitTypeId > 10)
-                    return true;
-
-                return false;
-            }
-        }
-    });
     self.selectedCompany = ko.observable(new Company());
-    self.references = ko.observableArray();
-    self.locations = ko.observableArray().extend({ required: true });
-    //self.selectedLocation = ko.observable();
-    self.effectiveDate = ko.observable().extend({ validPermitDate: [10, (new Date().addDays(11).getMonth() + 1) + "/" + new Date().addDays(11).getDate() + "/" + new Date().addDays(11).getFullYear()] });
-    self.expirationDate = ko.observable().extend({
-        validation: {
-            validator: function(expirationDate, params) {
-                if (Date.parse(expirationDate) && Date.parse(self.effectiveDate())) {
-                    return Date.parse(expirationDate) >= Date.parse(self.effectiveDate());
-                }
-                return false;
-            },
-            message: "Must be on or after the effective date",
-    }
-    });
-
-    self.effectiveTime = ko.observable().extend({
-        validation: {
-            validator: function (val, params) {
-                
-                if (val == undefined) return false;
-
-                var validTime = val.match(/^([1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
-                if (validTime == null || validTime.length !== 4) return false;
-
-                return true;
-            },
-            message: "A valid time required",
-        }
-    });
-
-    self.expirationTime = ko.observable().extend({
-        validation: {
-            validator: function (val, params) {
-
-                if (val == undefined) return false;
-
-                var validTime = val.match(/^([1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
-
-                if (validTime == null || validTime.length !== 4) return false;
-
-
-                // only validate the time is a valid time
-                if (!ko.validation.validateObservable(self.effectiveDate) || !ko.validation.validateObservable(self.expirationDate) || !ko.validation.validateObservable(self.effectiveTime)) return true;
-
-                var effectiveTime = self.effectiveTime().match(/^([1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
-                var effectiveDateTime = new Date(self.effectiveDate());
-                var effTimeHours = effectiveTime[3].toLowerCase() === "pm" ? (parseInt(effectiveTime[1]) + 12) : effectiveTime[1];
-                var effTimeMinutes = parseInt(effectiveTime[2]);
-                effectiveDateTime.setHours(effTimeHours);
-                effectiveDateTime.setMinutes(effTimeMinutes);
-
-                var expirationDateTime = new Date(self.expirationDate());
-                var expTimeHours = validTime[3].toLowerCase() === "pm" ? (parseInt(validTime[1]) + 12) : validTime[1];
-                var expTimeMinutes = parseInt(validTime[2]);
-                expirationDateTime.setHours(expTimeHours);
-                expirationDateTime.setMinutes(expTimeMinutes);
-
-                if (expirationDateTime > effectiveDateTime) return true;
-
-                return false;
-            },
-            message: "Must be after the effective date and time",
-            //params: 
-        }
-    });
-
-    self.purpose = ko.observable().extend({ reqsuuired: true });
-    self.comments = ko.observable();
-    self.permitPath = ko.observableArray().extend({ required: true });
 
     // data for the login email
     self.usersEmailAddress = ko.observable().extend({ email: true, required: true });
 
 
     self.totalPermitsFound = ko.observable();
-    self.apiUrl = "https://phila.azurewebsites.net/"; //  "http://localhost/Phila.Web.Api.Streets/"; //
+    self.apiUrl = "http://localhost/Phila.Web.Api.Streets/"; //"https://phila.azurewebsites.net/"; //  
     self.streetCode = "";
     self.fromStreets = ko.observableArray();
 
@@ -153,6 +67,7 @@ function AppViewModel() {
     self.editingItem = ko.observable();
     self.editingLocationItem = ko.observable();
     self.editingReferenceItem = ko.observable();
+    self.editingPermitItem = ko.observable();
 
     // create the transaction for commit and reject
     self.editTransaction = new ko.subscribable();
@@ -171,7 +86,7 @@ function AppViewModel() {
         return item == self.editingLocationItem();
     };
     self.isPermitEditing = function(item) {
-        return item == self.editingItem();
+        return item == self.editingPermitItem();
     };
     self.isReferenceEditing = function(item) {
         return item == self.editingReferenceItem();
@@ -361,10 +276,10 @@ function AppViewModel() {
     //** locations
     self.addLocation = function(location) {
         if (location == undefined || location.ToStreet == undefined) {
-            location = new Location();
+            location = new PostedLocation();
         }
 
-        location.OnStreet.editValue.subscribe(function(data) {
+        location.OnStreetName.editValue.subscribe(function(data) {
             //console.log(data.trim());
             self.getFromStreets(data.trim());
         });
@@ -374,7 +289,7 @@ function AppViewModel() {
         self.toStreetCaption("Choose an 'On Street'...");
         self.clearFromAndToOa();
         //self.selectedLocation(location);
-        self.locations.push(location);
+        self.editingPermitItem().Locations.push(location);
 
         //  begin editing the new item straight away
         self.editLocation(location);
@@ -399,8 +314,8 @@ function AppViewModel() {
 
             self.clearFromAndToOa();
 
-            if (location.OnStreet() != undefined) {
-                self.getFromStreets(location.OnStreet());
+            if (location.OnStreetName() != undefined) {
+                self.getFromStreets(location.OnStreetName());
             }
 
             //if (location.FromStreet().st_name != "blank")
@@ -578,17 +493,18 @@ function AppViewModel() {
 
     //** permits
     self.addPermit = function(permit) {
-        if (permit.PermitId == undefined) {
-            permit = new Permit();
+        if (permit.PermitNumber == undefined) {
+            permit = new Permit();//"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
             // begin editing the new item straight away
             self.editPermit(permit);
         }
 
-        self.permits.push(permit);
+        //self.permits.push(permit);
+        //self.showNewPermitSection();
     };
 
     self.removePermit = function(permit) {
-        if (self.editingItem() == null) {
+        if (self.editingPermitItem() == null) {
             var answer = confirm("Are you sure you want to delete this permit?");
             if (answer) {
                 self.permits.remove(permit);
@@ -596,42 +512,43 @@ function AppViewModel() {
         }
     };
 
-    self.editPermit = function(permit) {
-        if (self.editingItem() == null) {
+    self.editPermit = function (permit) {
+        if (self.editingPermitItem() == null) {
             // start the transaction
-            permit.beginEdit(self.editPermitTransaction);
+            //permit.setShortDatesAndTimes();
+            //permit.beginEdit(self.editPermitTransaction);
 
             // shows the edit fields
-            self.editingItem(permit);
+            self.editingPermitItem(permit);
+            //console.log(ko.toJSON(permit.StartDate.editValue));
+            //console.log(ko.toJSON(self.editingPermitItem().StartDate));
+
+            self.showNewPermitSection();
         }
     };
 
     self.applyPermit = function(permit, event) {
         //  commit the edit transaction
-        permit.PermitStatus.editValue("Pending");
-        self.editPermitTransaction.notifySubscribers(null, "commit");
+        //permit.PermitStatus.editValue("Pending");
+        //self.editPermitTransaction.notifySubscribers(null, "commit");
 
-        var $status = $(event.target).parent().prev(".ClosureStatus");
-        var bcCss = $status.css("background-color");
-        $status.css("backgroundColor", "#00FA9A");
-        $status.animate({ "backgroundColor": bcCss }, 300);
+        //var $status = $(event.target).parent().prev(".ClosureStatus");
+        //var bcCss = $status.css("background-color");
+        //$status.css("backgroundColor", "#00FA9A");
+        //$status.animate({ "backgroundColor": bcCss }, 300);
 
-        $(event.target).parent().find(".edit-button").remove();
+        //$(event.target).parent().find(".edit-button").remove();
 
         //  hides the edit fields
-        self.editingItem(null);
+        self.editingPermitItem(null);
     };
 
     self.cancelEditPermit = function() {
         //  reject the edit transaction
-        self.editPermitTransaction.notifySubscribers(null, "rollback");
+        //self.editPermitTransaction.notifySubscribers(null, "rollback");
 
         //  hides the edit fields
-        self.editingItem(null);
-    };
-
-    self.createPermit = function() {
-
+        self.editingPermitItem(null);
     };
 
     self.updatePermit = function() {
@@ -681,15 +598,17 @@ function AppViewModel() {
         self.filter = pageSizeFilter + "&filter=" + self.radioSearchSelectedOptionValue() + "&sort=" + self.sort + "&sortDir=" + self.sortDir + searchText + page + statusFilter + companyFilter;
 
         $loadingIndicator.show();
+        var token = getUrlParameter("token");
+        var pers = [];
         $.ajax({
             url: self.apiUrl + "api/permits/GetPermitByCompanyId?token="
                 + getUrlParameter("token") + self.filter,
             contentType: "application/json; charset=utf-8",
             success: function(result) {
                 self.totalPermitsFound(result.TotalPermits);
-                self.permits([]);
+
                 $("#page-selection").bootpag({
-                    total: result.TotalPages + 1,
+                    total: result.TotalPages,
                     page: result.CurrentPage,
                     maxVisible: result.TotalPages < 5 ? result.TotalPages : 5,
                     leaps: true,
@@ -697,27 +616,65 @@ function AppViewModel() {
                     first: '←',
                     last: '→',
                 });
-
+                var refs = [];
+                var locs = [];
+                var projTypes = [];
                 if (self.sortDir == "desc" && result.Permits != undefined) {
                     for (var i = result.Permits.length - 1; i >= 0; i--) {
-                        if (result.Permits[i].StartDate != undefined) result.Permits[i].StartDate = result.Permits[i].StartDate.substr(0, 10);
-                        if (result.Permits[i].EndDate != undefined) result.Permits[i].EndDate = result.Permits[i].EndDate.substr(0, 10);
 
-                        var permit = new Permit(result.Permits[i].PermitId, result.Permits[i].Purpose, result.Permits[i].PermitLocation, result.Permits[i].StartDate, result.Permits[i].EndDate, result.Permits[i].PermitStatus);
+                        // set references
+                        $(result.Permits[i].References).each(function (ind, ref) {
+                            var r = new Reference(setKoType(self.referenceTypes(), "ReferenceTypeId", ref.ReferenceTypeId), "", ref.ReferenceValue);
+                            refs.push(r);
+                        });
 
-                        self.addPermit(permit);
+                        // set locations
+                        $(result.Permits[i].Locations).each(function (ind, loc) {
+                            var pl = new PostedLocation(loc.SequenceNumber, setKoType(self.occupancyTypes(), "OccupancyTypeID", loc.OccupancyTypeId), setKoType(self.locationTypes(), "LocationTypeId", loc.LocationType), loc.OnStreetName, loc.OnStreetCode, loc.FromStreetName, loc.FromStreetCode, loc.FromStreetNode, loc.ToStreetName, loc.ToStreetCode, loc.ToStreetNode);
+                            locs.push(pl);
+                        });
+
+                        // set project types
+                        var pt = projectTypesDecimal2Array(result.Permits[i].ProjectTypes, self.projectTypes().length);
+
+                        $(pt).each(function (ind, projType) {
+                            projTypes.push(setKoType(self.projectTypes(), "ProjectTypeId", projType));
+                        });
+
+                        var permit = new Permit(token, result.Permits[i].PermitNumber, result.Permits[i].CompanyId, result.Permits[i].CompanyName, setKoType(self.utilityOwners(), "UtilityOwnerId", result.Permits[i].UtilityOwnerId), setKoType(self.permitTypes(), "PermitTypeId", result.Permits[i].PermitTypeId), pt, result.Permits[i].EncroachmentTypes, result.Permits[i].EffectiveDate, result.Permits[i].ExpirationDate, result.Permits[i].Purpose, result.Permits[i].Comments, result.Permits[i].PermitStatus, refs, locs, result.Permits[i].IsDraft);
+
+                        //if (permit.PermitTypeId != null) permit.setPermitType(self.permitTypes());
+                        //if (permit.UtilityOwnerId != null) permit.setUtilityOwner(self.utilityOwners());
+
+                        pers.push(permit);
                     }
+                    self.permits(pers);
                 } else {
-                    $(result.Permits).each(function(index, item) {
-                        if (item.StartDate != undefined) item.StartDate = item.StartDate.substr(0, 10);
-                        if (item.EndDate != undefined) item.EndDate = item.EndDate.substr(0, 10);
+                    $(result.Permits).each(function (index, item) {
 
-                        self.addPermit(new Permit(item.PermitId, item.Purpose, item.PermitLocation, item.StartDate, item.EndDate, item.PermitStatus));
+                        $(item.References).each(function (ind, ref) {
+                            var r = new Reference(setKoType(self.referenceTypes(), "ReferenceTypeId", "", ref.ReferenceTypeId), ref.ReferenceValue);
+                            refs.push(r);
+                        });
+
+                        var pts = projectTypesDecimal2Array(result.Permits[i].ProjectTypes, self.projectTypes().length);
+                        $(pts).each(function (ind, projType) {
+                            projTypes.push(setKoType(self.projectTypes(), "ProjectTypeId", projType));
+                        });
+
+                        $(item.Locations).each(function(ind, loc) {
+                            locs.push(new PostedLocation(loc.SequenceNumber, setKoType(self.occupancyTypes(), "OccupancyTypeID", loc.OccupancyTypeId), setKoType(self.locationTypes(), "LocationTypeId", loc.LocationType), loc.OnStreetName, loc.OnStreetCode, loc.FromStreetName, loc.FromStreetCode, loc.FromStreetNode, loc.ToStreetName, loc.ToStreetCode, loc.ToStreetNode));
+                        });
+
+                        var p = new Permit(token, item.PermitNumber, item.CompnayId, item.CompanyName, setKoType(self.utilityOwners(), "UtilityTypeId", item.UtilityOwnerId), setKoType(self.permitTypes(), "PermitTypeId", item.PermitTypeId), pts, item.EncroachmentTypes, item.EffectiveDate, item.ExpirationDate, item.Purpose, item.Comments, item.PermitStatus, refs, locs, item.IsDraft);
+
+                        pers.push(p);
                     });
+                    self.permits(pers);
                 }
             },
-            error: function(xhr, ajaxOptions, thrownError) {
-                console.log(thrownError);
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log("getPermitsForCompany", thrownError);
             }
         });
 
@@ -725,12 +682,13 @@ function AppViewModel() {
         $("#loading-table").hide();
     };
 
+
     self.downloadPermitPdf = function(permit) {
         window.open(self.apiUrl + "api/Permits/GetPermitPdf.pdf?token=" + getUrlParameter("token") + "&permitId=" + permit.PermitId(), "Download Permit " + permit.PermitId());
     };
 
     self.requestPermitCancellation = function(permit, event) {
-        var answer = confirm("Are you sure you want to request that Permit " + permit.PermitId() + " be canceled?");
+        var answer = confirm("Are you sure you want to request that Permit " + permit.PermitNumber() + " be canceled?");
         if (answer) {
             permit.PermitStatus("Pending Cancellation");
             //self.editPermitTransaction.notifySubscribers(null, "commit");
@@ -756,6 +714,7 @@ function AppViewModel() {
 
         var answer = confirm(notification.cancelNewPermitConfirm);
         if (answer) {
+            self.cancelEditPermit();
             $.notify(notification.cancelNewPermitSuccess, { className: "info", globalPosition: "top left" });
             self.showMainSections();
             self.resetNewPermitFields();
@@ -779,11 +738,11 @@ function AppViewModel() {
         self.postPermit(true);
     };
 
-    
-
     self.postPermit = function(isDraft) {
         self.applyLocation();
         self.applyReference();
+        //self.applyPermit();
+        console.log(ko.toJSON(self.editingPermitItem));
 
         var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose, self.selectedPermitType, self.selectedProjectTypes.projectTypes, self.locations, self.expirationTime, self.effectiveTime]);
 
@@ -832,14 +791,14 @@ function AppViewModel() {
         }
 
 
-        var effectiveTime = self.effectiveTime().match(/^([1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+        var effectiveTime = self.effectiveTime().match(/^([1-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
         var effectiveDateTime = new Date(self.effectiveDate());
         var effTimeHours = effectiveTime[3].toLowerCase() === "pm" ? (parseInt(effectiveTime[1]) + 12) : effectiveTime[1];
         var effTimeMinutes = parseInt(effectiveTime[2]);
         effectiveDateTime.setHours(effTimeHours);
         effectiveDateTime.setMinutes(effTimeMinutes);
 
-        var expirationTime = self.expirationTime().match(/^([1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+        var expirationTime = self.expirationTime().match(/^([1-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
         var expirationDateTime = new Date(self.expirationDate());
         var expTimeHours = expirationTime[3].toLowerCase() === "pm" ? (parseInt(expirationTime[1]) + 12) : expirationTime[1];
         var expTimeMinutes = parseInt(expirationTime[2]);
@@ -880,26 +839,26 @@ function AppViewModel() {
     };
 
     self.resetNewPermitFields = function() {
-        self.selectedUtilityOwner(null);
-        self.selectedPermitType(null);
-        self.selectedProjectTypes.projectTypes([]);
-        self.selectedEncroachmentTypes([]);
-        self.effectiveDate(null);
-        self.expirationDate(null);
-        self.purpose(null);
-        self.comments(null);
-        self.locations([]);
-        self.references([]);
+        //self.selectedUtilityOwner(null);
+        //self.selectedPermitType(null);
+        //self.selectedProjectTypes.projectTypes([]);
+        //self.selectedEncroachmentTypes([]);
+        //self.effectiveDate(null);
+        //self.expirationDate(null);
+        //self.purpose(null);
+        //self.comments(null);
+        //self.locations([]);
+        //self.references([]);
 
-        self.selectedUtilityOwner.clearError();
-        self.selectedPermitType.clearError();
-        self.selectedProjectTypes.projectTypes.clearError();
-        self.selectedEncroachmentTypes.clearError();
-        self.effectiveDate.clearError();
-        self.expirationDate.clearError();
-        self.purpose.clearError();
-        self.locations.clearError();
-        self.references.clearError();
+        //self.selectedUtilityOwner.clearError();
+        //self.selectedPermitType.clearError();
+        //self.selectedProjectTypes.projectTypes.clearError();
+        //self.selectedEncroachmentTypes.clearError();
+        //self.effectiveDate.clearError();
+        //self.expirationDate.clearError();
+        //self.purpose.clearError();
+        //self.locations.clearError();
+        //self.references.clearError();
     };
 
     //** references
@@ -907,7 +866,7 @@ function AppViewModel() {
         if (reference.ReferenceTypeId == undefined)
             reference = new Reference();
 
-        self.references.push(reference);
+        self.editingPermitItem().References.push(reference);
 
         //  begin editing the new item straight away
         self.editReference(reference);
@@ -917,7 +876,7 @@ function AppViewModel() {
         if (self.editingReferenceItem() == null) {
             var answer = confirm("Are you sure you want to delete this reference?");
             if (answer) {
-                self.references.remove(reference);
+                self.editingPermitItem().References.remove(reference);
             }
         }
     };
@@ -1061,31 +1020,6 @@ function AppViewModel() {
         } catch (e) {
 
         } 
-      
-        //var esrimap = L.map('esrimap').setView([39.95, -75.1667], 17);
-
-        //L.esri.basemapLayer('Streets').addTo(esrimap);
-
-        
-
-        //var centerline = L.esri.featureLayer({
-        //    url: 'http://gis.phila.gov/ArcGIS/rest/services/PhilaOIT-GIS_Transportation/MapServer/2'
-        //}).addTo(esrimap);
-
-        //centerline.bindPopup(function (feature) {
-        //    return L.Util.template('<p>{L_HUNDRED} {STNAME}</p><p>Code: {ST_CODE}</p>', feature.properties);
-        //});
-
-        //centerline.on('click', function (e) {
-        //    console.log('clicked', e);
-        //});
-        
-        //$(window).resize(function () {
-        //    var $mapDiv = $("#mapDiv");
-        //    map.setOptions({ width: $mapDiv.width() });
-        //    esrimap.invalidateSize.bind(esrimap);
-
-        //});
     };
 
     self.cancelNewPermit = function() {
@@ -1179,6 +1113,7 @@ function AppViewModel() {
                 }
 
                 // self.getProjectTypes();
+                //console.log(data.ProjectTypes);
                 self.projectTypes(data.ProjectTypes);
 
                 //self.getReferenceTypes();
@@ -1247,329 +1182,6 @@ function AppViewModel() {
         }
     };
 
-    //var map = null;
-    //var sessionKey;
-    //var routeLayer;
-    //var directionsManager;
-    //var directionsErrorEventObj;
-    //var directionsUpdatedEventObj;
-
-    //function loadMap() {
-    //    //var initialViewBounds = Microsoft.Maps.LocationRect.fromCorners(new Microsoft.Maps.Location(40.142140, -75.305099), new Microsoft.Maps.Location(39.840177, -74.927444));
-
-    //    var latitude;
-    //    var longitude;
-    //    var zoom = 10;
-    //    if (navigator.geolocation) {
-    //        navigator.geolocation.getCurrentPosition(function (loc) {
-    //            latitude = loc.coords.latitude;
-    //            longitude = loc.coords.longitude;
-    //            zoom = 15;
-    //            renderMap(latitude, longitude, zoom);
-    //        },
-    //            function (error) {
-    //                latitude = 39.95;
-    //                longitude = -75.166667;
-    //                renderMap(latitude, longitude, zoom);
-    //            },
-    //            { enableHighAccuracy: false, timeout: 5000, maximumAge: 0 });
-    //    } else {
-    //        latitude = 39.95;
-    //        longitude = -75.166667;
-    //        //console.log("Geolocation is not supported by this browser.");
-
-    //        renderMap(latitude, longitude, zoom);
-    //    }
-
-
-    //}
-
-    //function renderMap(latitude, longitude, zoom) {
-    //    var mapOptions = {
-    //        credentials: "AnSM9TY1CIflUjbddXDbTF6-tmK2C0jI3sqgOvsHy0ia0xC9mrQ9moD3yjf1pBZ1",
-    //        enableSearchLogo: false,
-    //        enableClickableLogo: false,
-    //        mapTypeId: Microsoft.Maps.MapTypeId.road,
-    //        width: 500,//$(".flexible-container").css("width"), //document.body.offsetWidth - 40,
-    //        height: 300,
-    //        //bounds: initialViewBounds,
-    //        zoom: zoom,
-    //        center: new Microsoft.Maps.Location(latitude, longitude),
-    //        showCopyright: false //IMPORTANT: Bing Maps Platform API Terms of Use requires copyright information to be displayed. Only set this option to false when copyright information is displayed through alternate means.
-    //    };
-    //    map = new Microsoft.Maps.Map(document.getElementById("mapDiv"), mapOptions);
-
-    //    map.getCredentials(function (c) {
-    //        sessionKey = c;
-    //    });
-
-    //    routeLayer = new Microsoft.Maps.EntityCollection();
-    //    map.entities.push(routeLayer);
-
-        
-
-    //    Microsoft.Maps.loadModule('Microsoft.Maps.Directions', { callback: createWalkingRoute });
-
-
-    //    //click map to add pushpin and get lat long
-    //    Microsoft.Maps.Events.addHandler(map, 'click', getLatLng);
-
-    //     //Microsoft.Maps.loadModule('Microsoft.Maps.Search', { callback: searchModuleLoaded });
-    //}
-
-    //function getLatLng(e) {
-    //    //console.log(e);
-    //    if (e.targetType == "map") {
-    //        var point = new Microsoft.Maps.Point(e.getX(), e.getY());
-    //        var locTemp = e.target.tryPixelToLocation(point);
-    //        var location = new Microsoft.Maps.Location(locTemp.latitude, locTemp.longitude);
-    //        var url = "https://dev.virtualearth.net/REST/v1/Locations/" + locTemp.latitude + "," + locTemp.longitude;
-
-    //        $.ajax({
-    //            type: "GET",
-    //            url: url,
-    //            contentType: "application/json",
-    //            dataType: 'jsonp',
-    //            data: {
-    //                key: sessionKey
-    //            },
-    //            success: function (data) {
-    //                getStreetCodeAndSegId(data.resourceSets[0].resources[0].address.addressLine);
-
-    //            },
-    //            error: function (e) {
-    //                console.log("error: " + e.statusText);
-    //            },
-    //            jsonp: "jsonp"
-    //        });
-
-    //        //var pin = new Microsoft.Maps.Pushpin(location, { draggable: true });
-
-    //        //map.entities.push(pin);
-
-    //    }
-    //}
-
-    //var points = [];
-    //function setPoint(point) {
-    //    points.push(point);
-
-    //    if (points.length === 2) {
-    //        var polyline = new Microsoft.Maps.Polyline(points, null);
-    //        console.log("points", points);
-    //        routeLayer.push(polyline);
-
-    //        points = [];
-    //    }
-    //}
-
-    //function getStreetCodeAndSegId(street) {
-
-    //    $.ajax({
-    //        url: self.apiUrl + "api/Locations/GetStreetSegmentLine?street=" + street,
-    //        type: "GET",
-    //        dataType: "json",
-    //        success: function (data) {
-    //            console.log(data);
-
-
-    //            $(data).each(function(index, item) {
-
-    //                ////routeLayer.clear();
-    //                //var polyline = new Microsoft.Maps.Polyline([new Microsoft.Maps.Location(latlon.latitude - 0.1, latlon.longitude - 0.1), new Microsoft.Maps.Location(latlon.latitude + 0.1, latlon.longitude - 0.1)]
-    //                //, null);
-                    
-    //                var url = "https://dev.virtualearth.net/REST/v1/Locations?q=" + item.FromAddress;                    ;
-
-    //                $.ajax({
-    //                    type: "GET",
-    //                    url: url,
-    //                    contentType: "application/json",
-    //                    dataType: 'jsonp',
-    //                    async: false,
-    //                    data: {
-    //                        key: sessionKey
-    //                    },
-    //                    success: function (result) {
-    //                        console.log("FromStreet result", result);
-    //                        setPoint(new Microsoft.Maps.Location(result.resourceSets[0].resources[0].geocodePoints[1].coordinates[0], result.resourceSets[0].resources[0].geocodePoints[1].coordinates[1]));
-    //                    },
-    //                    error: function (e) {
-    //                        console.log("error: " + e.statusText);
-    //                    },
-    //                    jsonp: "jsonp"
-    //                });
-
-    //                url = "https://dev.virtualearth.net/REST/v1/Locations?q=" + item.ToAddress;
-
-    //                $.ajax({
-    //                    type: "GET",
-    //                    url: url,
-    //                    contentType: "application/json",
-    //                    dataType: 'jsonp',
-    //                    async: false,
-    //                    data: {
-    //                        key: sessionKey
-    //                    },
-    //                    success: function (result) {
-    //                        console.log("ToStreet result", result);
-
-    //                        setPoint(new Microsoft.Maps.Location(result.resourceSets[0].resources[0].geocodePoints[1].coordinates[0], result.resourceSets[0].resources[0].geocodePoints[1].coordinates[1]));
-
-    //                    },
-    //                    error: function (e) {
-    //                        console.log("error: " + e.statusText);
-    //                    },
-    //                    jsonp: "jsonp"
-    //                });
-
-
-                    
-    //            });
-
-                
-
-    //        }
-    //    });
-
-    //}
-
-    ////function searchModuleLoaded() {
-    ////    //console.log("searchModuleLoaded");
-    ////    var searchManager = new Microsoft.Maps.Search.SearchManager(map);
-    ////    var searchRequest = { where: '100 S BROAD ST, PHILADELPHIA, PA', count: 5, callback: searchCallback, errorCallback: searchError };
-    ////    searchManager.search(searchRequest);
-    ////}
-
-    ////function searchCallback(searchResponse, userData) {
-    ////    //console.log("searchCallback");
-    ////    //console.log(searchResponse.parseResults[0].location.location);
-    ////    //console.log("The first search result is " + searchResponse.parseResults[0].location.name + ".");
-
-    ////    var pushpin = new Microsoft.Maps.Pushpin(map.getCenter(), { draggable: true });
-    ////    map.entities.push(pushpin);
-    ////    pushpin.setLocation(new Microsoft.Maps.Location(searchResponse.parseResults[0].location.location.latitude, searchResponse.parseResults[0].location.location.longitude));
-    ////    //console.log('Pushpin Location Updated to ' + pushpin.getLocation() + '. Pan map to location, if pushpin is not visible');
-    ////}
-
-    ////function searchError(searchRequest) {
-    ////    alert("An error occurred.");
-    ////}
-
-    ////ToDo: move to  models
-    //function LocationWaypoint(waypointOrder, latitude, longitude, addressLine, formattedAddress) {
-    //    var self = this;
-
-    //    self.WaypointOrder = waypointOrder;
-    //    self.Latitude = latitude;
-    //    self.Longitude = longitude;
-    //    self.AddressLine = addressLine;
-    //    self.FormattedAddress = formattedAddress;
-    //}
-
-    //function createDirectionsManager() {
-    //    var displayMessage;
-    //    if (!directionsManager) {
-    //        directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
-    //        displayMessage = 'Directions Module loaded\n';
-    //        displayMessage += 'Directions Manager loaded';
-    //    }
-    //    //console.log(displayMessage);
-    //    directionsManager.resetDirections();
-    //    directionsErrorEventObj = Microsoft.Maps.Events.addHandler(directionsManager, 'directionsError', function (arg) {
-    //        // console.log(  arg.message );
-    //    });
-    //    directionsUpdatedEventObj = Microsoft.Maps.Events.addHandler(directionsManager, 'directionsUpdated', function (result) {
-
-
-    //        //map.setView({ zoom: 15 });
-
-    //        // how many waypoints?
-    //        var totalWaypoints = result.route[0].routeLegs[0].subLegs[0].routePath.decodedLongitudes.length;
-
-    //        var wpLat = result.route[0].routeLegs[0].subLegs[0].routePath.decodedLatitudes;
-    //        var wpLong = result.route[0].routeLegs[0].subLegs[0].routePath.decodedLongitudes;
-
-    //        //var lastWp;
-    //        var order = -1;
-    //        self.permitPath([]);
-    //        for (var i = 0; i < totalWaypoints - 1; i++) {
-
-    //            var url = "https://dev.virtualearth.net/REST/v1/Locations/" + wpLat[i] + "," + wpLong[i];
-
-    //            $.ajax({
-    //                type: "GET",
-    //                url: url,
-    //                contentType: "application/json",
-    //                dataType: 'jsonp',
-    //                data: {
-    //                    key: sessionKey
-    //                },
-    //                success: function (data) {
-
-    //                    if (data && data.resourceSets && data.resourceSets.length > 0 && data.resourceSets[0].resources && data.resourceSets[0].resources.length > 0) {
-    //                        var lw = new LocationWaypoint(++order, data.resourceSets[0].resources[0].geocodePoints[0].coordinates[0], data.resourceSets[0].resources[0].geocodePoints[0].coordinates[1], data.resourceSets[0].resources[0].address.addressLine, data.resourceSets[0].resources[0].address.formattedAddress);
-    //                        self.permitPath.push(lw);
-    //                    }
-
-    //                    //routeLayer.clear();
-
-    //                    //var polyline = new Microsoft.Maps.Polyline(wp, null);
-
-    //                    //routeLayer.push(polyline);
-
-    //                    if (result && result.resourceSets && result.resourceSets.length > 0 && result.resourceSets[0].resources && result.resourceSets[0].resources.length > 0) {
-
-    //                        // Set the map view
-    //                        //var bbox = result.resourceSets[0].resources[0].bbox;
-    //                        //var viewBoundaries = Microsoft.Maps.LocationRect.fromLocations(new Microsoft.Maps.Location(bbox[0], bbox[1]), new Microsoft.Maps.Location(bbox[2], bbox[3]));
-    //                        //map.setView({ bounds: viewBoundaries, zoom: 10 });
-    //                        map.setView({ center: new Microsoft.Maps.Location(wpLat[0], wpLong[0]) });
-
-    //                    }
-
-    //                },
-    //                error: function (e) {
-    //                    console.log("error: " + e.statusText);
-    //                },
-    //                jsonp: "jsonp"
-    //            });
-    //        }
-
-    //    });
-    //}
-
-
-    //function createWalkingRoute(fromLocation, toLocation) {
-    //    if (fromLocation == undefined || toLocation == undefined) return;
-
-    //    var phila = ", Philadelphia, PA";
-    //    fromLocation = fromLocation + phila;
-    //    toLocation = toLocation + phila;
-
-
-
-    //    if (!directionsManager) { createDirectionsManager(); }
-    //    directionsManager.resetDirections();
-    //    // Set Route Mode to walking 
-    //    directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.walking });
-    //    var waypoint0 = new Microsoft.Maps.Directions.Waypoint({ address: fromLocation });
-    //    directionsManager.addWaypoint(waypoint0);
-    //    var waypoint1 = new Microsoft.Maps.Directions.Waypoint({ address: toLocation });
-    //    directionsManager.addWaypoint(waypoint1);
-    //    directionsManager.calculateDirections();
-
-
-    //}
-
-    //function createDirections() {
-    //    if (!directionsManager) {
-    //        Microsoft.Maps.loadModule('Microsoft.Maps.Directions', { callback: createWalkingRoute });
-    //    }
-    //    else {
-    //        createWalkingRoute();
-    //    }
-    //}
 };
 
 /*----------------------------------------------------------------------*/
@@ -1644,12 +1256,7 @@ $(document).ready(function() {
     });
 
     
-    //$(window).resize(function () {
-    //    var $mapDiv = $("#mapDiv");
-    //    map.setOptions({ width: $mapDiv.width() });
-    //});
-
-
+    // ToDo:...
     $(document).ajaxError(function (event, request, settings) {
         if (request.status === 401){
             window.location.href = "/?ExpiredToken=true";
