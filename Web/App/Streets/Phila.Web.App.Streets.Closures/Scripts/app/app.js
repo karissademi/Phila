@@ -42,7 +42,7 @@ function AppViewModel() {
 
 
     self.totalPermitsFound = ko.observable();
-    self.apiUrl = "https://phila.azurewebsites.net/"; //"http://localhost/Phila.Web.Api.Streets/";// 
+    self.apiUrl = "https://phila.azurewebsites.net/"; //"http://localhost/Phila.Web.Api.Streets/";//  
     self.streetCode = "";
     self.fromStreets = ko.observableArray();
 
@@ -390,7 +390,7 @@ function AppViewModel() {
             type: "GET",
             url: self.apiUrl + "api/locations/GetFromStreets?onStreet=" + onStreet,
             success: function (data) {
-                console.log("fromStreet", data);
+                //console.log("fromStreet", data);
                 self.fromStreets(data);
                 //self.fromStreets([]);
                 //$(data).each(function(index, item) {
@@ -660,6 +660,9 @@ function AppViewModel() {
                         // set project types
                         var pt = decimal2Array(result.Permits[i].ProjectTypes, self.projectTypes().length);
 
+                        //console.log(result.Permits[i].ProjectTypes, self.projectTypes().length);
+                        //console.log(pt);
+
                         $(pt).each(function (ind, projType) {
                             projTypes.push(setKoType(self.projectTypes(), "ProjectTypeId", projType));
                         });
@@ -823,6 +826,7 @@ function AppViewModel() {
         //var expTimeMinutes = parseInt(expirationTime[2]);
         //expirationDateTime.setHours(expTimeHours);
         //expirationDateTime.setMinutes(expTimeMinutes);
+
 
         var permit = {
             Token: getUrlParameter("token"),
@@ -1257,7 +1261,7 @@ $(document).ready(function() {
 
     } else {
         var expiredToken = getUrlParameter("ExpiredToken");
-        console.log(expiredToken);
+        //console.log(expiredToken);
         if (expiredToken == "true") {
             $.notify("Please request a new login email.", { globalPosition: "top left", className: "info" });
         }

@@ -342,7 +342,7 @@
                         <div class="row">
                             <div class="columns">
                                 <i class="fa fa-pencil fa-2x" data-bind="click: $root.editLocation.bind($data), visible: !$root.isLocationEditing($data)"></i>
-                                <i class="fa fa-times fa-2x" data-bind="click: $root.removeLocation.bind($data), visible: !$root.isLocationEditing($data)"></i>
+                                <i class="fa fa-trash fa-2x" data-bind="click: $root.removeLocation.bind($data), visible: !$root.isLocationEditing($data)"></i>
                                 <i class="fa fa-floppy-o fa-2x" data-bind="click: $root.applyLocation.bind($data), visible: $root.isLocationEditing($data)"></i>
                                 <i class="fa fa-times fa-2x" data-bind="click: $root.cancelEditLocation.bind($data), visible: $root.isLocationEditing($data)"></i>
                             </div>
@@ -426,7 +426,7 @@
                             </td>
                             <td class="tools">
                                 <i class="fa fa-pencil fa-2x" data-bind="click: $root.editReference.bind($data), visible: !$root.isReferenceEditing($data)"></i>
-                                <i class="fa fa-times fa-2x" data-bind="click: $root.removeReference.bind($data), visible: !$root.isReferenceEditing($data)"></i>
+                                <i class="fa fa-trash fa-2x" data-bind="click: $root.removeReference.bind($data), visible: !$root.isReferenceEditing($data)"></i>
                                 <i class="fa fa-floppy-o fa-2x" data-bind="click: $root.applyReference.bind($data), visible: $root.isReferenceEditing($data)"></i>
                                 <i class="fa fa-times fa-2x" data-bind="click: $root.cancelEditReference.bind($data), visible: $root.isReferenceEditing($data)"></i>
                             </td>

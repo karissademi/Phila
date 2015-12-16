@@ -824,6 +824,159 @@ namespace Phila.Web.Api.Streets.Controllers
                 throw;
             }
 
+
+            // delete records from tblPermit_Encroachments
+            var encroachs = _db.tblPermit_Encroachment.Where(x => x.Permit_Number == permitNumber).ToList();
+            foreach (var encroachment in encroachs)
+                _db.tblPermit_Encroachment.Remove(encroachment);
+
+            // delete records from tblPermit_References
+            var references = _db.tblPermit_References.Where(x => x.Permit_Number == permitNumber).ToList();
+            foreach (var reference in references)
+                _db.tblPermit_References.Remove(reference);
+
+            // delete records from tblPermit_Locations
+            var locations = _db.tblPermit_Locations.Where(x => x.Permit_Number == permitNumber).ToList();
+            foreach (var location in locations)
+                _db.tblPermit_Locations.Remove(location);
+
+            // delete records from tblPermit_Locations_GIS
+            var locationsGis = _db.tblPermit_Location_GIS.Where(x => x.Permit_Number == permitNumber).ToList();
+            foreach (var location in locationsGis)
+                _db.tblPermit_Location_GIS.Remove(location);
+
+
+            try
+            {
+
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PermitExists(permitNumber))
+                {
+                    return NotFound();
+                }
+                throw;
+            }
+
+            var encroachments = new List<tblPermit_Encroachment>();
+            for (int i = 0; i < permit.EncroachmentTypes.Count; i++)
+            {
+                int seq = i + 1;
+                encroachments.Add(new tblPermit_Encroachment
+                {
+                    EncroachmentTypeID = permit.EncroachmentTypes[i],
+                    Permit_Number = modifiedPermit.Permit_Number,
+                    Seq_Num = (short)seq
+                });
+            }
+            _db.tblPermit_Encroachment.AddRange(encroachments);
+
+
+            var refs = new List<tblPermit_References>();
+            for (int i = 0; i < permit.References.Count; i++)
+            {
+                int seq = i + 1;
+
+                refs.Add(new tblPermit_References
+                {
+                    Permit_Number = modifiedPermit.Permit_Number,
+                    Seq_Num = (short)seq,
+                    ReferenceTypeID = permit.References[i].ReferenceTypeId,
+                    ReferenceValue = permit.References[i].ReferenceValue
+                });
+            }
+            _db.tblPermit_References.AddRange(refs);
+
+
+            var locs = new List<tblPermit_Locations>();
+            var gisLocs = new List<tblPermit_Location_GIS>();
+            foreach (StreetsViewModels.PostedLocation permitLocation in permit.Locations)
+            {
+                //ToDo: check if location is valid
+
+                var lc = new LocationsController();
+                StreetsViewModels.LocationDetails stCode = lc.GetStreetCode(permitLocation.OnStreetName, true);
+
+
+                if (stCode.StreetCode != null)
+                {
+                    locs.Add(new tblPermit_Locations
+                    {
+                        Permit_Number = modifiedPermit.Permit_Number,
+                        Seq_Num = (short)permitLocation.SequenceNumber,
+                        OccupancyTypeID = (short)permitLocation.OccupancyTypeId,
+                        OnSTCODE = (int)stCode.StreetCode,
+                        sOnActual = permitLocation.OnStreetName,
+                        FromSTCODE = permitLocation.FromStreetCode,
+                        sFromActual = permitLocation.FromStreetName,
+                        ToSTCODE = permitLocation.ToStreetCode,
+                        sToActual = permitLocation.ToStreetName
+                    });
+
+                    switch (permitLocation.LocationType.ToLower())
+                    {
+                        case "address":
+
+                            break;
+                        case "intersection":
+
+                            ObjectResult<get_OnStreetElementsBetweenOrderedPair_Result> intResult =
+                                _db.get_OnStreetElementsBetweenOrderedPair(stCode.StreetCode,
+                                    permitLocation.FromStreetNode, permitLocation.FromStreetNode);
+
+                            gisLocs.AddRange(intResult.Select(x => new tblPermit_Location_GIS
+                            {
+                                Permit_Number = modifiedPermit.Permit_Number,
+                                Seq_Num = (short)permitLocation.SequenceNumber,
+                                DateCreated = DateTime.Now,
+                                Element_Id = (int)x.ElementId,
+                                lElementTypeID = x.ElementTypeId
+                            }));
+
+                            break;
+                        case "street segment":
+
+                            ObjectResult<get_OnStreetElementsBetweenOrderedPair_Result> spResult =
+                                _db.get_OnStreetElementsBetweenOrderedPair(stCode.StreetCode,
+                                    permitLocation.FromStreetNode, permitLocation.ToStreetNode);
+
+                            gisLocs.AddRange(spResult.Select(x => new tblPermit_Location_GIS
+                            {
+                                Permit_Number = modifiedPermit.Permit_Number,
+                                Seq_Num = (short)permitLocation.SequenceNumber,
+                                DateCreated = DateTime.Now,
+                                Element_Id = (int)x.ElementId,
+                                lElementTypeID = x.ElementTypeId
+                            }));
+
+                            break;
+                    }
+                }
+            }
+
+            //insert into tblPermit_Locations
+            _db.tblPermit_Locations.AddRange(locs);
+
+            //insert into tblPermit_LocationsGIS
+            _db.tblPermit_Location_GIS.AddRange(gisLocs);
+
+
+            try
+            {
+
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PermitExists(permitNumber))
+                {
+                    return NotFound();
+                }
+                throw;
+            }
+
             return StatusCode(HttpStatusCode.NoContent);
         }
 

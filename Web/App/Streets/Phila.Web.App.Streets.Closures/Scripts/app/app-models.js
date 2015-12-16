@@ -293,13 +293,13 @@ Permit.prototype.beginEdit = function (transaction) {
 };
 
 function getShortTime(datetime) {
-    console.log("datetime", datetime);
+    //console.log("datetime", datetime);
     var hours, minutes, xm;
     var dt = new Date(datetime);
-    console.log("dt", dt.toUTCString());
+    //console.log("dt", dt.toUTCString());
 
     hours = dt.getUTCHours();
-    console.log("hours", hours);
+    //console.log("hours", hours);
     xm = " AM";
     if (hours > 12) {
         hours = hours / 2;
@@ -311,9 +311,9 @@ function getShortTime(datetime) {
     minutes = dt.getUTCMinutes();
     
     if (minutes < 10) minutes = "0" + minutes;
-    console.log("minutes", minutes);
+    //console.log("minutes", minutes);
     var time = hours + ":" + minutes + xm;
-    console.log("time", time);
+    //console.log("time", time);
     return time;
 };
 
@@ -361,25 +361,25 @@ Permit.prototype.setLongDateTimes = function () {
     try {
         // set effective datetime
         var effectiveTime = this.StartTime().match(/^([0-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
-        console.log("effectiveTime", effectiveTime.toUTCString());
+        //console.log("effectiveTime", effectiveTime.toUTCString());
         var effectiveDateTime = new Date(this.StartDate());
         var effTimeHours = effectiveTime[3].toLowerCase() === "pm" && effectiveTime[1] != "12" ? (parseInt(effectiveTime[1]) + 12) : effectiveTime[1];
         var effTimeMinutes = parseInt(effectiveTime[2]);
         effectiveDateTime.setHours(effTimeHours);
         effectiveDateTime.setMinutes(effTimeMinutes);
         this.EffectiveDateTime(effectiveDateTime);
-        console.log("effectiveDateTime", effectiveDateTime.toUTCString());
+        //console.log("effectiveDateTime", effectiveDateTime.toUTCString());
 
         // set expiration datetime
         var expirationTime = this.EndTime().match(/^([0-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
-        console.log("expirationTime", expirationTime.toUTCString());
+        //console.log("expirationTime", expirationTime.toUTCString());
         var expirationDateTime = new Date(this.EndDate());
         var expTimeHours = expirationTime[3].toLowerCase() === "pm" && expirationTime[1] != "12" ? (parseInt(expirationTime[1]) + 12) : expirationTime[1];
         var expTimeMinutes = parseInt(expirationTime[2]);
         expirationDateTime.setHours(expTimeHours);
         expirationDateTime.setMinutes(expTimeMinutes);
         this.ExpirationDateTime(expirationDateTime);
-        console.log("exDateTime", expirationDateTime.toUTCString());
+        //console.log("exDateTime", expirationDateTime.toUTCString());
     } catch (e) {
 
     }
@@ -458,16 +458,18 @@ function intArray2Binary(array, totalOptions) {
         b += a[k];
 
     return b;
+
+
 }
 
-function binary2Decimal(bin, totalOptions) {
-    return parseInt(intArray2Binary(bin, totalOptions), 2);
+function binary2Decimal(bin) {
+    return parseInt(bin, 2);
 }
 
-function decimal2Binary(dec, totalProjectTypes) {
+function decimal2Binary(dec, totalOptions) {
     var bin = (dec >>> 0).toString(2);
     var len = bin.length;
-    var dif = totalProjectTypes - len;
+    var dif = totalOptions - len;
     for (var i = 0; i < dif; i++)
         bin = "0" + bin;
 
