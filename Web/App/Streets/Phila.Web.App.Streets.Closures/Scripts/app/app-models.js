@@ -223,9 +223,9 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
     self.References = ko.observableArray(references).extend({ editable: true });
     self.Locations = ko.observableArray(locations).extend({ editable: true }).extend({ required: true });
 
-    self.StartDate = ko.observable(self.EffectiveDateTime() != undefined ? self.EffectiveDateTime().substr(0, 10) : "").extend({ editable: true }).extend({ validPermitDate: [10, (new Date().addDays(11).getMonth() + 1) + "/" + new Date().addDays(11).getDate() + "/" + new Date().addDays(11).getFullYear()] });
+    self.StartDate = ko.observable(self.EffectiveDateTime() != undefined && self.EffectiveDateTime() != "" ? self.EffectiveDateTime().substr(0, 10) : "").extend({ editable: true }).extend({ validPermitDate: [10, (new Date().addDays(11).getMonth() + 1) + "/" + new Date().addDays(11).getDate() + "/" + new Date().addDays(11).getFullYear()] });
 
-    self.StartTime = ko.observable(self.EffectiveDateTime() != undefined ? new Date(self.EffectiveDateTime()).getShortTime() : "").extend({ editable: true }).extend({
+    self.StartTime = ko.observable(self.EffectiveDateTime() != undefined && self.EffectiveDateTime() != "" ? getShortTime(self.EffectiveDateTime()) : "").extend({ editable: true }).extend({
         validation: {
             validator: function (val, params) {
 
@@ -240,7 +240,7 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
         }
     });
 
-    self.EndDate = ko.observable(self.ExpirationDateTime() != undefined ? self.ExpirationDateTime().substr(0, 10) : "").extend({ editable: true }).extend({
+    self.EndDate = ko.observable(self.ExpirationDateTime() != undefined && self.ExpirationDateTime() != "" ? self.ExpirationDateTime().substr(0, 10) : "").extend({ editable: true }).extend({
         validation: {
             validator: function (val, params) {
                 if (Date.parse(val) && Date.parse(self.StartDate())) {
@@ -252,34 +252,15 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
         }
     });
 
-    self.EndTime = ko.observable(self.ExpirationDateTime() != undefined ? new Date(self.ExpirationDateTime()).getShortTime() : "").extend({ editable: true }).extend({
+    self.EndTime = ko.observable(self.ExpirationDateTime() != undefined && self.ExpirationDateTime() != "" ? getShortTime(self.ExpirationDateTime()) : "").extend({ editable: true }).extend({
         validation: {
             validator: function (val, params) {
 
                 if (val == undefined) return false;
 
-                var validTime = val.match(/^([0-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+                self.setLongDateTimes();
 
-                if (validTime == null || validTime.length !== 4) return false;
-
-
-                // only validate the time is a valid time
-                if (!ko.validation.validateObservable(self.StartDate) || !ko.validation.validateObservable(self.EndDate) || !ko.validation.validateObservable(self.StartTime)) return true;
-
-                var effectiveTime = self.StartTime().match(/^([0-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
-                var efDateTime = new Date(self.StartTime());
-                var efTimeHours = effectiveTime[3].toLowerCase() === "pm" ? (parseInt(effectiveTime[1]) + 12) : effectiveTime[1];
-                var efTimeMinutes = parseInt(effectiveTime[2]);
-                efDateTime.setHours(efTimeHours);
-                efDateTime.setMinutes(efTimeMinutes);
-
-                var exDateTime = new Date(self.EndDate());
-                var exTimeHours = validTime[3].toLowerCase() === "pm" ? (parseInt(validTime[1]) + 12) : validTime[1];
-                var exTimeMinutes = parseInt(validTime[2]);
-                exDateTime.setHours(exTimeHours);
-                exDateTime.setMinutes(exTimeMinutes);
-
-                if (exDateTime > efDateTime) return true;
+                if (self.ExpirationDateTime() > self.EffectiveDateTime()) return true;
 
                 return false;
             },
@@ -311,79 +292,94 @@ Permit.prototype.beginEdit = function (transaction) {
     this.EndTime.beginEdit(transaction);
 };
 
-Date.prototype.getShortTime = function () {
+function getShortTime(datetime) {
+    console.log("datetime", datetime);
     var hours, minutes, xm;
+    var dt = new Date(datetime);
+    console.log("dt", dt.toUTCString());
 
-    hours = this.getHours();
+    hours = dt.getUTCHours();
+    console.log("hours", hours);
     xm = " AM";
     if (hours > 12) {
         hours = hours / 2;
         xm = " PM";
     }
-    minutes = this.getMinutes();
+    if (hours === 0)
+        hours = 12;
+
+    minutes = dt.getUTCMinutes();
+    
     if (minutes < 10) minutes = "0" + minutes;
-    return hours + ":" + minutes + xm;
+    console.log("minutes", minutes);
+    var time = hours + ":" + minutes + xm;
+    console.log("time", time);
+    return time;
 };
 
-Permit.prototype.setShortDatesAndTimes = function () {
+//Permit.prototype.setShortDatesAndTimes = function () {
 
-    if (this.EffectiveDateTime() == null || this.ExpirationDateTime() == null) return;
+//    if (this.EffectiveDateTime() == null || this.ExpirationDateTime() == null) return;
 
-    var hours, minutes, xm;
+//    var hours, minutes, xm;
 
-    // set start date
-    this.StartDate(this.EffectiveDateTime().substr(0, 10));
+//    // set start date
+//    this.StartDate(this.EffectiveDateTime().substr(0, 10));
 
-    // set start time
-    var efDateTime = new Date(this.EffectiveDateTime());
-    hours = efDateTime.getHours();
-    xm = " AM";
-    if (hours > 12) {
-        hours = hours / 2;
-        xm = " PM";
-    }
-    minutes = efDateTime.getMinutes();
-    if (minutes < 10) minutes = "0" + minutes;
-    var st = hours + ":" + minutes + xm;
+//    // set start time
+//    var efDateTime = new Date(this.EffectiveDateTime());
+//    hours = efDateTime.getHours();
+//    xm = " AM";
+//    if (hours > 12) {
+//        hours = hours / 2;
+//        xm = " PM";
+//    }
+//    minutes = efDateTime.getMinutes();
+//    if (minutes < 10) minutes = "0" + minutes;
+//    var st = hours + ":" + minutes + xm;
 
-    this.StartTime(st);
+//    this.StartTime(st);
 
-    // set end date
-    this.EndDate(this.ExpirationDateTime().substr(0, 10));
+//    // set end date
+//    this.EndDate(this.ExpirationDateTime().substr(0, 10));
 
-    // set end time
-    var exDateTime = new Date(this.ExpirationDateTime());
-    hours = exDateTime.getHours();
-    xm = " AM";
-    if (hours > 12) {
-        hours = hours / 2;
-        xm = " PM";
-    }
-    minutes = exDateTime.getMinutes();
-    if (minutes < 10) minutes = "0" + minutes;
-    var et = hours + ":" + minutes + xm;
-    this.EndTime(et);
-};
+//    // set end time
+//    var exDateTime = new Date(this.ExpirationDateTime());
+//    hours = exDateTime.getUTCHours();
+//    xm = " AM";
+//    if (hours > 12) {
+//        hours = hours / 2;
+//        xm = " PM";
+//    }
+//    minutes = exDateTime.getMinutes();
+//    if (minutes < 10) minutes = "0" + minutes;
+//    var et = hours + ":" + minutes + xm;
+//    this.EndTime(et);
+//};
 
 Permit.prototype.setLongDateTimes = function () {
     try {
         // set effective datetime
         var effectiveTime = this.StartTime().match(/^([0-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+        console.log("effectiveTime", effectiveTime.toUTCString());
         var effectiveDateTime = new Date(this.StartDate());
-        var effTimeHours = effectiveTime[3].toLowerCase() === "pm" ? (parseInt(effectiveTime[1]) + 12) : effectiveTime[1];
+        var effTimeHours = effectiveTime[3].toLowerCase() === "pm" && effectiveTime[1] != "12" ? (parseInt(effectiveTime[1]) + 12) : effectiveTime[1];
         var effTimeMinutes = parseInt(effectiveTime[2]);
         effectiveDateTime.setHours(effTimeHours);
         effectiveDateTime.setMinutes(effTimeMinutes);
         this.EffectiveDateTime(effectiveDateTime);
+        console.log("effectiveDateTime", effectiveDateTime.toUTCString());
 
         // set expiration datetime
         var expirationTime = this.EndTime().match(/^([0-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+        console.log("expirationTime", expirationTime.toUTCString());
         var expirationDateTime = new Date(this.EndDate());
-        var expTimeHours = expirationTime[3].toLowerCase() === "pm" ? (parseInt(expirationTime[1]) + 12) : expirationTime[1];
+        var expTimeHours = expirationTime[3].toLowerCase() === "pm" && expirationTime[1] != "12" ? (parseInt(expirationTime[1]) + 12) : expirationTime[1];
         var expTimeMinutes = parseInt(expirationTime[2]);
         expirationDateTime.setHours(expTimeHours);
         expirationDateTime.setMinutes(expTimeMinutes);
         this.ExpirationDateTime(expirationDateTime);
+        console.log("exDateTime", expirationDateTime.toUTCString());
     } catch (e) {
 
     }
@@ -437,13 +433,24 @@ function sortProjectTypes() {
 }
 
 //** BEGIN required support for the PSD's legacy code
-function projectTypes2Binary(projectTypes, totalProjectTypes) {
+function intArray2Binary(array, totalOptions) {
+    /// <summary>
+    /// Converts an array to binary
+    /// </summary>
+    /// <param name="array" type="Array">
+    /// An array of project type ids
+    /// </param>
+    /// <param name="length" type="Array">
+    /// Total number of project types
+    /// </param>
+    /// <returns type="String" />
+
     var a = [];
-    for (var i = 0; i < totalProjectTypes; i++)
+    for (var i = 0; i < totalOptions; i++)
         a.push("0");
 
-    for (var j = 0; j < projectTypes.length; j++)
-        a[parseInt(projectTypes[j]) - 1] = "1";
+    for (var j = 0; j < array.length; j++)
+        a[parseInt(array[j]) - 1] = "1";
 
     var b = "";
 
@@ -452,10 +459,12 @@ function projectTypes2Binary(projectTypes, totalProjectTypes) {
 
     return b;
 }
-function porjectTypesBinary2Decimal(dec, totalProjectTypes) {
-    return parseInt(projectTypes2Binary(dec, totalProjectTypes), 2);
+
+function binary2Decimal(bin, totalOptions) {
+    return parseInt(intArray2Binary(bin, totalOptions), 2);
 }
-function projectTypesDecimal2Binary(dec, totalProjectTypes) {
+
+function decimal2Binary(dec, totalProjectTypes) {
     var bin = (dec >>> 0).toString(2);
     var len = bin.length;
     var dif = totalProjectTypes - len;
@@ -465,7 +474,7 @@ function projectTypesDecimal2Binary(dec, totalProjectTypes) {
     return bin;
 }
 
-function projectTypesBinary2Array(bin) {
+function binary2Array(bin) {
     
     var pts = bin.match(/[1]|[0]/g);
     var projectTypes = [];
@@ -477,12 +486,18 @@ function projectTypesBinary2Array(bin) {
     return projectTypes;
 }
 
-function projectTypesDecimal2Array(dec, totalProjectTypes) {
+function decimal2Array(dec, totalProjectTypes) {
     
-    var bin = projectTypesDecimal2Binary(dec, totalProjectTypes);
-    var result = projectTypesBinary2Array(bin);
+    var bin = decimal2Binary(dec, totalProjectTypes);
+    var result = binary2Array(bin);
     return result;
 }
+
+function array2Decimal(array, totalOptions) {
+    var bin = intArray2Binary(array, totalOptions);
+    return binary2Decimal(bin, totalOptions);
+}
+
 // END required support for the PSD's legacy code
 
 function ProjectType(projectTypeId, projectTypeName) {

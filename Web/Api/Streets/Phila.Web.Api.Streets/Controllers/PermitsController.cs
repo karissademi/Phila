@@ -6,12 +6,10 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
-using Microsoft.Ajax.Utilities;
 using Phila.Data.EntityModels.Streets;
 using Phila.Web.Api.Streets.Helpers;
 using Phila.Web.Api.Streets.Models;
@@ -46,7 +44,7 @@ namespace Phila.Web.Api.Streets.Controllers
             if (!auth)
                 return Unauthorized();
 
-            bool validCompanyId = IsCompanyIdValid(permit.Token, (int)permit.CompanyId);
+            bool validCompanyId = IsCompanyIdValid(permit.Token, (int) permit.CompanyId);
 
             // is the user auth to get permits of companyId?
             if (validCompanyId)
@@ -126,6 +124,7 @@ namespace Phila.Web.Api.Streets.Controllers
                     refs.Add(new tblPermit_References
                     {
                         Permit_Number = newPermit.Permit_Number,
+                        Seq_Num = (short) seq,
                         ReferenceTypeID = permit.References[i].ReferenceTypeId,
                         ReferenceValue = permit.References[i].ReferenceValue
                     });
@@ -147,9 +146,9 @@ namespace Phila.Web.Api.Streets.Controllers
                         locs.Add(new tblPermit_Locations
                         {
                             Permit_Number = newPermit.Permit_Number,
-                            Seq_Num = (short)permitLocation.SequenceNumber,
-                            OccupancyTypeID = (short)permitLocation.OccupancyTypeId,
-                            OnSTCODE = (int)stCode.StreetCode,
+                            Seq_Num = (short) permitLocation.SequenceNumber,
+                            OccupancyTypeID = (short) permitLocation.OccupancyTypeId,
+                            OnSTCODE = (int) stCode.StreetCode,
                             sOnActual = permitLocation.OnStreetName,
                             FromSTCODE = permitLocation.FromStreetCode,
                             sFromActual = permitLocation.FromStreetName,
@@ -293,7 +292,9 @@ namespace Phila.Web.Api.Streets.Controllers
             List<StreetsViewModels.PostedPermit> permits =
                 await
                     _db.tblPermits.Where(x => x.CompanyId == companyId)
-                        .Include(x => x.tblDecision).Include(x => x.tblPermit_Encroachment).Include(x => x.tblPermit_Locations)
+                        .Include(x => x.tblDecision)
+                        .Include(x => x.tblPermit_Encroachment)
+                        .Include(x => x.tblPermit_Locations)
                         .Where(x => x.tblDecision.DecisionID == statusCode)
                         .Select(x => new StreetsViewModels.PostedPermit
                         {
@@ -317,14 +318,12 @@ namespace Phila.Web.Api.Streets.Controllers
                                 FromStreetName = j.sFromActual,
                                 ToStreetCode = j.ToSTCODE,
                                 ToStreetName = j.sToActual
-
                             }).ToList(),
                             References = x.tblPermit_References.Select(j => new StreetsViewModels.PostedReference
                             {
                                 ReferenceTypeId = j.ReferenceTypeID,
                                 ReferenceValue = j.ReferenceValue
                             }).ToList()
-                            
                         }).ToListAsync();
 
             if (permits == null)
@@ -384,11 +383,11 @@ namespace Phila.Web.Api.Streets.Controllers
             //}
             //else
             //{
-                permits = permits.Where(p => p.PermitNumber.Contains(search) || p.Purpose.Contains(search)
-                                             //|| p.PermitLocation.Contains(search) 
-                                             || p.EffectiveDate.ToString().Contains(search)
-                                             || p.ExpirationDate.ToString().Contains(search)
-                                             || p.PermitStatus.Contains(search)).ToList();
+            permits = permits.Where(p => p.PermitNumber.Contains(search) || p.Purpose.Contains(search)
+                //|| p.PermitLocation.Contains(search) 
+                                         || p.EffectiveDate.ToString().Contains(search)
+                                         || p.ExpirationDate.ToString().Contains(search)
+                                         || p.PermitStatus.Contains(search)).ToList();
             //}
 
             // sort
@@ -402,9 +401,9 @@ namespace Phila.Web.Api.Streets.Controllers
                     case "purpose":
                         permits = permits.OrderByDescending(x => x.Purpose).ToList();
                         break;
-                    //case "permitlocation":
-                    //    permits = permits.OrderByDescending(x => x.PermitLocation).ToList();
-                    //    break;
+                        //case "permitlocation":
+                        //    permits = permits.OrderByDescending(x => x.PermitLocation).ToList();
+                        //    break;
                     case "startdate":
                         permits = permits.OrderByDescending(x => x.EffectiveDate).ToList();
                         break;
@@ -426,9 +425,9 @@ namespace Phila.Web.Api.Streets.Controllers
                     case "purpose":
                         permits = permits.OrderBy(x => x.Purpose).ToList();
                         break;
-                    //case "permitlocation":
-                    //    permits = permits.OrderBy(x => x.PermitLocation).ToList();
-                    //    break;
+                        //case "permitlocation":
+                        //    permits = permits.OrderBy(x => x.PermitLocation).ToList();
+                        //    break;
                     case "startdate":
                         permits = permits.OrderBy(x => x.EffectiveDate).ToList();
                         break;
@@ -473,11 +472,10 @@ namespace Phila.Web.Api.Streets.Controllers
         }
 
 
-
         [EnableCors(origins: "*", headers: "*", methods: "*")]
         [HttpGet]
         [Route("api/permits/GetPermitByPermitId")]
-        [ResponseType(typeof(StreetsViewModels.PermitsPage))]
+        [ResponseType(typeof (StreetsViewModels.PermitsPage))]
         public async Task<IHttpActionResult> GetPermitByPermitId(string token, string permitNumber)
         {
             var st = new SecurityToken();
@@ -488,9 +486,10 @@ namespace Phila.Web.Api.Streets.Controllers
                 return Unauthorized();
             }
 
-            var companyId = _db.tblPermits.Where(x => x.Permit_Number == permitNumber).Select(x => x.CompanyId).FirstOrDefault();
+            int? companyId =
+                _db.tblPermits.Where(x => x.Permit_Number == permitNumber).Select(x => x.CompanyId).FirstOrDefault();
 
-            bool validCompanyId = companyId != null && IsCompanyIdValid(token, (int)companyId);
+            bool validCompanyId = companyId != null && IsCompanyIdValid(token, (int) companyId);
 
             // is the user auth to get permits of companyId?
             if (validCompanyId)
@@ -501,7 +500,9 @@ namespace Phila.Web.Api.Streets.Controllers
             StreetsViewModels.PostedPermit permit =
                 await
                     _db.tblPermits.Where(x => x.CompanyId == companyId)
-                        .Include(x => x.tblDecision).Include(x => x.tblPermit_Encroachment).Include(x => x.tblPermit_Locations)
+                        .Include(x => x.tblDecision)
+                        .Include(x => x.tblPermit_Encroachment)
+                        .Include(x => x.tblPermit_Locations)
                         .Select(x => new StreetsViewModels.PostedPermit
                         {
                             PermitNumber = x.Permit_Number,
@@ -517,23 +518,21 @@ namespace Phila.Web.Api.Streets.Controllers
                             EncroachmentTypes = x.tblPermit_Encroachment.Select(j => j.EncroachmentTypeID).ToList(),
                             Locations = x.tblPermit_Locations.Select(j => new StreetsViewModels.PostedLocation
                             {
-                                OccupancyTypeId = (short)j.OccupancyTypeID,
+                                OccupancyTypeId = (short) j.OccupancyTypeID,
                                 OnStreetCode = j.OnSTCODE,
                                 OnStreetName = j.sOnActual,
                                 FromStreetCode = j.FromSTCODE,
                                 FromStreetName = j.sFromActual,
                                 ToStreetCode = j.ToSTCODE,
                                 ToStreetName = j.sToActual
-
                             }).ToList(),
                             References = x.tblPermit_References.Select(j => new StreetsViewModels.PostedReference
                             {
                                 ReferenceTypeId = j.ReferenceTypeID,
                                 ReferenceValue = j.ReferenceValue
                             }).ToList()
-
                         }).FirstOrDefaultAsync();
-            
+
             return Ok(permit);
         }
 
@@ -542,7 +541,7 @@ namespace Phila.Web.Api.Streets.Controllers
         //{
         //    return new StreetsViewModels.PostedLocation
         //    {
-                
+
         //    };            
         //}
 
@@ -738,6 +737,95 @@ namespace Phila.Web.Api.Streets.Controllers
             return _db.tblOwners.OrderBy(x => x.Name);
         }
 
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [ResponseType(typeof (void))]
+        [Route("api/Permits/UpdatePermit")]
+        public async Task<IHttpActionResult> UpdatePermit(string permitNumber, StreetsViewModels.PostedPermit permit)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (permitNumber != permit.PermitNumber)
+            {
+                return BadRequest();
+            }
+
+            var st = new SecurityToken();
+            bool auth = st.IsTokenValid(permit.Token);
+
+            if (!auth)
+                return Unauthorized();
+
+            bool validCompanyId = IsCompanyIdValid(permit.Token, (int) permit.CompanyId);
+
+            // is the user auth to get permits of companyId?
+            if (validCompanyId)
+                return Unauthorized();;
+
+            tblCompany company = _db.tblCompanies.FirstOrDefault(x => x.CompanyId == permit.CompanyId);
+            if (company == null)
+                return Unauthorized();
+
+            UserToken user = _db.UserTokens.FirstOrDefault(x => x.Token == permit.Token);
+            if (user == null)
+                return Unauthorized();
+
+            tblContact userInfo = _db.tblContacts.FirstOrDefault(x => x.EMailAddress == user.EmailAddress);
+
+            if (userInfo == null)
+                return Unauthorized();
+
+            tblPermit modifiedPermit = _db.tblPermits.FirstOrDefault(x => x.Permit_Number == permitNumber);
+
+            if (modifiedPermit == null)
+                return BadRequest();
+
+            modifiedPermit.ApplicationDate = DateTime.Now;
+            modifiedPermit.EntryDate = DateTime.Now;
+            modifiedPermit.OwnerId = permit.UtilityOwnerId;
+            modifiedPermit.CompanyId = permit.CompanyId;
+            modifiedPermit.Comments = permit.Comments;
+            modifiedPermit.EffectiveDate = permit.EffectiveDate;
+            modifiedPermit.ExpirationDate = permit.ExpirationDate;
+            modifiedPermit.Purpose = permit.Purpose;
+            modifiedPermit.DecisionId = permit.IsDraft == false ? (short) 3 : (short) 8;
+            modifiedPermit.ProjectType = permit.ProjectTypes;
+            modifiedPermit.Rec_DateTime = DateTime.Now;
+            modifiedPermit.PermitTypeId = permit.PermitTypeId;
+            modifiedPermit.Company_Name = company.Name;
+            modifiedPermit.Address1 = company.Address1;
+            modifiedPermit.Address2 = company.Address2;
+            modifiedPermit.City = company.City;
+            modifiedPermit.State = company.State;
+            modifiedPermit.PostalCode = company.PostalCode;
+            modifiedPermit.Phone = company.Phone;
+            modifiedPermit.Fax = company.Fax;
+            modifiedPermit.Contact_First_Name = userInfo.FirstName;
+            modifiedPermit.Contact_Mid_Name = userInfo.MiddleName;
+            modifiedPermit.Contact_Last_Name = userInfo.LastName;
+            modifiedPermit.ContactId = userInfo.ContactId;
+            modifiedPermit.Rec_UserId = "StreetClosureWebUser";
+
+            _db.Entry(modifiedPermit).State = EntityState.Modified;
+
+            try
+            {
+
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PermitExists(permitNumber))
+                {
+                    return NotFound();
+                }
+                throw;
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
 
         private bool PermitExists(string id)
         {

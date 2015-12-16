@@ -42,7 +42,7 @@ function AppViewModel() {
 
 
     self.totalPermitsFound = ko.observable();
-    self.apiUrl = "http://localhost/Phila.Web.Api.Streets/"; //"https://phila.azurewebsites.net/"; //  
+    self.apiUrl = "https://phila.azurewebsites.net/"; //"http://localhost/Phila.Web.Api.Streets/";// 
     self.streetCode = "";
     self.fromStreets = ko.observableArray();
 
@@ -302,7 +302,7 @@ function AppViewModel() {
         if (self.editingLocationItem() == null) {
             var answer = confirm("'Are you sure you want to delete this location?");
             if (answer) {
-                self.locations.remove(location);
+                self.editingPermitItem().Locations.remove(location);
             }
         }
     };
@@ -335,7 +335,7 @@ function AppViewModel() {
 
     self.applyLocation = function () {
         
-        var errors = ko.validation.group([self.locations, self.editingLocationItem.OnStreet, self.editingLocationItem.FromStreet, self.editingLocationItem.ToStreet], { deep: true, observable: true, live: true });
+        var errors = ko.validation.group([self.editingPermitItem.Locations, self.editingLocationItem.OnStreetName, self.editingLocationItem.FromStreetName, self.editingLocationItem.ToStreetName], { deep: true, observable: true, live: true });
 
         errors.showAllMessages();
         console.log(ko.toJSON(errors()));
@@ -383,7 +383,7 @@ function AppViewModel() {
             return;
 
         self.fromStreetCaption("Loading...");
-        self.toStreetCaption("Choose a 'From/At Street'...");
+        self.toStreetCaption("Choose a 'From Street'...");
 
         $.ajax({
             dataType: "json",
@@ -391,7 +391,7 @@ function AppViewModel() {
             url: self.apiUrl + "api/locations/GetFromStreets?onStreet=" + onStreet,
             success: function (data) {
                 console.log("fromStreet", data);
-                self.fromStreets(data)
+                self.fromStreets(data);
                 //self.fromStreets([]);
                 //$(data).each(function(index, item) {
                 //    fromStreets.push(new PermitLocation())
@@ -403,6 +403,7 @@ function AppViewModel() {
                 self.fromStreetCaption("Choose an 'On Street'...");
                 self.toStreetCaption("Choose an 'On Street'...");
                 self.clearFromAndToOa();
+                $.notify("Invalid location", { className: "error", globalPosition: "top left" });
             }
         });
     };
@@ -418,8 +419,8 @@ function AppViewModel() {
             if (ko.utils.unwrapObservable(onStreet) == undefined && self.toStreetCaption() != "Choose an 'On Street'...")
                 self.toStreets("Choose an 'On Street'...");
 
-            if (ko.utils.unwrapObservable(onStreet) != undefined && fromStreet == undefined && self.toStreetCaption() != "Choose a 'From/At Street'...")
-                self.toStreetCaption("Choose a 'From/At Street'...");
+            if (ko.utils.unwrapObservable(onStreet) != undefined && fromStreet == undefined && self.toStreetCaption() != "Choose a 'From Street'...")
+                self.toStreetCaption("Choose a 'From Street'...");
 
             return;
         }
@@ -492,11 +493,15 @@ function AppViewModel() {
     };
 
     //** permits
-    self.addPermit = function(permit) {
+
+    self.isPermitNew = ko.observable();
+    self.addPermit = function (permit) {
+        //$("#submitDraft").text("Save Draft");
+
         if (permit.PermitNumber == undefined) {
-            permit = new Permit();//"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+            permit = new Permit("", "", "", "", "", "", [], "", "", "", "", "", "", "", "", "");
             // begin editing the new item straight away
-            self.editPermit(permit);
+            self.editPermit(permit, true);
         }
 
         //self.permits.push(permit);
@@ -512,8 +517,12 @@ function AppViewModel() {
         }
     };
 
-    self.editPermit = function (permit) {
-        if (self.editingPermitItem() == null) {
+    self.editPermit = function (permit, isNew) {
+
+
+       // $("#btnSubmitDraft").prop("value", "Update Draft");
+
+        if (self.editingPermitItem() == null || self.editingPermitItem() == undefined) {
             // start the transaction
             //permit.setShortDatesAndTimes();
             //permit.beginEdit(self.editPermitTransaction);
@@ -524,6 +533,20 @@ function AppViewModel() {
             //console.log(ko.toJSON(self.editingPermitItem().StartDate));
 
             self.showNewPermitSection();
+
+            if (isNew === true) {
+                self.isPermitNew(true);
+
+                //document.getElementById("submitDraft").text = "Save Draft";
+                //document.getElementById("cancelApp").text = "Delete App";
+
+            } else {
+                self.isPermitNew(false);
+
+                //document.getElementById("submitDraft").text = "Update Draft";
+                //document.getElementById("cancelApp").text = "Cancel Changes";
+
+            }
         }
     };
 
@@ -616,12 +639,12 @@ function AppViewModel() {
                     first: '←',
                     last: '→',
                 });
-                var refs = [];
-                var locs = [];
-                var projTypes = [];
+                
                 if (self.sortDir == "desc" && result.Permits != undefined) {
                     for (var i = result.Permits.length - 1; i >= 0; i--) {
-
+                        var refs = [];
+                        var locs = [];
+                        var projTypes = [];
                         // set references
                         $(result.Permits[i].References).each(function (ind, ref) {
                             var r = new Reference(setKoType(self.referenceTypes(), "ReferenceTypeId", ref.ReferenceTypeId), "", ref.ReferenceValue);
@@ -635,7 +658,7 @@ function AppViewModel() {
                         });
 
                         // set project types
-                        var pt = projectTypesDecimal2Array(result.Permits[i].ProjectTypes, self.projectTypes().length);
+                        var pt = decimal2Array(result.Permits[i].ProjectTypes, self.projectTypes().length);
 
                         $(pt).each(function (ind, projType) {
                             projTypes.push(setKoType(self.projectTypes(), "ProjectTypeId", projType));
@@ -651,16 +674,20 @@ function AppViewModel() {
                     self.permits(pers);
                 } else {
                     $(result.Permits).each(function (index, item) {
+                        var refs = [];
+                        var locs = [];
+                        var projTypes = [];
 
                         $(item.References).each(function (ind, ref) {
                             var r = new Reference(setKoType(self.referenceTypes(), "ReferenceTypeId", "", ref.ReferenceTypeId), ref.ReferenceValue);
                             refs.push(r);
                         });
-
-                        var pts = projectTypesDecimal2Array(result.Permits[i].ProjectTypes, self.projectTypes().length);
-                        $(pts).each(function (ind, projType) {
-                            projTypes.push(setKoType(self.projectTypes(), "ProjectTypeId", projType));
-                        });
+                        if (result[i].ProjectTypes != undefined) {
+                            var pts = decimal2Array(result.Permits[i].ProjectTypes, self.projectTypes().length);
+                            $(pts).each(function(ind, projType) {
+                                projTypes.push(setKoType(self.projectTypes(), "ProjectTypeId", projType));
+                            });
+                        }
 
                         $(item.Locations).each(function(ind, loc) {
                             locs.push(new PostedLocation(loc.SequenceNumber, setKoType(self.occupancyTypes(), "OccupancyTypeID", loc.OccupancyTypeId), setKoType(self.locationTypes(), "LocationTypeId", loc.LocationType), loc.OnStreetName, loc.OnStreetCode, loc.FromStreetName, loc.FromStreetCode, loc.FromStreetNode, loc.ToStreetName, loc.ToStreetCode, loc.ToStreetNode));
@@ -718,13 +745,8 @@ function AppViewModel() {
             $.notify(notification.cancelNewPermitSuccess, { className: "info", globalPosition: "top left" });
             self.showMainSections();
             self.resetNewPermitFields();
+            self.editingPermitItem(null);
         }
-    };
-
-    self.savePermitApplicationDraft = function() {
-        // ToDo: submit permit application draft
-        $.notify(notification.savePermitAppDraftSuccess, { className: "success", globalPosition: "top left" });
-        self.showMainSections();
     };
 
     self.submitPermitApplication = function () {
@@ -742,31 +764,27 @@ function AppViewModel() {
         self.applyLocation();
         self.applyReference();
         //self.applyPermit();
-        console.log(ko.toJSON(self.editingPermitItem));
-
-        var errors = ko.validation.group([self.selectedUtilityOwner, self.effectiveDate, self.expirationDate, self.purpose, self.selectedPermitType, self.selectedProjectTypes.projectTypes, self.locations, self.expirationTime, self.effectiveTime]);
+        //self.editingPermitItem.setLongDateTimes();
+        
+        var errors = ko.validation.group([self.editingPermitItem.UtilityOwnerId, self.editingPermitItem.EffectiveDateTime, self.editingPermitItem.ExpirationDateTime, self.editingPermitItem.Purpose, self.editingPermitItem.PermitTypes, self.editingPermitItem.ProjectTypes, self.editingPermitItem.Locations, self.editingPermitItem.StartDate, self.editingPermitItem.StartTime, self.editingPermitItem.EndDate, self.editingPermitItem.EndTime]);
 
         errors.showAllMessages();
 
         if (errors().length > 0) return false;
 
-        //if (!ko.validation.validateObservable(self.usersEmailAddress))
-        //    return false;
-        
-
         var refs = [];
-        for (var i = 0; i < self.references().length; i++) {
-            refs.push(new PermitReference(self.references()[i].ReferenceTypeId().ReferenceTypeId(), self.references()[i].ReferenceValue()));
+        for (var i = 0; i < self.editingPermitItem().References().length; i++) {
+            refs.push(new PermitReference(self.editingPermitItem().References()[i].ReferenceTypeId().ReferenceTypeId(), self.editingPermitItem().References()[i].ReferenceValue()));
         }
 
         var locs = [];
-        for (var j = 0; j < self.locations().length; j++) {
-            console.log(self.locations()[j]);
-            var loc = new PermitLocation(
+        for (var j = 0; j < self.editingPermitItem().Locations().length; j++) {
+            console.log(self.editingPermitItem().Locations()[j].OccupancyTypeId());
+            var loc = new PermitLocation( //sequenceNumber, occupancyTypeId, locationType, onStreetName, fromStreetName, fromStreetCode, fromStreetNode, toStreetName, toStreetCode, toStreetNode
                 j + 1,
-                self.locations()[j].OccupancyType().OccupancyTypeID,
-                self.locations()[j].LocationType(),
-                self.locations()[j].OnStreet(),
+                self.editingPermitItem().Locations()[j].OccupancyTypeId().OccupancyTypeID,
+                self.editingPermitItem().Locations()[j].LocationType(),
+                self.editingPermitItem().Locations()[j].OnStreetName(),
                 null,
                 null,
                 null,
@@ -775,15 +793,15 @@ function AppViewModel() {
                 null
                 );
 
-            if (self.locations()[j].LocationType().toLowerCase() === "intersection" || self.locations()[j].LocationType().toLowerCase() === "street segment") {
-                    loc.FromStreetName = self.locations()[j].FromStreet().StreetName;
-                    loc.FromStreetCode = self.locations()[j].FromStreet().StreetCode;
-                    loc.FromStreetNode = self.locations()[j].FromStreet().NodeOrder;
+            if (self.editingPermitItem().Locations()[j].LocationType().toLowerCase() === "intersection" || self.editingPermitItem().Locations()[j].LocationType().toLowerCase() === "street segment") {
+                loc.FromStreetName = self.editingPermitItem().Locations()[j].FromStreetName();
+                loc.FromStreetCode = self.editingPermitItem().Locations()[j].FromStreetCode();
+                loc.FromStreetNode = self.editingPermitItem().Locations()[j].FromStreetNode();
 
-                    if (self.locations()[j].LocationType().toLowerCase() === "street segment"){
-                        loc.ToStreetName = self.locations()[j].ToStreet().StreetName;
-                        loc.ToStreetCode = self.locations()[j].ToStreet().StreetCode;
-                        loc.ToStreetNode = self.locations()[j].ToStreet().NodeOrder;
+                if (self.editingPermitItem().Locations()[j].LocationType().toLowerCase() === "street segment") {
+                    loc.ToStreetName = self.editingPermitItem().Locations()[j].ToStreetName();
+                    loc.ToStreetCode = self.editingPermitItem().Locations()[j].ToStreetCode();
+                    loc.ToStreetNode = self.editingPermitItem().Locations()[j].ToStreetNode();
                     }
             }
 
@@ -791,38 +809,45 @@ function AppViewModel() {
         }
 
 
-        var effectiveTime = self.effectiveTime().match(/^([1-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
-        var effectiveDateTime = new Date(self.effectiveDate());
-        var effTimeHours = effectiveTime[3].toLowerCase() === "pm" ? (parseInt(effectiveTime[1]) + 12) : effectiveTime[1];
-        var effTimeMinutes = parseInt(effectiveTime[2]);
-        effectiveDateTime.setHours(effTimeHours);
-        effectiveDateTime.setMinutes(effTimeMinutes);
 
-        var expirationTime = self.expirationTime().match(/^([1-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
-        var expirationDateTime = new Date(self.expirationDate());
-        var expTimeHours = expirationTime[3].toLowerCase() === "pm" ? (parseInt(expirationTime[1]) + 12) : expirationTime[1];
-        var expTimeMinutes = parseInt(expirationTime[2]);
-        expirationDateTime.setHours(expTimeHours);
-        expirationDateTime.setMinutes(expTimeMinutes);
+        //var effectiveTime = self.editingPermitItem().StartTime().match(/^([1-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+        //var effectiveDateTime = new Date(self.editingPermitItem().StartDate());
+        //var effTimeHours = effectiveTime[3].toLowerCase() === "pm" ? (parseInt(effectiveTime[1]) + 12) : effectiveTime[1];
+        //var effTimeMinutes = parseInt(effectiveTime[2]);
+        //effectiveDateTime.setHours(effTimeHours);
+        //effectiveDateTime.setMinutes(effTimeMinutes);
+
+        //var expirationTime = self.editingPermitItem().EndTime().match(/^([1-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+        //var expirationDateTime = new Date(self.editingPermitItem().EndDate());
+        //var expTimeHours = expirationTime[3].toLowerCase() === "pm" ? (parseInt(expirationTime[1]) + 12) : expirationTime[1];
+        //var expTimeMinutes = parseInt(expirationTime[2]);
+        //expirationDateTime.setHours(expTimeHours);
+        //expirationDateTime.setMinutes(expTimeMinutes);
 
         var permit = {
             Token: getUrlParameter("token"),
             CompanyId: self.selectedCompany().CompanyId(),
-            UtilityOwnerId: self.selectedUtilityOwner() != undefined ? self.selectedUtilityOwner().OwnerId : null,
-            PermitTypeId: self.selectedPermitType().PermitTypeId,
-            ProjectTypes: self.selectedProjectTypes.binary2Decimal(),
-            EncroachmentTypes: self.selectedEncroachmentTypes(),
-            EffectiveDate: effectiveDateTime,
-            ExpirationDate: expirationDateTime,
-            Purpose: self.purpose(),
-            Comments: self.comments(),
+            UtilityOwnerId: self.editingPermitItem().UtilityOwnerId() != undefined ? self.editingPermitItem().UtilityOwnerId().OwnerId : null,
+            PermitTypeId: self.editingPermitItem().PermitTypeId().PermitTypeId,
+            ProjectTypes: array2Decimal(self.editingPermitItem().ProjectTypes(), self.projectTypes().length),
+            EncroachmentTypes: self.editingPermitItem().EncroachmentTypes(),
+            EffectiveDate: new Date(self.editingPermitItem().StartDate() + " " + self.editingPermitItem().StartTime()),//effectiveDateTime,
+            ExpirationDate: new Date(self.editingPermitItem().StartDate() + " " + self.editingPermitItem().StartTime()),//new Date(self.editingPermitItem().EndDate() + " " + self.editingPermitItem().EndTime()),//expirationDateTime,
+            Purpose: self.editingPermitItem().Purpose(),
+            Comments: self.editingPermitItem().Comments(),
             IsDraft: isDraft,
             References: refs,
             Locations: locs
         }
 
+        if (self.isPermitNew() === false)
+            permit.PermitNumber = self.editingPermitItem().PermitNumber();
+       
+
+        var action = self.isPermitNew() === true ? "api/permits/CreatePermit" : "api/Permits/UpdatePermit?permitNumber=" + permit.PermitNumber;
+
         $.ajax({
-            url: self.apiUrl + "api/permits/CreatePermit",
+            url: self.apiUrl + action,
             data: JSON.stringify(permit),
             type: 'POST',
             dataType: "json",
@@ -831,6 +856,7 @@ function AppViewModel() {
                 $.notify(notification.submitNewAppSuccess, { className: "success", globalPosition: "top left" });
                 self.showMainSections();
                 self.resetNewPermitFields();
+                self.editingPermitItem(null);
             },
             error: function() {
                 $.notify(notification.recordNotSaved, { className: "error", globalPosition: "top left" });
@@ -916,7 +942,7 @@ function AppViewModel() {
         var $RequestLoginBtn = $("#RequestLoginBtn");
         $RequestLoginBtn.after($Loading);
         $Loading.show();
-        $RequestLoginBtn.val("sending request...");
+        $RequestLoginBtn.text("sending request...");
         $RequestLoginBtn.prop('disabled', true);
         $("#LoginMain").html(notification.checkLoginEmail);
         $Loading.hide();
@@ -1309,3 +1335,20 @@ ko.validation.registerExtenders();
 
 
 
+function replaceButtonText(buttonId, text) {
+    if (document.getElementById) {
+        var button = document.getElementById(buttonId);
+        if (button) {
+            if (button.childNodes[0]) {
+                button.childNodes[0].nodeValue = text;
+            }
+            else if (button.value) {
+                button.value = text;
+            }
+            else //if (button.innerHTML)
+            {
+                button.innerHTML = text;
+            }
+        }
+    }
+}
