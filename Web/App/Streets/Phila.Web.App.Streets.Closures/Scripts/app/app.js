@@ -42,7 +42,7 @@ function AppViewModel() {
 
 
     self.totalPermitsFound = ko.observable();
-    self.apiUrl = "https://phila.azurewebsites.net/"; //"http://localhost/Phila.Web.Api.Streets/";//  
+    self.apiUrl = "https://phila.azurewebsites.net/"; // "http://localhost/Phila.Web.Api.Streets/";//    
     self.streetCode = "";
     self.fromStreets = ko.observableArray();
 
@@ -335,11 +335,15 @@ function AppViewModel() {
 
     self.applyLocation = function () {
         
-        var errors = ko.validation.group([self.editingPermitItem.Locations, self.editingLocationItem.OnStreetName, self.editingLocationItem.FromStreetName, self.editingLocationItem.ToStreetName], { deep: true, observable: true, live: true });
+        //if (!ko.validation.validateObservable(self.editingLocationItem))
+        //    return false;
+
+
+        var errors = ko.validation.group([self.editingLocationItem], { deep: true, observable: true, live: true });
 
         errors.showAllMessages();
-        console.log(ko.toJSON(errors()));
-        //if (errors().length > 0) return false;
+        //console.log(ko.toJSON(errors()));
+        if (errors().length > 0) return false;
 
         //  commit the edit transaction
         self.editLocationTransaction.notifySubscribers(null, "commit");
@@ -512,6 +516,7 @@ function AppViewModel() {
         if (self.editingPermitItem() == null) {
             var answer = confirm("Are you sure you want to delete this permit?");
             if (answer) {
+                self.submitPermitCancellation(permit);
                 self.permits.remove(permit);
             }
         }
@@ -653,7 +658,17 @@ function AppViewModel() {
 
                         // set locations
                         $(result.Permits[i].Locations).each(function (ind, loc) {
-                            var pl = new PostedLocation(loc.SequenceNumber, setKoType(self.occupancyTypes(), "OccupancyTypeID", loc.OccupancyTypeId), setKoType(self.locationTypes(), "LocationTypeId", loc.LocationType), loc.OnStreetName, loc.OnStreetCode, loc.FromStreetName, loc.FromStreetCode, loc.FromStreetNode, loc.ToStreetName, loc.ToStreetCode, loc.ToStreetNode);
+                            //console.log(loc);
+                            var locType = "";
+                            if (loc.OnStreetCode != null && loc.FromStreetCode == null && loc.ToStreetCode == null)
+                                locType = "Address";
+                            else if (loc.OnStreetCode != null && loc.FromStreetCode != null && loc.ToStreetCode == null) {
+                                locType = "Intersection";
+                            } else if (loc.OnStreetCode != null && loc.FromStreetCode != null && loc.ToStreetCode != null) {
+                                locType = "Street Segment";
+                            }
+
+                            var pl = new PostedLocation(loc.SequenceNumber, setKoType(self.occupancyTypes(), "OccupancyTypeID", loc.OccupancyTypeId), locType, loc.OnStreetName, loc.OnStreetCode, loc.FromStreetName, loc.FromStreetCode, loc.FromStreetNode, loc.ToStreetName, loc.ToStreetCode, loc.ToStreetNode);
                             locs.push(pl);
                         });
 
@@ -685,15 +700,27 @@ function AppViewModel() {
                             var r = new Reference(setKoType(self.referenceTypes(), "ReferenceTypeId", "", ref.ReferenceTypeId), ref.ReferenceValue);
                             refs.push(r);
                         });
-                        if (result[i].ProjectTypes != undefined) {
-                            var pts = decimal2Array(result.Permits[i].ProjectTypes, self.projectTypes().length);
+
+                        if (item.ProjectTypes != undefined) {
+                            var pts = decimal2Array(item.ProjectTypes, self.projectTypes().length);
                             $(pts).each(function(ind, projType) {
                                 projTypes.push(setKoType(self.projectTypes(), "ProjectTypeId", projType));
                             });
                         }
 
-                        $(item.Locations).each(function(ind, loc) {
-                            locs.push(new PostedLocation(loc.SequenceNumber, setKoType(self.occupancyTypes(), "OccupancyTypeID", loc.OccupancyTypeId), setKoType(self.locationTypes(), "LocationTypeId", loc.LocationType), loc.OnStreetName, loc.OnStreetCode, loc.FromStreetName, loc.FromStreetCode, loc.FromStreetNode, loc.ToStreetName, loc.ToStreetCode, loc.ToStreetNode));
+
+                        $(item.Locations).each(function (ind, loc) {
+                            var locType = "";
+
+                            if (loc.OnStreetCode != null && loc.FromStreetCode == null && loc.ToStreetCode == null)
+                                locType = "address";
+                            else if (loc.OnStreetCode != null && loc.FromStreetCode != null && loc.ToStreetCode == null) {
+                                locType = "intersection";
+                            } else if (loc.OnStreetCode != null && loc.FromStreetCode != null && loc.ToStreetCode != null) {
+                                locType = "street segment";
+                            }
+
+                            locs.push(new PostedLocation(loc.SequenceNumber, setKoType(self.occupancyTypes(), "OccupancyTypeID", loc.OccupancyTypeId), locType, loc.OnStreetName, loc.OnStreetCode, loc.FromStreetName, loc.FromStreetCode, loc.FromStreetNode, loc.ToStreetName, loc.ToStreetCode, loc.ToStreetNode));
                         });
 
                         var p = new Permit(token, item.PermitNumber, item.CompnayId, item.CompanyName, setKoType(self.utilityOwners(), "UtilityTypeId", item.UtilityOwnerId), setKoType(self.permitTypes(), "PermitTypeId", item.PermitTypeId), pts, item.EncroachmentTypes, item.EffectiveDate, item.ExpirationDate, item.Purpose, item.Comments, item.PermitStatus, refs, locs, item.IsDraft);
@@ -730,6 +757,8 @@ function AppViewModel() {
 
             $(event.target).parent().find(".edit-button").remove();
             $(event.target).parent().find(".cancel-button").remove();
+
+            self.submitPermitCancellation(permit, false);
         }
     };
 
@@ -745,11 +774,36 @@ function AppViewModel() {
         var answer = confirm(notification.cancelNewPermitConfirm);
         if (answer) {
             self.cancelEditPermit();
-            $.notify(notification.cancelNewPermitSuccess, { className: "info", globalPosition: "top left" });
+
+            
+
+            //$.notify(notification.cancelNewPermitSuccess, { className: "info", globalPosition: "top left" });
             self.showMainSections();
             self.resetNewPermitFields();
             self.editingPermitItem(null);
+
+            
         }
+    };
+
+    self.submitPermitCancellation = function(permit, scrollTop) {
+        console.log(permit);
+        console.log(permit.PermitNumber());
+
+        $.ajax({
+            type: "POST",
+            url: self.apiUrl + "api/Permits/CancelPermit?token=" + getUrlParameter("token") + "&permitNumber=" + permit.PermitNumber(),
+            success: function (data) {
+                self.getStatusCodes();
+                self.showMainSections(scrollTop);
+                $.notify(notification.cancelNewPermitSuccess, { className: "success", globalPosition: "top left" });
+                self.resetNewPermitFields();
+                self.editingPermitItem(null);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log("submitPermitCancellation error: ", xhr, ajaxOptions, thrownError);
+            }
+        });
     };
 
     self.submitPermitApplication = function () {
@@ -764,16 +818,26 @@ function AppViewModel() {
     };
 
     self.postPermit = function(isDraft) {
-        self.applyLocation();
+        //self.applyLocation();
         self.applyReference();
         //self.applyPermit();
         //self.editingPermitItem.setLongDateTimes();
         
-        var errors = ko.validation.group([self.editingPermitItem.UtilityOwnerId, self.editingPermitItem.EffectiveDateTime, self.editingPermitItem.ExpirationDateTime, self.editingPermitItem.Purpose, self.editingPermitItem.PermitTypes, self.editingPermitItem.ProjectTypes, self.editingPermitItem.Locations, self.editingPermitItem.StartDate, self.editingPermitItem.StartTime, self.editingPermitItem.EndDate, self.editingPermitItem.EndTime]);
+        var errors = ko.validation.group([self.editingPermitItem, self.editingPermitItem.Locations], { deep: true, observable: true, live: true });
+
+        var hasLocationErrors = false;
+        for (var k = 0; k < self.editingPermitItem().Locations().length; k++) {
+            var locErr = ko.validation.group([self.editingPermitItem().Locations()[k]], { deep: true, observable: true, live: true });
+            //console.log(locErr());
+            if (locErr().length > 0) hasLocationErrors = true;
+        }
+
+        //, self.editingPermitItem.UtilityOwnerId, self.editingPermitItem.EffectiveDateTime, self.editingPermitItem.ExpirationDateTime, self.editingPermitItem.Purpose, self.editingPermitItem.PermitTypes, self.editingPermitItem.ProjectTypes, self.editingPermitItem.Locations, self.editingPermitItem.StartDate, self.editingPermitItem.StartTime, self.editingPermitItem.EndDate, self.editingPermitItem.EndTime]
 
         errors.showAllMessages();
+        //console.log(errors());
 
-        if (errors().length > 0) return false;
+        if (errors().length > 0 || hasLocationErrors) return false;
 
         var refs = [];
         for (var i = 0; i < self.editingPermitItem().References().length; i++) {
@@ -782,7 +846,7 @@ function AppViewModel() {
 
         var locs = [];
         for (var j = 0; j < self.editingPermitItem().Locations().length; j++) {
-            console.log(self.editingPermitItem().Locations()[j].OccupancyTypeId());
+            //console.log(self.editingPermitItem().Locations()[j].OccupancyTypeId());
             var loc = new PermitLocation( //sequenceNumber, occupancyTypeId, locationType, onStreetName, fromStreetName, fromStreetCode, fromStreetNode, toStreetName, toStreetCode, toStreetNode
                 j + 1,
                 self.editingPermitItem().Locations()[j].OccupancyTypeId().OccupancyTypeID,
@@ -795,16 +859,16 @@ function AppViewModel() {
                 null,
                 null
                 );
-
+            //console.log(self.editingPermitItem().Locations()[j].FromStreetName());
             if (self.editingPermitItem().Locations()[j].LocationType().toLowerCase() === "intersection" || self.editingPermitItem().Locations()[j].LocationType().toLowerCase() === "street segment") {
-                loc.FromStreetName = self.editingPermitItem().Locations()[j].FromStreetName();
-                loc.FromStreetCode = self.editingPermitItem().Locations()[j].FromStreetCode();
-                loc.FromStreetNode = self.editingPermitItem().Locations()[j].FromStreetNode();
+                loc.FromStreetName = self.editingPermitItem().Locations()[j].FromStreetName().StreetName;
+                loc.FromStreetCode = self.editingPermitItem().Locations()[j].FromStreetName().StreetCode;
+                loc.FromStreetNode = self.editingPermitItem().Locations()[j].FromStreetName().NodeOrder;
 
                 if (self.editingPermitItem().Locations()[j].LocationType().toLowerCase() === "street segment") {
-                    loc.ToStreetName = self.editingPermitItem().Locations()[j].ToStreetName();
-                    loc.ToStreetCode = self.editingPermitItem().Locations()[j].ToStreetCode();
-                    loc.ToStreetNode = self.editingPermitItem().Locations()[j].ToStreetNode();
+                    loc.ToStreetName = self.editingPermitItem().Locations()[j].ToStreetName().StreetName;
+                    loc.ToStreetCode = self.editingPermitItem().Locations()[j].ToStreetName().StreetCode;
+                    loc.ToStreetNode = self.editingPermitItem().Locations()[j].ToStreetName().NodeOrder;
                     }
             }
 
@@ -1008,8 +1072,12 @@ function AppViewModel() {
                     var s = new PermitStatus(item.StatusCodeId, item.StatusCodeName, item.TotalPermits);
                     self.permitStatusCodes.push(s);
                 });
+                var statusId = self.selectedStatusCode();
+                if (statusId == 1)
+                    $("button:contains('Approved')").css("border", "black solid 3px");
+                else if(statusId == 8)
+                    $("button:contains('Draft')").css("border", "black solid 3px");
 
-                $("button:contains('Approved')").css("border", "black solid 3px");
             },
             //error: function (xhr, ajaxOptions, thrownError) {
             //    //ToDo: handle error
@@ -1065,7 +1133,7 @@ function AppViewModel() {
         
     };
 
-    self.showMainSections = function() {
+    self.showMainSections = function(scrollTop) {
         $("#loading-table").show();
         self.getStatusCodes();
         self.getPermitsForCompany();
@@ -1079,7 +1147,8 @@ function AppViewModel() {
         if (self.companies().length > 1)
             $("#UsersCompaniesSection").show();
 
-        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        if (scrollTop !== false)
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
 
         //if (map == null)
         //    loadMap();

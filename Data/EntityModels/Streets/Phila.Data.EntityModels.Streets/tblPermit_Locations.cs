@@ -26,6 +26,7 @@ namespace Phila.Data.EntityModels.Streets
         public string sHighTrafficArea { get; set; }
         public Nullable<int> ReferenceTypeID { get; set; }
         public string ReferenceValue { get; set; }
+        public string LocationType { get; set; }
     
         public virtual tblPermit tblPermit { get; set; }
     }

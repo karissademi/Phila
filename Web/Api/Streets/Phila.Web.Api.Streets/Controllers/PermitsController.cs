@@ -153,7 +153,9 @@ namespace Phila.Web.Api.Streets.Controllers
                             FromSTCODE = permitLocation.FromStreetCode,
                             sFromActual = permitLocation.FromStreetName,
                             ToSTCODE = permitLocation.ToStreetCode,
-                            sToActual = permitLocation.ToStreetName
+                            sToActual = permitLocation.ToStreetName,
+                            LocationType = permitLocation.LocationType
+                            
                         });
 
                         switch (permitLocation.LocationType.ToLower())
@@ -223,6 +225,72 @@ namespace Phila.Web.Api.Streets.Controllers
 
 
             return Ok(newPermit);
+        }
+
+
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [ResponseType(typeof(void))]
+        [Route("api/Permits/CancelPermit")]
+        public async Task<IHttpActionResult> CancelPermit(string token, string permitNumber)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var st = new SecurityToken();
+            bool auth = st.IsTokenValid(token);
+
+            if (!auth)
+                return Unauthorized();
+
+            var permit = _db.tblPermits.FirstOrDefault(x => x.Permit_Number == permitNumber);
+
+            bool validCompanyId = permit != null && IsCompanyIdValid(token, (int)permit.CompanyId);
+
+            // is the user auth to get permits of companyId?
+            if (validCompanyId)
+                return Unauthorized();
+
+            tblCompany company = _db.tblCompanies.FirstOrDefault(x => x.CompanyId == permit.CompanyId);
+            if (company == null)
+                return Unauthorized();
+
+            UserToken user = _db.UserTokens.FirstOrDefault(x => x.Token == token);
+            if (user == null)
+                return Unauthorized();
+
+            tblContact userInfo = _db.tblContacts.FirstOrDefault(x => x.EMailAddress == user.EmailAddress);
+
+            if (userInfo == null)
+                return Unauthorized();
+
+            tblPermit modifiedPermit = _db.tblPermits.FirstOrDefault(x => x.Permit_Number == permitNumber);
+
+            if (modifiedPermit == null)
+                return BadRequest();
+
+            if (modifiedPermit.DecisionId != 3 && modifiedPermit.DecisionId != 4 && modifiedPermit.DecisionId != 8)
+                return Unauthorized();
+
+            modifiedPermit.DecisionId = (short)9;
+
+            _db.Entry(modifiedPermit).State = EntityState.Modified;
+
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PermitExists(permitNumber))
+                {
+                    return NotFound();
+                }
+                throw;
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         /// <summary>
@@ -317,7 +385,8 @@ namespace Phila.Web.Api.Streets.Controllers
                                 FromStreetCode = j.FromSTCODE,
                                 FromStreetName = j.sFromActual,
                                 ToStreetCode = j.ToSTCODE,
-                                ToStreetName = j.sToActual
+                                ToStreetName = j.sToActual,
+                                LocationType = j.LocationType
                             }).ToList(),
                             References = x.tblPermit_References.Select(j => new StreetsViewModels.PostedReference
                             {
@@ -524,7 +593,8 @@ namespace Phila.Web.Api.Streets.Controllers
                                 FromStreetCode = j.FromSTCODE,
                                 FromStreetName = j.sFromActual,
                                 ToStreetCode = j.ToSTCODE,
-                                ToStreetName = j.sToActual
+                                ToStreetName = j.sToActual,
+                                LocationType = j.LocationType
                             }).ToList(),
                             References = x.tblPermit_References.Select(j => new StreetsViewModels.PostedReference
                             {
@@ -912,7 +982,8 @@ namespace Phila.Web.Api.Streets.Controllers
                         FromSTCODE = permitLocation.FromStreetCode,
                         sFromActual = permitLocation.FromStreetName,
                         ToSTCODE = permitLocation.ToStreetCode,
-                        sToActual = permitLocation.ToStreetName
+                        sToActual = permitLocation.ToStreetName,
+                        LocationType = permitLocation.LocationType
                     });
 
                     switch (permitLocation.LocationType.ToLower())

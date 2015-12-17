@@ -360,6 +360,7 @@ warning 6002: The table/view 'SCBPPS.dbo.tblOccupancyTypes' does not have a prim
           <Property Name="sHighTrafficArea" Type="varchar" MaxLength="50" />
           <Property Name="ReferenceTypeID" Type="int" />
           <Property Name="ReferenceValue" Type="varchar" MaxLength="50" />
+          <Property Name="LocationType" Type="nvarchar" MaxLength="32" />
         </EntityType>
         <EntityType Name="tblPermit_Reasons">
           <Key>
@@ -1438,6 +1439,7 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <Property Name="ReferenceTypeID" Type="Int32" />
           <Property Name="ReferenceValue" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="tblPermit" Relationship="SCBPPSModel.FK_tblPermit_Locations_tblPermits" FromRole="tblPermit_Locations" ToRole="tblPermit" />
+          <Property Name="LocationType" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tblPermit_Reasons">
           <Key>
@@ -2196,6 +2198,7 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <EntitySetMapping Name="tblPermit_Locations">
             <EntityTypeMapping TypeName="SCBPPSModel.tblPermit_Locations">
               <MappingFragment StoreEntitySet="tblPermit_Locations">
+                <ScalarProperty Name="LocationType" ColumnName="LocationType" />
                 <ScalarProperty Name="ReferenceValue" ColumnName="ReferenceValue" />
                 <ScalarProperty Name="ReferenceTypeID" ColumnName="ReferenceTypeID" />
                 <ScalarProperty Name="sHighTrafficArea" ColumnName="sHighTrafficArea" />

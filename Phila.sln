@@ -30,6 +30,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Phila.Web.App.Streets.Closu
 		SlnRelativePath = "Web\App\Streets\Phila.Web.App.Streets.Closures\"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phila.Logic.Streets", "Logic\Streets\Phila.Logic.Streets\Phila.Logic.Streets.csproj", "{1B4FFD8F-08B7-4ADE-855E-87446028CB50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CityNetDev|Any CPU = CityNetDev|Any CPU
@@ -70,6 +72,14 @@ Global
 		{0A33F518-5E69-4726-A12F-8324EC03E26D}.Dev|Any CPU.Build.0 = Debug|Any CPU
 		{0A33F518-5E69-4726-A12F-8324EC03E26D}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{0A33F518-5E69-4726-A12F-8324EC03E26D}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{1B4FFD8F-08B7-4ADE-855E-87446028CB50}.CityNetDev|Any CPU.ActiveCfg = Release|Any CPU
+		{1B4FFD8F-08B7-4ADE-855E-87446028CB50}.CityNetDev|Any CPU.Build.0 = Release|Any CPU
+		{1B4FFD8F-08B7-4ADE-855E-87446028CB50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B4FFD8F-08B7-4ADE-855E-87446028CB50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B4FFD8F-08B7-4ADE-855E-87446028CB50}.Dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B4FFD8F-08B7-4ADE-855E-87446028CB50}.Dev|Any CPU.Build.0 = Debug|Any CPU
+		{1B4FFD8F-08B7-4ADE-855E-87446028CB50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B4FFD8F-08B7-4ADE-855E-87446028CB50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

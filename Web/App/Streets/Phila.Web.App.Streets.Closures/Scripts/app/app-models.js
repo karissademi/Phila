@@ -166,9 +166,9 @@ function PostedLocation(sequenceNumber, occumpanyTypeId, locationType, onStreetN
     var self = this;
 
     self.SequenceNumber = ko.observable(sequenceNumber).extend({ editable: true });
-    self.OccupancyTypeId = ko.observable(occumpanyTypeId).extend({ editable: true });
-    self.LocationType = ko.observable(locationType).extend({ editable: true });
-    self.OnStreetName = ko.observable(onStreetName).extend({ editable: true });
+    self.OccupancyTypeId = ko.observable(occumpanyTypeId).extend({ editable: true }).extend({ required: true });
+    self.LocationType = ko.observable(locationType).extend({ editable: true }).extend({ required: true });;
+    self.OnStreetName = ko.observable(onStreetName).extend({ editable: true }).extend({ required: true });;
     self.OnStreetCode = ko.observable(onStreetCode).extend({ editable: true });
     self.FromStreetName = ko.observable(fromStreetName).extend({ editable: true });
     self.FromStreetCode = ko.observable(fromStreetCode).extend({ editable: true });
@@ -213,7 +213,7 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
         }
     });
     self.ProjectTypes = ko.observable(projectTypes).extend({ editable: true }).extend({ required: true });
-    self.EncroachmentTypes = ko.observableArray(encroachmentTypes).extend({ editable: true });
+    self.EncroachmentTypes = ko.observableArray(encroachmentTypes).extend({ editable: true }).extend({ required: true });
     self.EffectiveDateTime = ko.observable(effectiveDateTime).extend({ editable: true });
     self.ExpirationDateTime = ko.observable(expirationDateTime).extend({ editable: true });
     self.Purpose = ko.observable(purpose).extend({ editable: true }).extend({ required: true });
