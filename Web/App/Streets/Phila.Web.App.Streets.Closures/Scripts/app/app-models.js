@@ -170,10 +170,32 @@ function PostedLocation(sequenceNumber, occumpanyTypeId, locationType, onStreetN
     self.LocationType = ko.observable(locationType).extend({ editable: true }).extend({ required: true });;
     self.OnStreetName = ko.observable(onStreetName).extend({ editable: true }).extend({ required: true });;
     self.OnStreetCode = ko.observable(onStreetCode).extend({ editable: true });
-    self.FromStreetName = ko.observable(fromStreetName).extend({ editable: true });
+    self.FromStreetName = ko.observable(fromStreetName).extend({ editable: true }).extend({
+                validation: {
+                    validator: function (val, params) {               
+                        if (self.LocationType() == "Intersection" || self.LocationType() == "Street Segment" && (val == undefined || val.StreetName == "blank")) {
+                            return false;
+                        }
+
+                        return true;
+                    },
+                    message: "Required",
+                }
+            });
     self.FromStreetCode = ko.observable(fromStreetCode).extend({ editable: true });
     self.FromStreetNode = ko.observable(fromStreetNode).extend({ editable: true });
-    self.ToStreetName = ko.observable(toStreetName).extend({ editable: true });
+    self.ToStreetName = ko.observable(toStreetName).extend({ editable: true }).extend({
+                validation: {
+                    validator: function (val, params) {
+                        if (self.LocationType() === "Street Segment" && (val == undefined || val.StreetName == "blank")) {
+                            return false;
+                        }
+
+                        return true;
+                    },
+                    message: "Required",
+                }
+            });
     self.ToStreetCode = ko.observable(toStreetCode).extend({ editable: true });
     self.ToStreetNode = ko.observable(toStreetNode).extend({ editable: true });
 }
@@ -201,8 +223,7 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
     self.CompanyId = ko.observable(companyId).extend({ editable: true }).extend({ required: true });
     self.CompanyName = ko.observable(companyName).extend({ editable: true });
     self.PermitTypeId = ko.observable(permitTypeId).extend({ editable: true }).extend({ required: true });
-    self.UtilityOwnerId = ko.observable(utilityOwnerId).extend({ editable: true })
-        .extend({
+    self.UtilityOwnerId = ko.observable(utilityOwnerId).extend({ editable: true }).extend({
         required: {
             onlyIf: function () {
                 if (self.PermitTypeId() != undefined && self.PermitTypeId().PermitTypeId > 10) {
@@ -213,7 +234,16 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
         }
     });
     self.ProjectTypes = ko.observable(projectTypes).extend({ editable: true }).extend({ required: true });
-    self.EncroachmentTypes = ko.observableArray(encroachmentTypes).extend({ editable: true }).extend({ required: true });
+    self.EncroachmentTypes = ko.observableArray(encroachmentTypes).extend({ editable: true }).extend({
+        required: {
+            onlyIf: function () {
+                if (self.PermitTypeId() != undefined && (self.PermitTypeId().PermitTypeId < 4 || self.PermitTypeId().PermitTypeId == 9)) {
+                    return true;
+                }
+                return false;
+            }
+        }
+    });
     self.EffectiveDateTime = ko.observable(effectiveDateTime).extend({ editable: true });
     self.ExpirationDateTime = ko.observable(expirationDateTime).extend({ editable: true });
     self.Purpose = ko.observable(purpose).extend({ editable: true }).extend({ required: true });
@@ -301,9 +331,11 @@ function getShortTime(datetime) {
     hours = dt.getUTCHours();
     //console.log("hours", hours);
     xm = " AM";
-    if (hours > 12) {
-        hours = hours / 2;
+    if (hours > 11) {
         xm = " PM";
+        if (hours > 12) {
+            hours = hours / 2;
+        }
     }
     if (hours === 0)
         hours = 12;
@@ -363,23 +395,45 @@ Permit.prototype.setLongDateTimes = function () {
         var effectiveTime = this.StartTime().match(/^([0-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
         //console.log("effectiveTime", effectiveTime.toUTCString());
         var effectiveDateTime = new Date(this.StartDate());
-        var effTimeHours = effectiveTime[3].toLowerCase() === "pm" && effectiveTime[1] != "12" ? (parseInt(effectiveTime[1]) + 12) : effectiveTime[1];
+
+        var effTimeHours;
+        var efHrs = parseInt(effectiveTime[1]);
+        if (effectiveTime[3].toLowerCase() === "pm" && effectiveTime[1] != 12) {
+            effTimeHours = efHrs + 12;
+        }else if (effectiveTime[3].toLowerCase() === "am" && efHrs == 12) {
+            effTimeHours = 0;
+        }
+        else {
+            effTimeHours = efHrs;
+        }
+
         var effTimeMinutes = parseInt(effectiveTime[2]);
         effectiveDateTime.setHours(effTimeHours);
         effectiveDateTime.setMinutes(effTimeMinutes);
         this.EffectiveDateTime(effectiveDateTime);
-        //console.log("effectiveDateTime", effectiveDateTime.toUTCString());
+        console.log("effectiveDateTime", effectiveDateTime.toUTCString());
 
         // set expiration datetime
         var expirationTime = this.EndTime().match(/^([0-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
         //console.log("expirationTime", expirationTime.toUTCString());
         var expirationDateTime = new Date(this.EndDate());
-        var expTimeHours = expirationTime[3].toLowerCase() === "pm" && expirationTime[1] != "12" ? (parseInt(expirationTime[1]) + 12) : expirationTime[1];
+
+        var expTimeHours;
+        var exHrs = parseInt(expirationTime[1]);
+        if (expirationTime[3].toLowerCase() === "pm" && expirationTime[1] != 12) {
+            expTimeHours = exHrs + 12;
+        } else if (expirationTime[3].toLowerCase() === "am" && efHrs == 12) {
+            expTimeHours = 0;
+        }
+        else {
+            expTimeHours = exHrs;
+        }
+
         var expTimeMinutes = parseInt(expirationTime[2]);
         expirationDateTime.setHours(expTimeHours);
         expirationDateTime.setMinutes(expTimeMinutes);
         this.ExpirationDateTime(expirationDateTime);
-        //console.log("exDateTime", expirationDateTime.toUTCString());
+        console.log("exDateTime", expirationDateTime.toUTCString());
     } catch (e) {
 
     }

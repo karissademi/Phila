@@ -203,7 +203,8 @@ namespace Phila.Web.Api.Streets.Controllers
                 bool isEven = streetNumber%2 == 0;
 
                 if (isEven)
-                    return Ok(
+                {
+                    var results =
                         _db.tblStreets.Where(
                             x => (
                                 x.StreetName.StartsWith(streetName)
@@ -239,49 +240,62 @@ namespace Phila.Web.Api.Streets.Controllers
                             })
                             .OrderBy(x => x.StreetName)
                             .Take(10)
-                            .ToList()
-                        );
-                return Ok(_db.tblStreets.Where(
-                    x => (
-                        x.StreetName.StartsWith(streetName)
-                        ||
-                        x.StreetNameShort.StartsWith(streetName)
-                        ||
-                        x.StreetNameShort.StartsWith(street)
-                        ||
-                        x.StreetNameShort.StartsWith(streetName)
+                            .ToList();
+
+
+                    return Ok(results);
+                }
+                else
+                {
+
+                    var results = _db.tblStreets.Where(
+                        x => (
+                            x.StreetName.StartsWith(streetName)
+                            ||
+                            x.StreetNameShort.StartsWith(streetName)
+                            ||
+                            x.StreetNameShort.StartsWith(street)
+                            ||
+                            x.StreetNameShort.StartsWith(streetName)
+                            )
+                             &&
+                             x.L_F_ADD <= streetNumber
+                             &&
+                             x.L_T_ADD >= streetNumber
                         )
-                         &&
-                         x.L_F_ADD <= streetNumber
-                         &&
-                         x.L_T_ADD >= streetNumber
-                    )
-                    .GroupBy(
-                        x =>
-                            new
-                            {
-                                x.StreetName,
-                                StreetCode = x.ST_CODE,
-                                SegmentId = x.SEG_ID,
-                                FromAddress = x.L_F_ADD,
-                                ToAddress = x.L_T_ADD
-                            })
-                    .Select(x => new
-                    {
-                        StreetName = streetNumber + " " + x.Key.StreetName,
-                        x.Key.StreetCode,
-                        x.Key.SegmentId,
-                        FromAddress = x.Key.FromAddress + " " + x.Key.StreetName + ", Philadelphia, PA",
-                        ToAddress = x.Key.ToAddress + " " + x.Key.StreetName + ", Philadelphia, PA"
-                    })
-                    .OrderBy(x => x.StreetName)
-                    .Take(10)
-                    .ToList()
-                    );
+                        .GroupBy(
+                            x =>
+                                new
+                                {
+                                    x.StreetName,
+                                    StreetCode = x.ST_CODE,
+                                    SegmentId = x.SEG_ID,
+                                    FromAddress = x.L_F_ADD,
+                                    ToAddress = x.L_T_ADD
+                                })
+                        .Select(x => new
+                        {
+                            StreetName = streetNumber + " " + x.Key.StreetName,
+                            x.Key.StreetCode,
+                            x.Key.SegmentId,
+                            FromAddress = x.Key.FromAddress + " " + x.Key.StreetName + ", Philadelphia, PA",
+                            ToAddress = x.Key.ToAddress + " " + x.Key.StreetName + ", Philadelphia, PA"
+                        })
+                        .OrderBy(x => x.StreetName)
+                        .Take(10)
+                        .ToList();
+                    return Ok(results);
+                }
             }
             return Ok();
         }
 
+        /// <summary>
+        /// Gets the street code.
+        /// </summary>
+        /// <param name="location">The location.</param>
+        /// <param name="trimLeadingNumbers">if set to <c>true</c> [trim leading numbers].</param>
+        /// <returns></returns>
         public StreetsViewModels.LocationDetails GetStreetCode(string location, bool trimLeadingNumbers = true)
         {
             if (trimLeadingNumbers)
@@ -293,6 +307,92 @@ namespace Phila.Web.Api.Streets.Controllers
                     .Select(x => new StreetsViewModels.LocationDetails {StreetCode = x.ST_CODE, SegmentId = x.SEG_ID})
                     .FirstOrDefault();
 
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the location st code and seg identifier.
+        /// </summary>
+        /// <param name="location">The location.</param>
+        /// <returns></returns>
+        public StreetsViewModels.LocationDetails GetLocationStCodeAndSegId(string location)
+        {
+            var numSts = new[]
+            {
+                "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"
+            };
+
+            var firstThreeChar = new string(location.ToLower().Take(3).ToArray());
+
+            bool sn = numSts.Any(x => x.StartsWith(firstThreeChar));
+
+            string streetNumberString = !sn ? new String(location.TakeWhile(Char.IsDigit).ToArray()) : "";
+
+            string streetName = location.TrimStart(new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' });
+
+
+            streetName = streetName.Trim(new[] { ' ' });
+
+            var result = new StreetsViewModels.LocationDetails();
+
+            // 1234 Market St
+            if (streetNumberString.Length > 0)
+            {
+                int streetNumber = Convert.ToInt32(streetNumberString);
+
+                bool isEven = streetNumber % 2 == 0;
+
+                if (isEven)
+                {
+                    result =
+                        _db.tblStreets.Where(
+                            x => (
+                                x.StreetName.StartsWith(streetName)
+                                ||
+                                x.StreetNameShort.StartsWith(streetName)
+                                ||
+                                x.StreetNameShort.StartsWith(location)
+                                ||
+                                x.StreetNameShort.StartsWith(streetName)
+                                )
+                                 &&
+                                 x.R_F_ADD <= streetNumber
+                                 &&
+                                 x.R_T_ADD >= streetNumber
+                            )
+                            .Select(x => new StreetsViewModels.LocationDetails
+                            {
+                                StreetCode = x.ST_CODE,
+                                SegmentId = x.SEG_ID
+                            }).FirstOrDefault();
+
+                }
+                else
+                {
+
+                    result = _db.tblStreets.Where(
+                        x => (
+                            x.StreetName.StartsWith(streetName)
+                            ||
+                            x.StreetNameShort.StartsWith(streetName)
+                            ||
+                            x.StreetNameShort.StartsWith(location)
+                            ||
+                            x.StreetNameShort.StartsWith(streetName)
+                            )
+                             &&
+                             x.L_F_ADD <= streetNumber
+                             &&
+                             x.L_T_ADD >= streetNumber
+                        ).Select(x => new StreetsViewModels.LocationDetails
+                        {
+                            StreetCode = x.ST_CODE,
+                            SegmentId = x.SEG_ID
+                        }).FirstOrDefault();
+
+                   
+                }
+            } 
             return result;
         }
 

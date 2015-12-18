@@ -334,16 +334,39 @@ function AppViewModel() {
     };
 
     self.applyLocation = function () {
-        
+
+        //console.log(self.editingLocationItem());
+
+        //if (!ko.validation.validateObservable(self.editingLocationItem().OccupancyTypeId().editValue))
+        //    console.log("invalid occupancy type");
+
+        //if (!ko.validation.validateObservable(self.editingLocationItem().LocationType().editValue))
+        //    console.log("invalid location type");
+
+        //if (!ko.validation.validateObservable(self.editingLocationItem().OnStreetName().editValue))
+        //    console.log("invalid on street");
+
+        //if (!ko.validation.validateObservable(self.editingLocationItem().FromStreetName().editValue))
+        //    console.log("invalid from street");
+
+        //if (!ko.validation.validateObservable(self.editingLocationItem().ToStreetName().editValue))
+        //    console.log("invalid to street");
+
+
         //if (!ko.validation.validateObservable(self.editingLocationItem))
         //    return false;
+        //console.log(self.editingLocationItem().OccupancyTypeId, self.editingLocationItem().LocationType, self.editingLocationItem().OnStreetName);
 
+        //var errors = ko.validation.group([self.editingLocationItem().OccupancyTypeId, self.editingLocationItem().LocationType, self.editingLocationItem().OnStreetName], { deep: true, insertMessages: true });
+        //errors.showAllMessages();
+       // var errors = ko.validation.group([self.editingLocationItem], { deep: true, observable: true, live: true });
+        
 
-        var errors = ko.validation.group([self.editingLocationItem], { deep: true, observable: true, live: true });
-
-        errors.showAllMessages();
-        //console.log(ko.toJSON(errors()));
-        if (errors().length > 0) return false;
+        //sequenceNumber, occumpanyTypeId, locationType, onStreetName, onStreetCode, fromStreetName, fromStreetCode, fromStreetNode, toStreetName, toStreetCode, toStreetNode////self.editingLocationItem.LocationType.editValue, self.editingLocationItem.OnStreetName.editValue
+        //errors.showAllMessages();
+        //console.log(errors());
+        //console.log(ko.toJSON(errors));
+        //if (errors().length > 0) return false;
 
         //  commit the edit transaction
         self.editLocationTransaction.notifySubscribers(null, "commit");
@@ -516,7 +539,7 @@ function AppViewModel() {
         if (self.editingPermitItem() == null) {
             var answer = confirm("Are you sure you want to delete this permit?");
             if (answer) {
-                self.submitPermitCancellation(permit);
+                self.submitPermitCancellation(permit, true, true);
                 self.permits.remove(permit);
             }
         }
@@ -758,7 +781,7 @@ function AppViewModel() {
             $(event.target).parent().find(".edit-button").remove();
             $(event.target).parent().find(".cancel-button").remove();
 
-            self.submitPermitCancellation(permit, false);
+            self.submitPermitCancellation(permit, false, true);
         }
     };
 
@@ -786,24 +809,27 @@ function AppViewModel() {
         }
     };
 
-    self.submitPermitCancellation = function(permit, scrollTop) {
-        console.log(permit);
-        console.log(permit.PermitNumber());
+    self.submitPermitCancellation = function(scrollTop, isCancelConfirmed, permit) {
 
-        $.ajax({
-            type: "POST",
-            url: self.apiUrl + "api/Permits/CancelPermit?token=" + getUrlParameter("token") + "&permitNumber=" + permit.PermitNumber(),
-            success: function (data) {
-                self.getStatusCodes();
-                self.showMainSections(scrollTop);
-                $.notify(notification.cancelNewPermitSuccess, { className: "success", globalPosition: "top left" });
-                self.resetNewPermitFields();
-                self.editingPermitItem(null);
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                console.log("submitPermitCancellation error: ", xhr, ajaxOptions, thrownError);
-            }
-        });
+        if (isCancelConfirmed == false)
+            isCancelConfirmed = confirm(notification.cancelNewPermitConfirm);
+
+        if (isCancelConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: self.apiUrl + "api/Permits/CancelPermit?token=" + getUrlParameter("token") + "&permitNumber=" + permit.PermitNumber(),
+                success: function(data) {
+                    self.getStatusCodes();
+                    self.showMainSections(scrollTop);
+                    $.notify(notification.cancelNewPermitSuccess, { className: "success", globalPosition: "top left" });
+                    self.resetNewPermitFields();
+                    self.editingPermitItem(null);
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    console.log("submitPermitCancellation error: ", xhr, ajaxOptions, thrownError);
+                }
+            });
+        }
     };
 
     self.submitPermitApplication = function () {
@@ -818,26 +844,29 @@ function AppViewModel() {
     };
 
     self.postPermit = function(isDraft) {
-        //self.applyLocation();
+        self.applyLocation();
         self.applyReference();
         //self.applyPermit();
         //self.editingPermitItem.setLongDateTimes();
-        
-        var errors = ko.validation.group([self.editingPermitItem, self.editingPermitItem.Locations], { deep: true, observable: true, live: true });
 
-        var hasLocationErrors = false;
-        for (var k = 0; k < self.editingPermitItem().Locations().length; k++) {
-            var locErr = ko.validation.group([self.editingPermitItem().Locations()[k]], { deep: true, observable: true, live: true });
-            //console.log(locErr());
-            if (locErr().length > 0) hasLocationErrors = true;
-        }
+        self.editingPermitItem.EffectiveDateTime = new Date(self.editingPermitItem().StartDate() + " " + self.editingPermitItem().StartTime());
+        self.editingPermitItem.ExpirationDateTime = new Date(self.editingPermitItem().StartDate() + " " + self.editingPermitItem().StartTime());
+
+        var errors = ko.validation.group([self.editingPermitItem], { deep: true, observable: true, live: true });
+
+        //var hasLocationErrors = false;
+        //for (var k = 0; k < self.editingPermitItem().Locations().length; k++) {
+        //    var locErr = ko.validation.group([self.editingPermitItem().Locations()[k]], { deep: true, observable: true, live: true });
+        //    //console.log(locErr());
+        //    if (locErr().length > 0) hasLocationErrors = true;
+        //}
 
         //, self.editingPermitItem.UtilityOwnerId, self.editingPermitItem.EffectiveDateTime, self.editingPermitItem.ExpirationDateTime, self.editingPermitItem.Purpose, self.editingPermitItem.PermitTypes, self.editingPermitItem.ProjectTypes, self.editingPermitItem.Locations, self.editingPermitItem.StartDate, self.editingPermitItem.StartTime, self.editingPermitItem.EndDate, self.editingPermitItem.EndTime]
 
         errors.showAllMessages();
-        //console.log(errors());
+        console.log(errors());
 
-        if (errors().length > 0 || hasLocationErrors) return false;
+        if (errors().length > 0 /*|| hasLocationErrors*/) return false;
 
         var refs = [];
         for (var i = 0; i < self.editingPermitItem().References().length; i++) {
@@ -846,7 +875,7 @@ function AppViewModel() {
 
         var locs = [];
         for (var j = 0; j < self.editingPermitItem().Locations().length; j++) {
-            //console.log(self.editingPermitItem().Locations()[j].OccupancyTypeId());
+            //console.log(self.editingPermitItem().Locations()[j]());
             var loc = new PermitLocation( //sequenceNumber, occupancyTypeId, locationType, onStreetName, fromStreetName, fromStreetCode, fromStreetNode, toStreetName, toStreetCode, toStreetNode
                 j + 1,
                 self.editingPermitItem().Locations()[j].OccupancyTypeId().OccupancyTypeID,
@@ -899,8 +928,8 @@ function AppViewModel() {
             PermitTypeId: self.editingPermitItem().PermitTypeId().PermitTypeId,
             ProjectTypes: array2Decimal(self.editingPermitItem().ProjectTypes(), self.projectTypes().length),
             EncroachmentTypes: self.editingPermitItem().EncroachmentTypes(),
-            EffectiveDate: new Date(self.editingPermitItem().StartDate() + " " + self.editingPermitItem().StartTime()),//effectiveDateTime,
-            ExpirationDate: new Date(self.editingPermitItem().StartDate() + " " + self.editingPermitItem().StartTime()),//new Date(self.editingPermitItem().EndDate() + " " + self.editingPermitItem().EndTime()),//expirationDateTime,
+            EffectiveDate: self.editingPermitItem().EffectiveDateTime(),//effectiveDateTime,
+            ExpirationDate: self.editingPermitItem().ExpirationDateTime(),//new Date(self.editingPermitItem().EndDate() + " " + self.editingPermitItem().EndTime()),//expirationDateTime,
             Purpose: self.editingPermitItem().Purpose(),
             Comments: self.editingPermitItem().Comments(),
             IsDraft: isDraft,
@@ -1133,7 +1162,10 @@ function AppViewModel() {
         
     };
 
-    self.showMainSections = function(scrollTop) {
+    self.showMainSections = function (scrollTop) {
+        self.cancelEditLocation();
+        self.cancelEditReference();
+
         $("#loading-table").show();
         self.getStatusCodes();
         self.getPermitsForCompany();
@@ -1286,7 +1318,15 @@ function AppViewModel() {
 /*----------------------------------------------------------------------*/
 /* KO Page Binding                                                      */
 /*----------------------------------------------------------------------*/
-$(document).ready(function() {
+$(document).ready(function () {
+    var getUrl = window.location;
+    var host = getUrl.host.toLowerCase();
+    if (window.location.protocol == "http:" && host.indexOf("localhost") === -1) {
+        var restOfUrl = window.location.href.substr(5);
+        window.location = "https:" + restOfUrl;
+    }
+
+
     //  create the model
     var model = new AppViewModel();
 

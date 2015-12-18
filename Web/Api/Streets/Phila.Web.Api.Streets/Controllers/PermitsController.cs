@@ -23,18 +23,16 @@ namespace Phila.Web.Api.Streets.Controllers
     {
         private readonly SCBPPSEntities _db = new SCBPPSEntities();
 
-
         /// <summary>
-        ///     Posts the permit.
+        /// Creates the permit.
         /// </summary>
-        /// <param name="tblPermit">The table permit.</param>
+        /// <param name="permit">The permit.</param>
         /// <returns></returns>
         [EnableCors(origins: "*", headers: "*", methods: "*")]
         [AllowAnonymous]
         [Route("api/permits/CreatePermit")]
         [HttpPost]
         public async Task<IHttpActionResult> CreatePermit([FromBody] StreetsViewModels.PostedPermit permit)
-            //, List<StreetsViewModels.ReferenceSelection> references)
         {
             //if (encroachmentTypes == null) throw new ArgumentNullException("encroachmentTypes");
 
@@ -161,6 +159,7 @@ namespace Phila.Web.Api.Streets.Controllers
                         switch (permitLocation.LocationType.ToLower())
                         {
                             case "address":
+                                //ToDo... 
 
                                 break;
                             case "intersection":
