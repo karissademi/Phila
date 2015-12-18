@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -389,6 +390,10 @@
     <ProjectReference Include="..\..\..\..\Data\EntityModels\Streets\Phila.Data.EntityModels.Streets\Phila.Data.EntityModels.Streets.csproj">
       <Project>{938862b2-7024-48d7-8857-945eb110df33}</Project>
       <Name>Phila.Data.EntityModels.Streets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Logic\Streets\Phila.Logic.Streets\Phila.Logic.Streets.csproj">
+      <Project>{1b4ffd8f-08b7-4ade-855e-87446028cb50}</Project>
+      <Name>Phila.Logic.Streets</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

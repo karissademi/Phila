@@ -77,6 +77,8 @@
         <!-- Begin user's companies selection div -->
         <div id="UsersCompaniesSection" class="row" style="display: none">
             <div class="columns">
+                <!--<h1>I LOVE MY SON RICARDO</h1>
+                <h1>I LOVE MY DAD</h1>-->
                 <h2>Your Companies</h2>
                 <select data-bind="options: $root.companies, optionsText: 'CompanyName', value: $root.selectedCompany, optionsCaption: 'Choose one...', event:{ change: $root.selectedCompanyChanged }"></select>
             </div>
@@ -258,7 +260,7 @@
         <div id="AddNewPermitSection" class="row add-permit" style="display: none" data-bind="with: editingPermitItem">
             <!-- Begin top input div -->
             <div id="AddResourcePage" class="columns marg-top-20">
-
+                <i class="fa fa-home fa-4x" data-bind="click: $root.cancelPermitApplication"></i>
                 <h2>New Closure Request Form</h2>
                 <div class="row">
                     <div class="medium-6 columns">
@@ -266,46 +268,46 @@
                             Start Date:<span style="color: black;">*</span>&nbsp;
                             <abbr rel="tooltip" title="The start date must be <em>10 days</em> after today."><i class="fa fa-info-circle"></i></abbr>
                         </label>
-                        <input type="date" data-bind="value: StartDate" id="start-date" />
+                        <input id="formStartDate" type="date" data-bind="value: StartDate" />
                     </div>
                     <div class="medium-6 columns">
                         <label>Start Time:<span style="color: black;">*</span></label>
-                        <input type="text" class="form-control" placeholder="hh:mm xm" data-bind="value: StartTime" /><!--data-bind="inputmask: { value: $root.effectiveTime, mask: 'h:s t\\m', placeholder: 'hh:mm xm', alias: 'datetime', hourFormat: '12'}" />-->
+                        <input id="formStartTime" type="text" class="form-control" placeholder="hh:mm xm" data-bind="value: StartTime" /><!--data-bind="inputmask: { value: $root.effectiveTime, mask: 'h:s t\\m', placeholder: 'hh:mm xm', alias: 'datetime', hourFormat: '12'}" />-->
                     </div>
                     <div class="medium-6 columns">
                         <label>End Date:<span style="color: black;">*</span></label>
-                        <input type="date" class="form-control" data-bind="value: EndDate" />
+                        <input id="formEndDate" type="date" class="form-control" data-bind="value: EndDate" />
                     </div>
                     <div class="medium-6 columns">
                         <label>End Time:<span style="color: black;">*</span></label>
-                        <input type="text" class="form-control" placeholder="hh:mm xm" data-bind="value: EndTime" /><!--data-bind="inputmask: { value: $root.expirationTime, mask: 'h:s t\\m', placeholder: 'hh:mm xm', alias: 'datetime', hourFormat: '12'}"/>-->
+                        <input id="formEndTime" type="text" class="form-control" placeholder="hh:mm xm" data-bind="value: EndTime" /><!--data-bind="inputmask: { value: $root.expirationTime, mask: 'h:s t\\m', placeholder: 'hh:mm xm', alias: 'datetime', hourFormat: '12'}"/>-->
                     </div>
                 </div>
                 <div class="row">
                     <div class="medium-24 columns">
                         <label>Purpose:<span style="color: black;">*</span></label>
-                        <textarea id="ReqPurpose" name="EventDesc" data-bind="value: Purpose"></textarea>
+                        <textarea id="formPurpose" data-bind="value: Purpose"></textarea>
                     </div>
                 </div>
                 <div class="row">
                     <div class="medium-12 columns">
                         <label>Permit Type:<span style="color: black;">*</span> </label>
-                        <select data-bind="options: $root.permitTypes, optionsText: 'PermitTypeName', value: PermitTypeId.bind($data), optionsCaption: 'Choose...'"></select>
+                        <select id="formPermitTypes" data-bind="options: $root.permitTypes, optionsText: 'PermitTypeName', value: PermitTypeId, optionsCaption: 'Choose...'"></select>
                     </div>
                     <div class="medium-12 columns" data-bind="visible: PermitTypeId() != undefined && PermitTypeId().PermitTypeId > 10">
                         <label>Utility Owner:<span style="color: black;">*</span> </label>
-                        <select data-bind="options: $root.utilityOwners, optionsText: 'Name', value: UtilityOwnerId.bind($data), optionsCaption: 'Choose...'"></select>
+                        <select id="formUtilityOwners" data-bind="options: $root.utilityOwners, optionsText: 'Name', value: UtilityOwnerId, optionsCaption: 'Choose...'"></select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="medium-24 columns">
                         <label>Comments: </label>
-                        <textarea id="ReqComments" data-bind="value: Comments"></textarea>
+                        <textarea id="formComments" data-bind="value: Comments"></textarea>
                     </div>
                 </div>
                 <hr />
                 <div class="row">
-                    <div class="columns">
+                    <div id="formProjectTypes" class="columns">
                         <h2>Project Type(s)<span style="color: black;">*</span></h2>
                         <span class="validationMessage" data-bind="validationMessage: ProjectTypes"></span>
                         <div data-bind="validationOptions: {insertMessages: false}">
@@ -319,7 +321,7 @@
                 </div>
                 <hr />
                 <div class="row" data-bind="visible: PermitTypeId() != undefined && (PermitTypeId().PermitTypeId < 4 || PermitTypeId().PermitTypeId == 9)">
-                    <div class="columns">
+                    <div id="formEncroachments" class="columns">
                         <h2>Encroachment Type(s)<span style="color: black;">*</span></h2>
                         <span class="validationMessage" data-bind="validationMessage: EncroachmentTypes"></span>
                         <div data-bind="validationOptions: {insertMessages: false}">
@@ -336,7 +338,7 @@
             <!-- end top input div -->
             <!-- Begin location div  -->
             <div style="padding-left: 12.5px; padding-right: 12.5px;">
-                <div class="row">
+                <div id="formLocations" class="row">
                     <div class="columns">
                         <h2>Location(s)<span style="color: black;">*</span></h2>
                         <span class="validationMessage" data-bind="validationMessage: Locations"></span>
@@ -363,6 +365,7 @@
                             <strong><label>Location Type:<span style="color: black;">*</span>&nbsp;<abbr rel="tooltip" title="Select a location type."><i class="fa fa-info-circle"></i></abbr></label></strong>
 
                             <select data-bind="options: $root.locationTypes, selectedOptions: LocationType.editValue(), visible: $root.isLocationEditing($data), value: LocationType.editValue, optionsCaption: 'Choose...'"></select>
+
                             <label class="read" data-bind="text: LocationType() ? LocationType() : 'blank', visible: !$root.isLocationEditing($data)"></label>
                         </div>
                     </div>
@@ -371,7 +374,7 @@
                             <strong><label data-bind="text: $data.LocationType.editValue() == 'Address' ? 'Address:' : 'On Street:'"></label></strong><span style="color: black;">*</span>
 
                             <input id="OnStreet" data-bind="jqAuto: { value: OnStreetName.editValue, source: $root.getOnStreets, inputProp: 'StreetName', labelProp: 'StreetName', valueProp: 'StreetName' }, visible: $root.isLocationEditing($data)" type="text" />
-                            <input type="text" style="visibility: collapse"/>
+                            <input type="text" style="visibility: collapse" />
                             <label class="read" data-bind="text: OnStreetName.editValue() != undefined ? OnStreetName() : 'blank', visible: !$root.isLocationEditing($data)"></label>
                         </div>
                     </div>
@@ -408,7 +411,7 @@
             <!-- end location div -->
             <!-- Begin reference div -->
             <hr />
-            <div style="padding-left: 12.5px; padding-right: 12.5px;">
+            <div id="formReferences" style="padding-left: 12.5px; padding-right: 12.5px;">
                 <a href="#"></a>
                 <h2>Reference(s)</h2>
                 <table>
@@ -550,24 +553,26 @@
                 <label data-bind="text: EndTime"></label>
             </td>
             <!--<td>
-                <label data-bind="text: Comments"></label>
-            </td>
-            <td>
-                <label data-bind="text: EffectiveDateTim"></label>
-            </td>
-            <td>
-                <label data-bind="text: ExpirationDateTime"></label>
-            </td>-->
+                    <label data-bind="text: Comments"></label>
+                </td>
+                <td>
+                    <label data-bind="text: EffectiveDateTim"></label>
+                </td>
+                <td>
+                    <label data-bind="text: ExpirationDateTime"></label>
+                </td>-->
             <td class="ClosureStatus">
                 <label data-bind="text: PermitStatus"></label>
             </td>
 
             <td class="tools">
                 <i class="fa fa-pencil fa-2x edit-button" data-bind="click: $root.editPermit.bind($data), visible: (!$root.isPermitEditing($data) && (PermitStatus() == 'Draft' || PermitStatus() == 'Awaiting Information')) ? true : false"></i>
+
                 <i class="fa fa-floppy-o fa-2x" data-bind="click: $root.applyPermit.bind($data), visible: $root.isPermitEditing($data)"></i>
                 <i class="fa fa-times fa-2x cancel-button" data-bind="click: $root.cancelEditPermit.bind($data), visible: $root.isPermitEditing($data)"></i>
                 <i class="fa fa-trash fa-2x cancel-button" data-bind="click: $root.requestPermitCancellation.bind($data), visible: (!$root.isPermitEditing($data) && (PermitStatus() == 'Draft' || PermitStatus() == 'Awaiting Information' || PermitStatus() == 'Pending')) ? true : false"></i>
                 <i class="fa fa-file-pdf-o fa-2x" data-bind="click: $root.downloadPermitPdf.bind($data), visible: PermitStatus() == 'Approved' ? true : false"></i>
+                <i class="fa fa-file  fa-2x" data-bind="visible: !$root.isPermitEditing($data) &&  PermitStatus() == 'Pending' ? true : false"></i>
             </td>
         </tr>
     </script>

@@ -42,7 +42,7 @@ function AppViewModel() {
 
 
     self.totalPermitsFound = ko.observable();
-    self.apiUrl = "https://phila.azurewebsites.net/"; // "http://localhost/Phila.Web.Api.Streets/";//    
+    self.apiUrl = "https://phila.azurewebsites.net/"; // "http://localhost/Phila.Web.Api.Streets/";//  
     self.streetCode = "";
     self.fromStreets = ko.observableArray();
 
@@ -388,13 +388,18 @@ function AppViewModel() {
             self.fromStreets([]);
         if (self.toStreets().length > 0)
             self.toStreets([]);
+
+        if (self.fromStreetCaption() !== "Choose an 'On Street'...")
+            self.fromStreetCaption("Choose an 'On Street'...");
+        if (self.toStreetCaption() !== "Choose an 'On Street'...")
+            self.toStreetCaption("Choose an 'On Street'...");
     };
 
     self.getOnStreets = function(searchTerm, callback) {
-        if (self.fromStreetCaption() != "Choose an 'On Street'...")
+        if (self.fromStreetCaption() !== "Choose an 'On Street'...")
             self.fromStreetCaption("Choose an 'On Street'...");
-        if (self.toStreetCaption() != "Choose an 'On Street'...")
-            self.toStreets("Choose an 'On Street'...");
+        if (self.toStreetCaption() !== "Choose an 'On Street'...")
+            self.toStreetCaption("Choose an 'On Street'...");
 
         //self.clearFromAndToOa();
 
@@ -406,8 +411,11 @@ function AppViewModel() {
     };
 
     self.getFromStreets = function(onStreet) {
-        if (onStreet == "")
+        if (onStreet === "") {
+
+            self.clearFromAndToOa();
             return;
+        }
 
         self.fromStreetCaption("Loading...");
         self.toStreetCaption("Choose a 'From Street'...");
@@ -443,17 +451,16 @@ function AppViewModel() {
             if (self.toStreets().length > 0)
                 self.toStreets([]);
 
-            if (ko.utils.unwrapObservable(onStreet) == undefined && self.toStreetCaption() != "Choose an 'On Street'...")
-                self.toStreets("Choose an 'On Street'...");
+            if (ko.utils.unwrapObservable(onStreet) == undefined && self.toStreetCaption() !== "Choose an 'On Street'...")
+                self.toStreetCaption("Choose an 'On Street'...");
 
-            if (ko.utils.unwrapObservable(onStreet) != undefined && fromStreet == undefined && self.toStreetCaption() != "Choose a 'From Street'...")
+            if (ko.utils.unwrapObservable(onStreet) != undefined && fromStreet == undefined && self.toStreetCaption() !== "Choose a 'From Street'...")
                 self.toStreetCaption("Choose a 'From Street'...");
 
             return;
         }
     };
     self.getToStreets = function(onStreet, fromStreet) {
-
 
         try {
             //console.log("setting onStreet...");
@@ -465,21 +472,33 @@ function AppViewModel() {
             return;
         }
 
-        var fromNodeNumber;
 
-        try {
-            //console.log("setting fromNodeNumber...");
-            fromNodeNumber = fromStreet().NodeOrder;
-            //console.log("fromNodeOrder set to " + fromNodeNumber);
-            //console.log("setting fromStreet...");
-            fromStreet = fromStreet().StreetName.trim();
-            //console.log("fromStreet set to " + fromStreet);
-        } catch (e) {
+        if (fromStreet() == undefined) {
+            self.toStreetCaption("Choose a 'From Street'...");
 
-            console.log("fromStreetError: " + e);
-            console.log(ko.toJSON(fromStreet));
+            self.toStreets([]);
             return;
         }
+
+
+        var fromNodeNumber;
+
+        //try {
+           
+
+        //console.log("setting fromNodeNumber...");
+            fromNodeNumber = fromStreet().NodeOrder;
+        //console.log("fromNodeOrder set to " + fromNodeNumber);
+        //console.log("setting fromStreet...");
+            fromStreet = fromStreet().StreetName.trim();
+        //console.log("fromStreet set to " + fromStreet);
+
+       // } catch (e) {
+
+       //     console.log("fromStreetError: " + e);
+       //     console.log(ko.toJSON(fromStreet));
+       //     return;
+       //}
 
 
         self.toStreetCaption("Loading...");
@@ -526,7 +545,7 @@ function AppViewModel() {
         //$("#submitDraft").text("Save Draft");
 
         if (permit.PermitNumber == undefined) {
-            permit = new Permit("", "", "", "", "", "", [], "", "", "", "", "", "", "", "", "");
+            permit = new Permit();
             // begin editing the new item straight away
             self.editPermit(permit, true);
         }
@@ -600,21 +619,6 @@ function AppViewModel() {
 
         //  hides the edit fields
         self.editingPermitItem(null);
-    };
-
-    self.updatePermit = function() {
-        $.ajax({
-            url: self.apiUrl + "api/permits/CreatePermit",
-            data: JSON.stringify({ permits: this.permits }),
-            type: 'POST',
-
-            success: function() {
-                $.notify(notification.recordSaved, { className: "success", globalPosition: "top left" });
-            },
-            error: function() {
-                $.notify(notification.recordNotSaved, { className: "error", globalPosition: "top left" });
-            }
-        });
     };
 
     self.getPermitsForCompany = function(paging) {
@@ -705,7 +709,7 @@ function AppViewModel() {
                             projTypes.push(setKoType(self.projectTypes(), "ProjectTypeId", projType));
                         });
 
-                        var permit = new Permit(token, result.Permits[i].PermitNumber, result.Permits[i].CompanyId, result.Permits[i].CompanyName, setKoType(self.utilityOwners(), "UtilityOwnerId", result.Permits[i].UtilityOwnerId), setKoType(self.permitTypes(), "PermitTypeId", result.Permits[i].PermitTypeId), pt, result.Permits[i].EncroachmentTypes, result.Permits[i].EffectiveDate, result.Permits[i].ExpirationDate, result.Permits[i].Purpose, result.Permits[i].Comments, result.Permits[i].PermitStatus, refs, locs, result.Permits[i].IsDraft);
+                        var permit = new Permit(token, result.Permits[i].PermitNumber, result.Permits[i].CompanyId, result.Permits[i].CompanyName, setKoType(self.utilityOwners(), "OwnerId", result.Permits[i].UtilityOwnerId), setKoType(self.permitTypes(), "PermitTypeId", result.Permits[i].PermitTypeId), pt, result.Permits[i].EncroachmentTypes, result.Permits[i].EffectiveDate, result.Permits[i].ExpirationDate, result.Permits[i].Purpose, result.Permits[i].Comments, result.Permits[i].PermitStatus, refs, locs, result.Permits[i].IsDraft);
 
                         //if (permit.PermitTypeId != null) permit.setPermitType(self.permitTypes());
                         //if (permit.UtilityOwnerId != null) permit.setUtilityOwner(self.utilityOwners());
@@ -746,7 +750,7 @@ function AppViewModel() {
                             locs.push(new PostedLocation(loc.SequenceNumber, setKoType(self.occupancyTypes(), "OccupancyTypeID", loc.OccupancyTypeId), locType, loc.OnStreetName, loc.OnStreetCode, loc.FromStreetName, loc.FromStreetCode, loc.FromStreetNode, loc.ToStreetName, loc.ToStreetCode, loc.ToStreetNode));
                         });
 
-                        var p = new Permit(token, item.PermitNumber, item.CompnayId, item.CompanyName, setKoType(self.utilityOwners(), "UtilityTypeId", item.UtilityOwnerId), setKoType(self.permitTypes(), "PermitTypeId", item.PermitTypeId), pts, item.EncroachmentTypes, item.EffectiveDate, item.ExpirationDate, item.Purpose, item.Comments, item.PermitStatus, refs, locs, item.IsDraft);
+                        var p = new Permit(token, item.PermitNumber, item.CompnayId, item.CompanyName, setKoType(self.utilityOwners(), "OwnerId", item.UtilityOwnerId), setKoType(self.permitTypes(), "PermitTypeId", item.PermitTypeId), pts, item.EncroachmentTypes, item.EffectiveDate, item.ExpirationDate, item.Purpose, item.Comments, item.PermitStatus, refs, locs, item.IsDraft);
 
                         pers.push(p);
                     });
@@ -764,7 +768,7 @@ function AppViewModel() {
 
 
     self.downloadPermitPdf = function(permit) {
-        window.open(self.apiUrl + "api/Permits/GetPermitPdf.pdf?token=" + getUrlParameter("token") + "&permitId=" + permit.PermitId(), "Download Permit " + permit.PermitId());
+        window.open(self.apiUrl + "api/Permits/GetPermitPdf.pdf?token=" + getUrlParameter("token") + "&permitId=" + permit.PermitNumber(), "Download Permit " + permit.PermitNumber());
     };
 
     self.requestPermitCancellation = function(permit, event) {
@@ -811,7 +815,7 @@ function AppViewModel() {
 
     self.submitPermitCancellation = function(scrollTop, isCancelConfirmed, permit) {
 
-        if (isCancelConfirmed == false)
+        if (isCancelConfirmed === false)
             isCancelConfirmed = confirm(notification.cancelNewPermitConfirm);
 
         if (isCancelConfirmed) {
@@ -849,22 +853,56 @@ function AppViewModel() {
         //self.applyPermit();
         //self.editingPermitItem.setLongDateTimes();
 
-        self.editingPermitItem.EffectiveDateTime = new Date(self.editingPermitItem().StartDate() + " " + self.editingPermitItem().StartTime());
-        self.editingPermitItem.ExpirationDateTime = new Date(self.editingPermitItem().StartDate() + " " + self.editingPermitItem().StartTime());
+        //var sdt = new Date(self.editingPermitItem().StartDate() + " " + self.editingPermitItem().StartTime());
+        //console.log(sdt);
+        //var edt = new Date(self.editingPermitItem().EndDate() + " " + self.editingPermitItem().EndTime());
+        //console.log(edt);
+        //self.editingPermitItem.EffectiveDateTime(sdt);
+        //self.editingPermitItem.ExpirationDateTime(edt);
 
         var errors = ko.validation.group([self.editingPermitItem], { deep: true, observable: true, live: true });
+
+        errors.showAllMessages();
+        console.log(errors());
+
+        if (!ko.validation.validateObservable(self.editingPermitItem().StartDate().editValue))
+            $("#formStartDate").focus();
+
+        else if (!ko.validation.validateObservable(self.editingPermitItem().StartTime().editValue))
+            $("#formStartTime").focus();
+
+        else if (!ko.validation.validateObservable(self.editingPermitItem().EndDate().editValue))
+            $("#formEndDate").focus();
+
+        else if (!ko.validation.validateObservable(self.editingPermitItem().EndTime().editValue))
+            $("#formEndTime").focus();
+
+        else if (!ko.validation.validateObservable(self.editingPermitItem().Purpose().editValue))
+            $("#formPurpose").focus();
+
+        else if (!ko.validation.validateObservable(self.editingPermitItem().UtilityOwnerId().editValue))
+            $("#formUtilityOwners").focus();
+
+        else if (!ko.validation.validateObservable(self.editingPermitItem().ProjectTypes().editValue))
+            $("#formProjectTypes").focus();
+
+        else if (!ko.validation.validateObservable(self.editingPermitItem().Locations().editValue))
+            $("#formLocations").focus();
+
+
+
 
         //var hasLocationErrors = false;
         //for (var k = 0; k < self.editingPermitItem().Locations().length; k++) {
         //    var locErr = ko.validation.group([self.editingPermitItem().Locations()[k]], { deep: true, observable: true, live: true });
         //    //console.log(locErr());
         //    if (locErr().length > 0) hasLocationErrors = true;
+        //    if (locErr().length > 0) hasLocationErrors = true;
         //}
 
         //, self.editingPermitItem.UtilityOwnerId, self.editingPermitItem.EffectiveDateTime, self.editingPermitItem.ExpirationDateTime, self.editingPermitItem.Purpose, self.editingPermitItem.PermitTypes, self.editingPermitItem.ProjectTypes, self.editingPermitItem.Locations, self.editingPermitItem.StartDate, self.editingPermitItem.StartTime, self.editingPermitItem.EndDate, self.editingPermitItem.EndTime]
 
-        errors.showAllMessages();
-        console.log(errors());
+       
 
         if (errors().length > 0 /*|| hasLocationErrors*/) return false;
 
@@ -920,6 +958,7 @@ function AppViewModel() {
         //expirationDateTime.setHours(expTimeHours);
         //expirationDateTime.setMinutes(expTimeMinutes);
 
+        console.log(self.editingPermitItem().UtilityOwnerId().OwnerId);
 
         var permit = {
             Token: getUrlParameter("token"),
@@ -928,14 +967,16 @@ function AppViewModel() {
             PermitTypeId: self.editingPermitItem().PermitTypeId().PermitTypeId,
             ProjectTypes: array2Decimal(self.editingPermitItem().ProjectTypes(), self.projectTypes().length),
             EncroachmentTypes: self.editingPermitItem().EncroachmentTypes(),
-            EffectiveDate: self.editingPermitItem().EffectiveDateTime(),//effectiveDateTime,
-            ExpirationDate: self.editingPermitItem().ExpirationDateTime(),//new Date(self.editingPermitItem().EndDate() + " " + self.editingPermitItem().EndTime()),//expirationDateTime,
+            EffectiveDate: self.editingPermitItem().EffectiveDateTime(), //effectiveDateTime,
+            ExpirationDate: self.editingPermitItem().ExpirationDateTime(), //new Date(self.editingPermitItem().EndDate() + " " + self.editingPermitItem().EndTime()),//expirationDateTime,
             Purpose: self.editingPermitItem().Purpose(),
             Comments: self.editingPermitItem().Comments(),
             IsDraft: isDraft,
             References: refs,
             Locations: locs
-        }
+        };
+
+        console.log(ko.toJSON(permit));
 
         if (self.isPermitNew() === false)
             permit.PermitNumber = self.editingPermitItem().PermitNumber();

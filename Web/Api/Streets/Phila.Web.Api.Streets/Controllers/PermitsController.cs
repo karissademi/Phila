@@ -136,7 +136,7 @@ namespace Phila.Web.Api.Streets.Controllers
                     //ToDo: check if location is valid
 
                     var lc = new LocationsController();
-                    StreetsViewModels.LocationDetails stCode = lc.GetStreetCode(permitLocation.OnStreetName, true);
+                    StreetsViewModels.LocationDetails stCode = lc.GetLocationStCodeAndSegId(permitLocation.OnStreetName);
 
 
                     if (stCode.StreetCode != null)
@@ -159,7 +159,32 @@ namespace Phila.Web.Api.Streets.Controllers
                         switch (permitLocation.LocationType.ToLower())
                         {
                             case "address":
-                                //ToDo... 
+                                var sp1Result =
+                                    _db.Get_CrossStreetsAndOnStreetSegIDsFromStCode2(stCode.StreetCode);
+
+                                var t = sp1Result.Where(x => x.Seg_ID == stCode.SegmentId).GroupBy(x => new { x.NodeOrder })
+                                    .Select(x => new
+                                    {
+                                        x.Key.NodeOrder
+                                    })
+                                    .OrderBy(x => x.NodeOrder)
+                                    .ToList();
+
+                                if (t.Count == 2)
+                                {
+                                    ObjectResult<get_OnStreetElementsBetweenOrderedPair_Result> r3 =
+                                    _db.get_OnStreetElementsBetweenOrderedPair(stCode.StreetCode,
+                                        t[0].NodeOrder, t[1].NodeOrder);
+
+                                    gisLocs.AddRange(r3.Select(x => new tblPermit_Location_GIS
+                                    {
+                                        Permit_Number = newPermit.Permit_Number,
+                                        Seq_Num = (short)permitLocation.SequenceNumber,
+                                        DateCreated = DateTime.Now,
+                                        Element_Id = (int)x.ElementId,
+                                        lElementTypeID = x.ElementTypeId
+                                    }));
+                                }
 
                                 break;
                             case "intersection":
@@ -376,6 +401,7 @@ namespace Phila.Web.Api.Streets.Controllers
                             Comments = x.Comments,
                             ProjectTypes = x.ProjectType,
                             EncroachmentTypes = x.tblPermit_Encroachment.Select(j => j.EncroachmentTypeID).ToList(),
+                            UtilityOwnerId = x.OwnerId,
                             Locations = x.tblPermit_Locations.Select(j => new StreetsViewModels.PostedLocation
                             {
                                 OccupancyTypeId = (short) j.OccupancyTypeID,
@@ -583,6 +609,7 @@ namespace Phila.Web.Api.Streets.Controllers
                             PermitTypeId = x.PermitTypeId,
                             Comments = x.Comments,
                             ProjectTypes = x.ProjectType,
+                            UtilityOwnerId = x.OwnerId,
                             EncroachmentTypes = x.tblPermit_Encroachment.Select(j => j.EncroachmentTypeID).ToList(),
                             Locations = x.tblPermit_Locations.Select(j => new StreetsViewModels.PostedLocation
                             {
@@ -966,7 +993,7 @@ namespace Phila.Web.Api.Streets.Controllers
                 //ToDo: check if location is valid
 
                 var lc = new LocationsController();
-                StreetsViewModels.LocationDetails stCode = lc.GetStreetCode(permitLocation.OnStreetName, true);
+                StreetsViewModels.LocationDetails stCode = lc.GetLocationStCodeAndSegId(permitLocation.OnStreetName);
 
 
                 if (stCode.StreetCode != null)
@@ -988,6 +1015,32 @@ namespace Phila.Web.Api.Streets.Controllers
                     switch (permitLocation.LocationType.ToLower())
                     {
                         case "address":
+                            var sp1Result =
+                                _db.Get_CrossStreetsAndOnStreetSegIDsFromStCode2(stCode.StreetCode);
+
+                            var t = sp1Result.Where(x => x.Seg_ID == stCode.SegmentId).GroupBy(x => new { x.NodeOrder })
+                                .Select(x => new
+                                {
+                                    x.Key.NodeOrder
+                                })
+                                .OrderBy(x => x.NodeOrder)
+                                .ToList();
+
+                            if (t.Count == 2)
+                            {
+                                ObjectResult<get_OnStreetElementsBetweenOrderedPair_Result> r3 =
+                                _db.get_OnStreetElementsBetweenOrderedPair(stCode.StreetCode,
+                                    t[0].NodeOrder, t[1].NodeOrder);
+
+                                gisLocs.AddRange(r3.Select(x => new tblPermit_Location_GIS
+                                {
+                                    Permit_Number = modifiedPermit.Permit_Number,
+                                    Seq_Num = (short)permitLocation.SequenceNumber,
+                                    DateCreated = DateTime.Now,
+                                    Element_Id = (int)x.ElementId,
+                                    lElementTypeID = x.ElementTypeId
+                                }));
+                            }
 
                             break;
                         case "intersection":

@@ -165,21 +165,40 @@ Company.prototype.beginEdit = function (transaction) {
 function PostedLocation(sequenceNumber, occumpanyTypeId, locationType, onStreetName, onStreetCode, fromStreetName, fromStreetCode, fromStreetNode, toStreetName, toStreetCode, toStreetNode) {
     var self = this;
 
+    if (occumpanyTypeId == undefined) occumpanyTypeId = "";
+    if (locationType == undefined) locationType = "blank";
+    if (onStreetName == undefined) onStreetName = "";
+    if (fromStreetName == undefined) fromStreetNode = "";
+    if (toStreetName == undefined) toStreetName = "";
+
     self.SequenceNumber = ko.observable(sequenceNumber).extend({ editable: true });
     self.OccupancyTypeId = ko.observable(occumpanyTypeId).extend({ editable: true }).extend({ required: true });
-    self.LocationType = ko.observable(locationType).extend({ editable: true }).extend({ required: true });;
-    self.OnStreetName = ko.observable(onStreetName).extend({ editable: true }).extend({ required: true });;
+    self.LocationType = ko.observable(locationType).extend({ editable: true }).extend({
+        validation: {
+            validator: function (val, params) {
+                console.log(val);
+                if (val == undefined || val === "" || val === "") {
+                    return false;
+                }
+
+                return true;
+            },
+            message: "Required"
+        }
+    });
+    self.OnStreetName = ko.observable(onStreetName).extend({ editable: true }).extend({ required: true });
     self.OnStreetCode = ko.observable(onStreetCode).extend({ editable: true });
     self.FromStreetName = ko.observable(fromStreetName).extend({ editable: true }).extend({
                 validation: {
                     validator: function (val, params) {               
-                        if (self.LocationType() == "Intersection" || self.LocationType() == "Street Segment" && (val == undefined || val.StreetName == "blank")) {
+
+                        if (self.LocationType() === "Intersection" || self.LocationType() === "Street Segment" && (val == undefined || val.StreetName === "blank" || val === "")) {
                             return false;
                         }
 
                         return true;
                     },
-                    message: "Required",
+                    message: "Required"
                 }
             });
     self.FromStreetCode = ko.observable(fromStreetCode).extend({ editable: true });
@@ -187,7 +206,7 @@ function PostedLocation(sequenceNumber, occumpanyTypeId, locationType, onStreetN
     self.ToStreetName = ko.observable(toStreetName).extend({ editable: true }).extend({
                 validation: {
                     validator: function (val, params) {
-                        if (self.LocationType() === "Street Segment" && (val == undefined || val.StreetName == "blank")) {
+                        if (self.LocationType() === "Street Segment" && (val == undefined || val.StreetName === "blank")) {
                             return false;
                         }
 
@@ -237,7 +256,7 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
     self.EncroachmentTypes = ko.observableArray(encroachmentTypes).extend({ editable: true }).extend({
         required: {
             onlyIf: function () {
-                if (self.PermitTypeId() != undefined && (self.PermitTypeId().PermitTypeId < 4 || self.PermitTypeId().PermitTypeId == 9)) {
+                if (self.PermitTypeId() != undefined && (self.PermitTypeId().PermitTypeId < 4 || self.PermitTypeId().PermitTypeId === 9)) {
                     return true;
                 }
                 return false;
@@ -253,9 +272,9 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
     self.References = ko.observableArray(references).extend({ editable: true });
     self.Locations = ko.observableArray(locations).extend({ editable: true }).extend({ required: true });
 
-    self.StartDate = ko.observable(self.EffectiveDateTime() != undefined && self.EffectiveDateTime() != "" ? self.EffectiveDateTime().substr(0, 10) : "").extend({ editable: true }).extend({ validPermitDate: [10, (new Date().addDays(11).getMonth() + 1) + "/" + new Date().addDays(11).getDate() + "/" + new Date().addDays(11).getFullYear()] });
+    self.StartDate = ko.observable(self.EffectiveDateTime() != undefined && self.EffectiveDateTime() !== "blank" ? self.EffectiveDateTime().substr(0, 10) : "").extend({ editable: true }).extend({ validPermitDate: [10, (new Date().addDays(11).getMonth() + 1) + "/" + new Date().addDays(11).getDate() + "/" + new Date().addDays(11).getFullYear()] });
 
-    self.StartTime = ko.observable(self.EffectiveDateTime() != undefined && self.EffectiveDateTime() != "" ? getShortTime(self.EffectiveDateTime()) : "").extend({ editable: true }).extend({
+    self.StartTime = ko.observable(self.EffectiveDateTime() != undefined && self.EffectiveDateTime() !== "blank" ? getShortTime(self.EffectiveDateTime()) : "").extend({ editable: true }).extend({
         validation: {
             validator: function (val, params) {
 
@@ -270,7 +289,7 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
         }
     });
 
-    self.EndDate = ko.observable(self.ExpirationDateTime() != undefined && self.ExpirationDateTime() != "" ? self.ExpirationDateTime().substr(0, 10) : "").extend({ editable: true }).extend({
+    self.EndDate = ko.observable(self.ExpirationDateTime() != undefined && self.ExpirationDateTime() !== "" ? self.ExpirationDateTime().substr(0, 10) : "").extend({ editable: true }).extend({
         validation: {
             validator: function (val, params) {
                 if (Date.parse(val) && Date.parse(self.StartDate())) {
@@ -278,11 +297,11 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
                 }
                 return false;
             },
-            message: "Must be on or after the effective date",
+            message: "Must be on or after the effective date"
         }
     });
 
-    self.EndTime = ko.observable(self.ExpirationDateTime() != undefined && self.ExpirationDateTime() != "" ? getShortTime(self.ExpirationDateTime()) : "").extend({ editable: true }).extend({
+    self.EndTime = ko.observable(self.ExpirationDateTime() != undefined && self.ExpirationDateTime() !== "" ? getShortTime(self.ExpirationDateTime()) : "").extend({ editable: true }).extend({
         validation: {
             validator: function (val, params) {
 
@@ -294,7 +313,7 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
 
                 return false;
             },
-            message: "Must be after the effective date and time",
+            message: "Must be after the effective date and time"
         }
     });
 
@@ -329,12 +348,12 @@ function getShortTime(datetime) {
     //console.log("dt", dt.toUTCString());
 
     hours = dt.getUTCHours();
-    //console.log("hours", hours);
+   
     xm = " AM";
     if (hours > 11) {
         xm = " PM";
         if (hours > 12) {
-            hours = hours / 2;
+            hours = hours - 12;
         }
     }
     if (hours === 0)
@@ -342,8 +361,11 @@ function getShortTime(datetime) {
 
     minutes = dt.getUTCMinutes();
     
-    if (minutes < 10) minutes = "0" + minutes;
+    //console.log("hours", hours);
     //console.log("minutes", minutes);
+
+    if (minutes < 10) minutes = "0" + minutes;
+    //
     var time = hours + ":" + minutes + xm;
     //console.log("time", time);
     return time;
@@ -363,7 +385,7 @@ function getShortTime(datetime) {
 //    hours = efDateTime.getHours();
 //    xm = " AM";
 //    if (hours > 12) {
-//        hours = hours / 2;
+//        hours = hours - 12;
 //        xm = " PM";
 //    }
 //    minutes = efDateTime.getMinutes();
@@ -380,7 +402,7 @@ function getShortTime(datetime) {
 //    hours = exDateTime.getUTCHours();
 //    xm = " AM";
 //    if (hours > 12) {
-//        hours = hours / 2;
+//        hours = hours - 12;
 //        xm = " PM";
 //    }
 //    minutes = exDateTime.getMinutes();
@@ -391,49 +413,56 @@ function getShortTime(datetime) {
 
 Permit.prototype.setLongDateTimes = function () {
     try {
-        // set effective datetime
-        var effectiveTime = this.StartTime().match(/^([0-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
-        //console.log("effectiveTime", effectiveTime.toUTCString());
-        var effectiveDateTime = new Date(this.StartDate());
 
-        var effTimeHours;
-        var efHrs = parseInt(effectiveTime[1]);
-        if (effectiveTime[3].toLowerCase() === "pm" && effectiveTime[1] != 12) {
-            effTimeHours = efHrs + 12;
-        }else if (effectiveTime[3].toLowerCase() === "am" && efHrs == 12) {
-            effTimeHours = 0;
-        }
-        else {
-            effTimeHours = efHrs;
-        }
+        var sdt = new Date(this.StartDate() + " " + this.StartTime());
+        //console.log(sdt);
+        var edt = new Date(this.EndDate() + " " + this.EndTime());
+        //console.log(edt);
+        this.EffectiveDateTime(sdt);
+        this.ExpirationDateTime(edt);
+        //// set effective datetime
+        //var effectiveTime = this.StartTime().match(/^([0-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+        ////console.log("effectiveTime", effectiveTime.toUTCString());
+        //var effectiveDateTime = new Date(this.StartDate());
 
-        var effTimeMinutes = parseInt(effectiveTime[2]);
-        effectiveDateTime.setHours(effTimeHours);
-        effectiveDateTime.setMinutes(effTimeMinutes);
-        this.EffectiveDateTime(effectiveDateTime);
-        console.log("effectiveDateTime", effectiveDateTime.toUTCString());
+        //var effTimeHours;
+        //var efHrs = parseInt(effectiveTime[1]);
+        //if (effectiveTime[3].toLowerCase() === "pm" && effectiveTime[1] !== 12) {
+        //    effTimeHours = efHrs + 12;
+        //}else if (effectiveTime[3].toLowerCase() === "am" && efHrs === 12) {
+        //    effTimeHours = 0;
+        //}
+        //else {
+        //    effTimeHours = efHrs;
+        //}
 
-        // set expiration datetime
-        var expirationTime = this.EndTime().match(/^([0-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
-        //console.log("expirationTime", expirationTime.toUTCString());
-        var expirationDateTime = new Date(this.EndDate());
+        //var effTimeMinutes = parseInt(effectiveTime[2]);
+        //effectiveDateTime.setHours(effTimeHours);
+        //effectiveDateTime.setMinutes(effTimeMinutes);
+        //this.EffectiveDateTime(effectiveDateTime);
+        ////console.log("effectiveDateTime", effectiveDateTime.toUTCString());
 
-        var expTimeHours;
-        var exHrs = parseInt(expirationTime[1]);
-        if (expirationTime[3].toLowerCase() === "pm" && expirationTime[1] != 12) {
-            expTimeHours = exHrs + 12;
-        } else if (expirationTime[3].toLowerCase() === "am" && efHrs == 12) {
-            expTimeHours = 0;
-        }
-        else {
-            expTimeHours = exHrs;
-        }
+        //// set expiration datetime
+        //var expirationTime = this.EndTime().match(/^([0-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+        ////console.log("expirationTime", expirationTime.toUTCString());
+        //var expirationDateTime = new Date(this.EndDate());
 
-        var expTimeMinutes = parseInt(expirationTime[2]);
-        expirationDateTime.setHours(expTimeHours);
-        expirationDateTime.setMinutes(expTimeMinutes);
-        this.ExpirationDateTime(expirationDateTime);
-        console.log("exDateTime", expirationDateTime.toUTCString());
+        //var expTimeHours;
+        //var exHrs = parseInt(expirationTime[1]);
+        //if (expirationTime[3].toLowerCase() === "pm" && expirationTime[1] !== 12) {
+        //    expTimeHours = exHrs + 12;
+        //} else if (expirationTime[3].toLowerCase() === "am" && efHrs === 12) {
+        //    expTimeHours = 0;
+        //}
+        //else {
+        //    expTimeHours = exHrs;
+        //}
+
+        //var expTimeMinutes = parseInt(expirationTime[2]);
+        //expirationDateTime.setHours(expTimeHours);
+        //expirationDateTime.setMinutes(expTimeMinutes);
+        //this.ExpirationDateTime(expirationDateTime);
+        ////console.log("exDateTime", expirationDateTime.toUTCString());
     } catch (e) {
 
     }
@@ -473,9 +502,9 @@ function setKoType(array, property, id) {
     
     var result = $.grep(array, function(obj) {
         if (typeof obj[property] === "function") {
-            return obj[property]() == id;
+            return obj[property]() === id;
         } else {
-            return obj[property] == id;
+            return obj[property] === id;
         }
     });
     //console.log(ko.toJSON(result));
