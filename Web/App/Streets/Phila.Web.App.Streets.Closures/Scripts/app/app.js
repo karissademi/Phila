@@ -8,7 +8,7 @@
 /// <reference path="ko.editable.js" />
 /// <reference path="app-models.js" />
 /// <reference path="permit-geo.js" />
-
+/// <reference path="~/Scripts/jquery.bootpag.min.js" />
 
 
 //**** View Model
@@ -35,7 +35,7 @@ function AppViewModel() {
     self.permitTypes = ko.observableArray();
     self.occupancyTypes = ko.observableArray();
     self.utilityOwners = ko.observableArray();
-    self.selectedCompany = ko.observable(new Company());
+    self.selectedCompany = ko.observable("");
 
     // data for the login email
     self.usersEmailAddress = ko.observable().extend({ email: true, required: true });
@@ -333,33 +333,67 @@ function AppViewModel() {
         }
     };
 
+    self.isOccupancyTypeValid = ko.observable(false).extend({ required: {message: "*" } } );
+    self.isLocationTypeValid = ko.observable(false).extend({ required: { message: "*" } });
+    self.isOnStreetValid = ko.observable(false).extend({ required: { message: "*" } });
+    self.isFromStreetValid = ko.observable(false).extend({ required: { message: "*" } });
+    self.isToStreetValid = ko.observable(false).extend({ required: { message: "*" } });
+
     self.applyLocation = function () {
 
         //console.log(self.editingLocationItem());
 
-        //if (!ko.validation.validateObservable(self.editingLocationItem().OccupancyTypeId().editValue))
-        //    console.log("invalid occupancy type");
+        if (!ko.validation.validateObservable(self.editingLocationItem().OccupancyTypeId().editValue)) {
+            console.log("invalid occupancy type");
+            self.isOccupancyTypeValid(undefined);
+        } else {
+            console.log("valid occupancy type");
+            self.isOccupancyTypeValid(true);
+        }
 
-        //if (!ko.validation.validateObservable(self.editingLocationItem().LocationType().editValue))
-        //    console.log("invalid location type");
 
-        //if (!ko.validation.validateObservable(self.editingLocationItem().OnStreetName().editValue))
-        //    console.log("invalid on street");
+        if (!ko.validation.validateObservable(self.editingLocationItem().LocationType)) {
+            console.log("invalid location type");
+            self.isLocationTypeValid(undefined);
+        } else {
+            console.log("valid location type");
+            self.isLocationTypeValid(true);
+        }
 
-        //if (!ko.validation.validateObservable(self.editingLocationItem().FromStreetName().editValue))
-        //    console.log("invalid from street");
+        if (!ko.validation.validateObservable(self.editingLocationItem().OnStreetName)) {
+            console.log("invalid on street");
+            self.isOnStreetValid(undefined);
+        } else {
+            console.log("valid on street");
+            self.isOnStreetValid(true);
+        }
 
-        //if (!ko.validation.validateObservable(self.editingLocationItem().ToStreetName().editValue))
-        //    console.log("invalid to street");
+        if (!ko.validation.validateObservable(self.editingLocationItem().FromStreetName)) {
+            console.log("invalid from street");
+            self.isFromStreetValid(undefined);
+        } else {
+            console.log("valid from street");
+            self.isFromStreetValid(true);
+        }
 
+        if (!ko.validation.validateObservable(self.editingLocationItem().ToStreetName)) {
+            console.log("invalid to street");
+            self.isToStreetValid(undefined);
+        } else {
+            console.log("valid to street");
+            self.isToStreetValid(true);
+        }
 
         //if (!ko.validation.validateObservable(self.editingLocationItem))
         //    return false;
         //console.log(self.editingLocationItem().OccupancyTypeId, self.editingLocationItem().LocationType, self.editingLocationItem().OnStreetName);
 
-        //var errors = ko.validation.group([self.editingLocationItem().OccupancyTypeId, self.editingLocationItem().LocationType, self.editingLocationItem().OnStreetName], { deep: true, insertMessages: true });
+        //var errors = ko.validation.group([self.editingLocationItem().OccupancyTypeId, self.editingLocationItem().LocationType, self.editingLocationItem().OnStreetName, self.editingLocationItem().FromStreetName, self.editingLocationItem().ToStreetName ], { deep: true, insertMessages: true });
         //errors.showAllMessages();
-       // var errors = ko.validation.group([self.editingLocationItem], { deep: true, observable: true, live: true });
+
+        //if (errors().length > 0) return false;
+
+        //var errors = ko.validation.group([self.editingLocationItem], { deep: true, observable: true, live: true });
         
 
         //sequenceNumber, occumpanyTypeId, locationType, onStreetName, onStreetCode, fromStreetName, fromStreetCode, fromStreetNode, toStreetName, toStreetCode, toStreetNode////self.editingLocationItem.LocationType.editValue, self.editingLocationItem.OnStreetName.editValue
@@ -625,27 +659,28 @@ function AppViewModel() {
         /// <summary>
         ///     Gets a list of permits for a company
         /// </summary>
-        var $loadingIndicator = $('#loading-indicator');
+        var $loadingIndicator = $("#loading-indicator");
         $loadingIndicator.show();
 
-        var searchText = self.permitSearch() + self.permitSearch() != "" ? "&search=" + self.permitSearch() : "";
+        var searchText = self.permitSearch() + self.permitSearch() !== "" ? "&search=" + self.permitSearch() : "";
 
         var page = "";
         if (paging) page = "&page=" + self.currentPermitPage;
 
         var statusFilter = "&statusCode=";
 
-        statusFilter += self.selectedStatusCode() == undefined ? "1" : self.selectedStatusCode().StatusId;
+        statusFilter += self.selectedStatusCode() == undefined ? "1" : self.selectedStatusCode();
 
         var companyFilter = "";
         try {
-            companyFilter = self.selectedCompany().CompanyId() == undefined ? "" : "&companyId=" + self.selectedCompany().CompanyId();
+
+            companyFilter = self.selectedCompany() == undefined || self.selectedCompany().CompanyId() == undefined ? "" : "&companyId=" + self.selectedCompany().CompanyId();
         } catch (e) {
             console.log(e);
             return;
         }
 
-        if (companyFilter == "" || companyFilter == undefined) return;
+        if (companyFilter === "" || companyFilter == undefined) return;
 
 
         var pageSizeFilter = self.selectedPageSize() != undefined ? "&pageSize=" + self.selectedPageSize() : "";
@@ -1143,9 +1178,9 @@ function AppViewModel() {
                     self.permitStatusCodes.push(s);
                 });
                 var statusId = self.selectedStatusCode();
-                if (statusId == 1)
+                if (statusId === 1)
                     $("button:contains('Approved')").css("border", "black solid 3px");
-                else if(statusId == 8)
+                else if(statusId === 8)
                     $("button:contains('Draft')").css("border", "black solid 3px");
 
             },
@@ -1157,17 +1192,42 @@ function AppViewModel() {
 
     self.selectStatusCode = function(data, event) {
         //console.log(event.target);
-        $(".status-button").css("border", "none");
-        if (!$(event.target).hasClass("status-button")) {
-            $(event.target).parent(".status-button").css("border", "black solid 3px");
-        } else {
-            //console.log("else");
-            $(event.target).css("border", "black solid 3px");
-        }
+        //$(".status-button").css("border", "none");
+        //if (!$(event.target).hasClass("status-button")) {
+        //    $(event.target).parent(".status-button").css("border", "black solid 3px");
+        //} else {
+        //    //console.log("else");
+        //    $(event.target).css("border", "black solid 3px");
+        //}
+        //$("#PermitsTable").html($("#tab-" + data));
+        if (document.getElementById("tab-" + data) !== null) {
+            $('.r-tabs-state-active').removeClass('r-tabs-state-active');
+            $("#tab-" + data).prev("div").removeClass('r-tabs-state-default').addClass('r-tabs-state-active');
 
-        self.selectedStatusCode(data);
-        $("#loading-table").show();
-        self.getPermitsForCompany();
+            var $tab = document.getElementById("tab-" + data);
+
+            if (screen.width > 768) {
+                $tab.appendChild(document.getElementById("PermitsTable"));
+            } else {
+               $tab.previousElementSibling.appendChild(document.getElementById("PermitsTable"));
+            }
+
+
+            //$tab.previousElementSibling.className.replace("r-tabs-state-default", "r-tabs-state-active");
+            //console.log($("#tab-" + data).prev("div.r-tabs-accordion-title.r-tabs-state-default").html());
+
+           // $('.r-tabs-state-active').removeClass('r-tabs-state-active');//.addClass('r-tabs-state-default');
+            //
+          
+
+
+            //$("#PermitsTable").after($("#tab-" + data));
+
+            self.selectedStatusCode(data);
+            //$("#loading-table").show();
+            self.getPermitsForCompany();
+
+        } 
     };
 
     //** nav
@@ -1389,7 +1449,7 @@ $(document).ready(function () {
         //    // ToDo: validation
         //});
 
-        $('#page-selection').bootpag({
+        $("#page-selection").bootpag({
             total: 1,
             page: 1,
             maxVisible: 5
@@ -1428,11 +1488,46 @@ $(document).ready(function () {
         handles: "e"
     });
 
-    $(document).ajaxStart(function() {
-        $(".mask").addClass("ajax");
+    //$(document).ajaxStart(function() {
+    //    $(".mask").addClass("ajax");
+    //});
+    //$(document).ajaxComplete(function() {
+    //    $(".mask").removeClass("ajax");
+    //});
+
+    $('#tabs').responsiveTabs({
+        active: 1,
+        //accordionTabElement: "<div data-bind='click: $root.selectStatusCode($data)'></div>",
+        scrollToAccordion: false
+        //startCollapsed: 'accordion'
     });
-    $(document).ajaxComplete(function() {
-        $(".mask").removeClass("ajax");
+
+    $("#a1").click(function() {
+        model.selectStatusCode(1);
+    });
+    $("#a2").click(function () {
+        model.selectStatusCode(2);
+    });
+    $("#a3").click(function () {
+        model.selectStatusCode(3);
+    });
+    $("#a4").click(function () {
+        model.selectStatusCode(4);
+    });
+    $("#a5").click(function () {
+        model.selectStatusCode(5);
+    });
+    $("#a6").click(function () {
+        model.selectStatusCode(6);
+    });
+    $("#a7").click(function () {
+        model.selectStatusCode(7);
+    });
+    $("#a8").click(function () {
+        model.selectStatusCode(8);
+    });
+    $("#a9").click(function () {
+        model.selectStatusCode(9);
     });
 
     

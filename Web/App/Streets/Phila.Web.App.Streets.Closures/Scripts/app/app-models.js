@@ -166,7 +166,7 @@ function PostedLocation(sequenceNumber, occumpanyTypeId, locationType, onStreetN
     var self = this;
 
     if (occumpanyTypeId == undefined) occumpanyTypeId = "";
-    if (locationType == undefined) locationType = "blank";
+    if (locationType == undefined) locationType = "";
     if (onStreetName == undefined) onStreetName = "";
     if (fromStreetName == undefined) fromStreetNode = "";
     if (toStreetName == undefined) toStreetName = "";
@@ -176,23 +176,23 @@ function PostedLocation(sequenceNumber, occumpanyTypeId, locationType, onStreetN
     self.LocationType = ko.observable(locationType).extend({ editable: true }).extend({
         validation: {
             validator: function (val, params) {
-                console.log(val);
-                if (val == undefined || val === "" || val === "") {
+                console.log(val, this.editValue);
+                if (val == undefined || val === "") {
                     return false;
                 }
 
                 return true;
-            },
-            message: "Required"
+            }
         }
     });
     self.OnStreetName = ko.observable(onStreetName).extend({ editable: true }).extend({ required: true });
     self.OnStreetCode = ko.observable(onStreetCode).extend({ editable: true });
     self.FromStreetName = ko.observable(fromStreetName).extend({ editable: true }).extend({
                 validation: {
-                    validator: function (val, params) {               
+                    validator: function (val, params) {
+                        //console.log(val, self.LocationType.editValue());
+                        if ((self.LocationType.editValue()) === "Intersection" || self.LocationType.editValue() === "Street Segment" && (val == undefined || val.StreetName === "blank" || val === "")) {
 
-                        if (self.LocationType() === "Intersection" || self.LocationType() === "Street Segment" && (val == undefined || val.StreetName === "blank" || val === "")) {
                             return false;
                         }
 
@@ -309,7 +309,11 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
 
                 self.setLongDateTimes();
 
-                if (self.ExpirationDateTime() > self.EffectiveDateTime()) return true;
+                var exDt = self.ExpirationDateTime();
+                var efDt = self.EffectiveDateTime();
+                //console.log(efDt, exDt);
+
+                if (exDt > efDt) return true;
 
                 return false;
             },
@@ -414,55 +418,55 @@ function getShortTime(datetime) {
 Permit.prototype.setLongDateTimes = function () {
     try {
 
-        var sdt = new Date(this.StartDate() + " " + this.StartTime());
-        //console.log(sdt);
-        var edt = new Date(this.EndDate() + " " + this.EndTime());
-        //console.log(edt);
-        this.EffectiveDateTime(sdt);
-        this.ExpirationDateTime(edt);
-        //// set effective datetime
-        //var effectiveTime = this.StartTime().match(/^([0-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
-        ////console.log("effectiveTime", effectiveTime.toUTCString());
-        //var effectiveDateTime = new Date(this.StartDate());
+        //var sdt = new Date(this.StartDate() + " " + this.StartTime());
+        ////console.log(sdt);
+        //var edt = new Date(this.EndDate() + " " + this.EndTime());
+        ////console.log(edt);
+        //this.EffectiveDateTime(sdt);
+        //this.ExpirationDateTime(edt);
+        // set effective datetime
+        var effectiveTime = this.StartTime().match(/^([0-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+        //console.log("effectiveTime", effectiveTime.toUTCString());
+        var effectiveDateTime = new Date(this.StartDate());
 
-        //var effTimeHours;
-        //var efHrs = parseInt(effectiveTime[1]);
-        //if (effectiveTime[3].toLowerCase() === "pm" && effectiveTime[1] !== 12) {
-        //    effTimeHours = efHrs + 12;
-        //}else if (effectiveTime[3].toLowerCase() === "am" && efHrs === 12) {
-        //    effTimeHours = 0;
-        //}
-        //else {
-        //    effTimeHours = efHrs;
-        //}
+        var effTimeHours;
+        var efHrs = parseInt(effectiveTime[1]);
+        if (effectiveTime[3].toLowerCase() === "pm" && effectiveTime[1] !== 12) {
+            effTimeHours = efHrs + 12;
+        }else if (effectiveTime[3].toLowerCase() === "am" && efHrs === 12) {
+            effTimeHours = 0;
+        }
+        else {
+            effTimeHours = efHrs;
+        }
 
-        //var effTimeMinutes = parseInt(effectiveTime[2]);
-        //effectiveDateTime.setHours(effTimeHours);
-        //effectiveDateTime.setMinutes(effTimeMinutes);
-        //this.EffectiveDateTime(effectiveDateTime);
-        ////console.log("effectiveDateTime", effectiveDateTime.toUTCString());
+        var effTimeMinutes = parseInt(effectiveTime[2]);
+        effectiveDateTime.setHours(effTimeHours);
+        effectiveDateTime.setMinutes(effTimeMinutes);
+        this.EffectiveDateTime(effectiveDateTime);
+        //console.log("effectiveDateTime", effectiveDateTime.toUTCString());
 
-        //// set expiration datetime
-        //var expirationTime = this.EndTime().match(/^([0-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
-        ////console.log("expirationTime", expirationTime.toUTCString());
-        //var expirationDateTime = new Date(this.EndDate());
+        // set expiration datetime
+        var expirationTime = this.EndTime().match(/^([0-9]|0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)?$/i);
+        //console.log("expirationTime", expirationTime.toUTCString());
+        var expirationDateTime = new Date(this.EndDate());
 
-        //var expTimeHours;
-        //var exHrs = parseInt(expirationTime[1]);
-        //if (expirationTime[3].toLowerCase() === "pm" && expirationTime[1] !== 12) {
-        //    expTimeHours = exHrs + 12;
-        //} else if (expirationTime[3].toLowerCase() === "am" && efHrs === 12) {
-        //    expTimeHours = 0;
-        //}
-        //else {
-        //    expTimeHours = exHrs;
-        //}
+        var expTimeHours;
+        var exHrs = parseInt(expirationTime[1]);
+        if (expirationTime[3].toLowerCase() === "pm" && expirationTime[1] !== 12) {
+            expTimeHours = exHrs + 12;
+        } else if (expirationTime[3].toLowerCase() === "am" && efHrs === 12) {
+            expTimeHours = 0;
+        }
+        else {
+            expTimeHours = exHrs;
+        }
 
-        //var expTimeMinutes = parseInt(expirationTime[2]);
-        //expirationDateTime.setHours(expTimeHours);
-        //expirationDateTime.setMinutes(expTimeMinutes);
-        //this.ExpirationDateTime(expirationDateTime);
-        ////console.log("exDateTime", expirationDateTime.toUTCString());
+        var expTimeMinutes = parseInt(expirationTime[2]);
+        expirationDateTime.setHours(expTimeHours);
+        expirationDateTime.setMinutes(expTimeMinutes);
+        this.ExpirationDateTime(expirationDateTime);
+        //console.log("exDateTime", expirationDateTime.toUTCString());
     } catch (e) {
 
     }

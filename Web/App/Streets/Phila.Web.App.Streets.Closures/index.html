@@ -16,8 +16,8 @@
     <link href="Content/app/jquery-ui-smoothness-1.11.4.css" rel="stylesheet" />
     <link href="Content/app/ionicons.min-2.0.1.css" rel="stylesheet" />
     <!--<link href="Content/app/patterns-0.8.1.css" rel="stylesheet" />-->
+    <link href="Content/responsive-tabs.css" rel="stylesheet" />
     <link href="Content/app/site.css" rel="stylesheet" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
 </head>
@@ -205,18 +205,20 @@
         <hr />
         <!-- Begin your permits section -->
         <div id="YourPermitsSection" class="row" style="display: none; padding: 12.5px;">
-            <div class="columns medium-24 marg-bottom-20">
+            <div class="columns medium-24 marg-bottom-12.5px">
 
                 <h2>Your Permits</h2>
 
-                <a class="button icon" href="#/" data-bind="click: $root.addPermit" id="ShowAddResourcePageButtonTOP">Add New Permit<i class="fa fa-plus fa-2x addNewButton"></i></a>
+                <!--<a class="button icon" href="#/" style="cursor: pointer" data-bind="click: $root.addPermit" id="ShowAddResourcePageButtonTOP">New Permit<i class="fa fa-plus fa-2x addNewButton"></i></a>
 
                 <h4>Step 1: filter your permits by status</h4>
 
-                <div data-bind="template: { name: 'status-template', foreach: permitStatusCodes }"></div>
+                <div data-bind="template: { name: 'status-template', foreach: permitStatusCodes }"></div>-->
+
             </div>
 
-            <div class="row">
+            <!--<div class="row">
+                <h4>Step 2: enter text to filter your permits</h4>
                 <div id="Search" class="columns medium-20 marg-bottom-20">
                     <input placeholder="Filter list" type="text" data-bind="value: permitSearch, valueUpdate: 'afterkeydown', event: { 'keyup': $root.getPermitsForCompany.bind($data) }" />
                     <div>
@@ -226,33 +228,81 @@
                 <div class="medium-4 columns">
                     <select data-bind="options: pageSizes, value: $root.selectedPageSize, event:{ change: $root.getPermitsForCompany.bind($data) }"></select>
                 </div>
-            </div>
-            <div class="row">
+            </div>-->
+            <!--<div class="row">
                 <div class="columns medium-24 marg-bottom-20">
                     <div>
                         <img src="Content/app/images/loading.gif" alt="loading..." id="loading-table" style="float: right" />
                     </div>
                 </div>
             </div>
-            <div class="mask"></div>
-            <div id="PermitSection">
-                <table id="permitsTable" class="ui-widget-content resize no-borders">
-                    <thead>
-                        <tr>
-                            <th data-bind="click: sortPermits.bind($data, 'permitid')">Permit ID&nbsp;<i class="fa fa-sort"></i></th>
-                            <th data-bind="click: sortPermits.bind($data, 'purpose')">Purpose&nbsp;<i class="fa fa-sort"></i></th>
-                            <th data-bind="click: sortPermits.bind($data, 'permitlocation')">Start Date&nbsp;<i class="fa fa-sort"></i></th>
-                            <th data-bind="click: sortPermits.bind($data, 'startdate')">Start Time&nbsp;<i class="fa fa-sort"></i></th>
-                            <th data-bind="click: sortPermits.bind($data, 'enddate')">End Date&nbsp;<i class="fa fa-sort"></i></th>
-                            <th data-bind="click: sortPermits.bind($data, 'startdate')">End Time&nbsp;<i class="fa fa-sort"></i></th>
-                            <th data-bind="click: sortPermits.bind($data, 'permitstatus')">Status&nbsp;<i class="fa fa-sort"></i></th>
-                            <th>options&nbsp;<i class="fa fa-sort"></i></th>
-                        </tr>
-                    </thead>
-                    <tbody data-bind="template: { name: 'closure-template', foreach: permits }"></tbody>
-                </table>
+            <div class="mask"></div>-->
+            <div id="PermitSection" class="row" style="padding-left: 12.5px; padding-right: 12.5px">
+                The crazy colors are for the development site only
+                <div id="tabs" class="columns medium-24 marg-bottom-20">
+                    <ul>
+                        <li><a href="#tab-permit-stats">Stats</a></li>
+                        <li><a id="a1" data-statusId="1" href="#tab-1">Approved</a></li>
+                        <li><a id="a4" data-statusId="4" href="#tab-4">Awaiting Info</a></li>
+                        <li><a id="a9" data-statusId="9" href="#tab-9">Cancelled</a></li>
+                        <li><a id="a2" data-statusId="2" href="#tab-2">Denied</a></li>
+                        <li><a id="a8" data-statusId="8" href="#tab-8">Draft</a></li>
+                        <li><a id="a7" data-statusId="7" href="#tab-7">Work In Progress</a></li>
+                        <li><a id="a3" data-statusId="3" href="#tab-3">Pending</a></li>
+                        <li><a id="a5" data-statusId="5" href="#tab-5">Revoked</a></li>
+                        <li><a id="a6" data-statusId="6" href="#tab-6">Suspended</a></li>
+
+                    </ul>
+                    <div id="tab-permit-stats">
+                        Stats go here
+                    </div>
+                    <div id="tab-1" name="tab-permits-approved">
+
+                        <div id="PermitsTable">
+                            <div class="row">
+                                <div id="Search" class="columns medium-20 marg-bottom-20">
+                                    <input placeholder="Filter list" type="text" data-bind="value: permitSearch, valueUpdate: 'afterkeydown', event: { 'keyup': $root.getPermitsForCompany.bind($data) }"/>
+                                    <div>
+                                        Filtered results:&nbsp;<span data-bind="text: $root.totalPermitsFound"></span>&nbsp;permits
+                                    </div>
+                                </div>
+                                <div class="medium-4 columns">
+                                    <select data-bind="options: pageSizes, value: $root.selectedPageSize, event:{ change: $root.getPermitsForCompany.bind($data) }"></select>
+                                </div>
+                            </div>
+                            <table id="permitsTable" class="ui-widget-content resize no-borders">
+                                <thead>
+                                <tr>
+                                    <th>options</th>
+
+                                    <th data-bind="click: sortPermits.bind($data, 'permitid')">Permit ID&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th data-bind="click: sortPermits.bind($data, 'purpose')">Purpose&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th data-bind="click: sortPermits.bind($data, 'permitlocation')">Start Date&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th data-bind="click: sortPermits.bind($data, 'startdate')">Start Time&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th data-bind="click: sortPermits.bind($data, 'enddate')">End Date&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th data-bind="click: sortPermits.bind($data, 'startdate')">End Time&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th data-bind="click: sortPermits.bind($data, 'permitstatus')">Status&nbsp;<i class="fa fa-sort"></i></th>
+                                </tr>
+                                </thead>
+                                <tbody data-bind="template: { name: 'closure-template', foreach: permits }"></tbody>
+                            </table>
+                            <div id="page-selection"></div>
+
+                        </div>
+
+                    </div>
+                    <div id="tab-4" name="tab-permits-awaitinginfo"></div>
+                    <div id="tab-9" name="tab-permits-cancelled"></div>
+                    <div id="tab-2" name="tab-permits-denied"></div>
+                    <div id="tab-8" name="tab-permits-draft"></div>
+                    <div id="tab-7" name="tab-permits-afterwork"></div>
+                    <div id="tab-3" name="tab-permits-pending"></div>
+                    <div id="tab-5" name="tab-permits-revoked"></div>
+                    <div id="tab-6"name="tab-permits-suspended"></div>
+
+
+                </div>
             </div>
-            <div id="page-selection"></div>
 
         </div>
         <!-- end your permits section -->
@@ -260,7 +310,7 @@
         <div id="AddNewPermitSection" class="row add-permit" style="display: none" data-bind="with: editingPermitItem">
             <!-- Begin top input div -->
             <div id="AddResourcePage" class="columns marg-top-20">
-                <i class="fa fa-home fa-4x" data-bind="click: $root.cancelPermitApplication"></i>
+                <i style="cursor: pointer" class="fa fa-home fa-4x" data-bind="click: $root.cancelPermitApplication"></i>
                 <h2>New Closure Request Form</h2>
                 <div class="row">
                     <div class="medium-6 columns">
@@ -337,11 +387,13 @@
             <hr />
             <!-- end top input div -->
             <!-- Begin location div  -->
-            <div style="padding-left: 12.5px; padding-right: 12.5px;">
+            <div style="padding-left: 12.5px; padding-right: 12.5px;" data-bind="validationOptions: {insertMessages: false}">
                 <div id="formLocations" class="row">
                     <div class="columns">
                         <h2>Location(s)<span style="color: black;">*</span></h2>
                         <span class="validationMessage" data-bind="validationMessage: Locations"></span>
+
+                        <span class="validationMessage" data-bind="validationMessage: $root.isLocationTypeValid"></span>
                     </div>
                 </div>
                 <div data-bind="foreach: Locations">
@@ -354,19 +406,25 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div data-bind="validationOptions: {insertMessages: true}" class="medium-12 columns">
+                        <div class="medium-12 columns">
                             <strong><label>Occupancy Type:</label></strong><span style="color: black;">*</span>
 
                             <select data-bind="options: $root.occupancyTypes, optionsText: 'OccupancyTypeName', value: OccupancyTypeId.editValue, selectedOptions: OccupancyTypeId, optionsCaption: 'Choose...', visible: $root.isLocationEditing($data)"></select>
 
-                            <label class="read" data-bind="text: OccupancyTypeId() ? OccupancyTypeId().OccupancyTypeName : 'blank', visible: !$root.isLocationEditing($data)"></label>
+                            <label class="read" data-bind="text: OccupancyTypeId() ? OccupancyTypeId().OccupancyTypeName : '', visible: !$root.isLocationEditing($data)"></label>
+
+                            <span class="validationMessage" data-bind="validationMessage: OccupancyTypeId"></span>
+
                         </div>
+
+                        <!-- location type -->
                         <div class="medium-12 columns">
                             <strong><label>Location Type:<span style="color: black;">*</span>&nbsp;<abbr rel="tooltip" title="Select a location type."><i class="fa fa-info-circle"></i></abbr></label></strong>
 
                             <select data-bind="options: $root.locationTypes, selectedOptions: LocationType.editValue(), visible: $root.isLocationEditing($data), value: LocationType.editValue, optionsCaption: 'Choose...'"></select>
 
-                            <label class="read" data-bind="text: LocationType() ? LocationType() : 'blank', visible: !$root.isLocationEditing($data)"></label>
+                            <label class="read" data-bind="text: LocationType() ? LocationType() : 'required', visible: !$root.isLocationEditing($data)"></label>
+                            <span class="validationMessage" data-bind="validationMessage: LocationType"></span>
                         </div>
                     </div>
                     <div class="row">
@@ -374,8 +432,11 @@
                             <strong><label data-bind="text: $data.LocationType.editValue() == 'Address' ? 'Address:' : 'On Street:'"></label></strong><span style="color: black;">*</span>
 
                             <input id="OnStreet" data-bind="jqAuto: { value: OnStreetName.editValue, source: $root.getOnStreets, inputProp: 'StreetName', labelProp: 'StreetName', valueProp: 'StreetName' }, visible: $root.isLocationEditing($data)" type="text" />
-                            <input type="text" style="visibility: collapse" />
-                            <label class="read" data-bind="text: OnStreetName.editValue() != undefined ? OnStreetName() : 'blank', visible: !$root.isLocationEditing($data)"></label>
+
+                            <label class="read" data-bind="text: OnStreetName.editValue() != undefined ? OnStreetName() : 'required', visible: !$root.isLocationEditing($data)"></label>
+
+                            <span class="validationMessage" data-bind="validationMessage: OnStreetName"></span>
+
                         </div>
                     </div>
                     <div class="row">
@@ -394,6 +455,9 @@
                             <select id="FromStreet" class="ddFromStreet" data-bind="options: $root.fromStreets, optionsText: 'StreetName', value: FromStreetName.editValue, optionsCaption: $root.fromStreetCaption, visible: $root.isLocationEditing($data), event: { change: $root.getToStreets.bind($data, $data.OnStreetName.editValue, $data.FromStreetName.editValue) },  enable: $root.fromStreets() != undefined && $root.fromStreets().length > 0 ? true : false"></select>
 
                             <label class="read" data-bind="text: FromStreetName() != undefined ? FromStreetName().StreetName : FromStreetName(), visible: !$root.isLocationEditing($data)"></label>
+
+                            <span class="validationMessage" data-bind="validationMessage: FromStreetName.editValue"></span>
+
                         </div>
 
                         <div id="OnStreetDiv" class="medium-12 columns" data-bind="visible: $data.LocationType.editValue() == 'Street Segment'">
@@ -402,11 +466,16 @@
                             <br />
                             <select class="ddToStreet" data-bind="options: $root.toStreets, optionsText: 'StreetName', value: $data.ToStreetName.editValue, optionsCaption: $root.toStreetCaption, visible: $root.isLocationEditing($data),  enable: $root.toStreets() != undefined && $root.toStreets().length > 0 ? true : false"></select>
                             <label class="read" data-bind="text: ToStreetName() != undefined ? ToStreetName().StreetName : ToStreetName(), visible: !$root.isLocationEditing($data)"></label>
+
+                            <span class="validationMessage" data-bind="validationMessage: ToStreetName"></span>
+
                         </div>
                     </div>
                     <hr />
                 </div>
-                <span style="cursor: pointer" data-bind="click: $root.addLocation, visible: $root.isLocationEditing()"><i class="marg-top-5 fa fa-plus fa-2x addNewButton"></i>Add Location</span>
+
+                <a class="button icon" style="cursor: pointer" href="#/" data-bind="click: $root.addLocation, visible: $root.isLocationEditing()">Add Location<i class="fa fa-plus fa-2x addNewButton"></i></a>
+
             </div>
             <!-- end location div -->
             <!-- Begin reference div -->
@@ -443,7 +512,9 @@
                         </tr>
                     </tbody>
                 </table>
-                <span style="cursor: pointer" data-bind="click: $root.addReference, visible: $root.isReferenceEditing()"><i class="fa fa-plus fa-2x addNewButton"></i>Add Reference</span>
+
+                <a class="button icon" style="cursor: pointer" href="#/" data-bind="click: $root.addReference, visible: $root.isReferenceEditing()">Add Reference<i class="fa fa-plus fa-2x addNewButton"></i></a>
+
             </div>
             <!-- end reference div -->
             <!-- Begin file upload div -->
@@ -457,10 +528,26 @@
             <!-- end file upload div -->
             <!-- Begin application actions div -->
             <div class="large-24 columns pad-25">
-                <a class="button" id="submitApp" data-bind="click: $root.submitPermitApplication">Submit App</a>
-                <a class="button" id="submitDraft" data-bind="click: $root.submitPermitDraftApplication, text: $root.isPermitNew() === true ? 'Save Draft' : 'Update Draft'"></a>
-                <a class="button" id="cancelApp" data-bind="click: $root.cancelPermitApplication, text:  $root.isPermitNew() === true ? 'Delete App' : 'Cancel Changes'"></a>
-                <a class="button" id="deleteApp" data-bind="visible: !$root.isPermitNew(), click: $root.submitPermitCancellation.bind($data, true, false)">Delete Draft</a>
+
+                <a class="button icon" id="submitApp" style="cursor: pointer" href="#/" data-bind="click: $root.submitPermitApplication">Submit App<i class="fa fa-send fa-2x addNewButton"></i></a>
+
+
+                <!--<a class="button" id="submitApp" data-bind="click: $root.submitPermitApplication">Submit App</a>-->
+
+                <a class="button icon" id="submitDraft" style="cursor: pointer" href="#/" data-bind="click: $root.submitPermitDraftApplication"><span data-bind="text: $root.isPermitNew() === true ? 'Save Draft' : 'Update Draft'"></span><i class="fa fa-floppy-o fa-2x addNewButton"></i></a>
+
+
+                <!--<a class="button" id="submitDraft" data-bind="click: $root.submitPermitDraftApplication, text: $root.isPermitNew() === true ? 'Save Draft' : 'Update Draft'"></a>-->
+
+
+                <a class="button icon" id="cancelApp" style="cursor: pointer" href="#/" data-bind="click: $root.cancelPermitApplication"><span data-bind="text:  $root.isPermitNew() === true ? 'Delete App' : 'Cancel Changes'"></span><i class="fa fa-times fa-2x addNewButton"></i></a>
+
+
+                <!--<a class="button" id="cancelApp" data-bind="click: $root.cancelPermitApplication, text:  $root.isPermitNew() === true ? 'Delete App' : 'Cancel Changes'"></a>-->
+
+                <a class="button icon" id="deleteApp" data-bind="visible: !$root.isPermitNew(), click: $root.submitPermitCancellation.bind($data, true, false)"><span>Delete Draft</span><i class="fa fa-trash fa-2x addNewButton"></i></a>
+
+                <!--<a class="button" id="deleteApp" data-bind="visible: !$root.isPermitNew(), click: $root.submitPermitCancellation.bind($data, true, false)">Delete Draft</a>-->
             </div>
             <!-- End application actions div -->
         </div>
@@ -522,18 +609,25 @@
     <!-- Begin templates -->
     <!-- Begin status button template -->
     <script type="text/html" id="status-template">
-        <div class="searchGroup">
-            <button class="button toolButton status-button" data-bind="click: $root.selectStatusCode">
-                <span data-bind="text: TotalPermits"></span>
-                <br />
-                <span data-bind="text: StatusName"></span>
-            </button>
-        </div>
+        <li>
+            <a href="#tab-permits" data-bind="click: $root.selectStatusCode, text: StatusName">
+            </a>
+        </li>
     </script>
     <!-- end status button template -->
     <!-- Begin permit row template -->
-    <script type="text/html" id="closure-template">
-        <tr>
+<script type="text/html" id="closure-template">
+    <tr>
+        <td class="tools">
+            <i class="fa fa-pencil fa-2x edit-button" data-bind="click: $root.editPermit.bind($data), visible: (!$root.isPermitEditing($data) && (PermitStatus() == 'Draft' || PermitStatus() == 'Awaiting Information')) ? true : false"></i>
+
+            <i class="fa fa-floppy-o fa-2x" data-bind="click: $root.applyPermit.bind($data), visible: $root.isPermitEditing($data)"></i>
+            <i class="fa fa-times fa-2x cancel-button" data-bind="click: $root.cancelEditPermit.bind($data), visible: $root.isPermitEditing($data)"></i>
+            <i class="fa fa-trash fa-2x cancel-button" data-bind="click: $root.requestPermitCancellation.bind($data), visible: (!$root.isPermitEditing($data) && (PermitStatus() == 'Draft' || PermitStatus() == 'Awaiting Information' || PermitStatus() == 'Pending')) ? true : false"></i>
+            <i class="fa fa-file-pdf-o fa-2x" data-bind="click: $root.downloadPermitPdf.bind($data), visible: PermitStatus() == 'Approved' ? true : false"></i>
+            <i class="fa fa-file  fa-2x" data-bind="visible: !$root.isPermitEditing($data) &&  PermitStatus() == 'Pending' ? true : false"></i>
+        </td>
+
             <td>
                 <label data-bind="text: PermitNumber"></label>
             </td>
@@ -565,15 +659,6 @@
                 <label data-bind="text: PermitStatus"></label>
             </td>
 
-            <td class="tools">
-                <i class="fa fa-pencil fa-2x edit-button" data-bind="click: $root.editPermit.bind($data), visible: (!$root.isPermitEditing($data) && (PermitStatus() == 'Draft' || PermitStatus() == 'Awaiting Information')) ? true : false"></i>
-
-                <i class="fa fa-floppy-o fa-2x" data-bind="click: $root.applyPermit.bind($data), visible: $root.isPermitEditing($data)"></i>
-                <i class="fa fa-times fa-2x cancel-button" data-bind="click: $root.cancelEditPermit.bind($data), visible: $root.isPermitEditing($data)"></i>
-                <i class="fa fa-trash fa-2x cancel-button" data-bind="click: $root.requestPermitCancellation.bind($data), visible: (!$root.isPermitEditing($data) && (PermitStatus() == 'Draft' || PermitStatus() == 'Awaiting Information' || PermitStatus() == 'Pending')) ? true : false"></i>
-                <i class="fa fa-file-pdf-o fa-2x" data-bind="click: $root.downloadPermitPdf.bind($data), visible: PermitStatus() == 'Approved' ? true : false"></i>
-                <i class="fa fa-file  fa-2x" data-bind="visible: !$root.isPermitEditing($data) &&  PermitStatus() == 'Pending' ? true : false"></i>
-            </td>
         </tr>
     </script>
     <!-- end permit row template -->
@@ -601,6 +686,7 @@
     <script src="Scripts/app/app.js"></script>
     <script src="Scripts/app/permit-geo.js"></script>
     <!--<script src="Scripts/app/patterns.min.js"></script>-->
+    <script src="Scripts/jquery.responsiveTabs.js"></script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/js/foundation.min.js"></script>
 
