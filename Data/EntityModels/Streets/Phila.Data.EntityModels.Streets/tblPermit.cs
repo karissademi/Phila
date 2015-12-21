@@ -62,7 +62,6 @@ namespace Phila.Data.EntityModels.Streets
         public string Phone { get; set; }
         public string Fax { get; set; }
     
-        public virtual tblContact tblContact { get; set; }
         public virtual tblDecision tblDecision { get; set; }
         public virtual tblOwner tblOwner { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -84,5 +83,6 @@ namespace Phila.Data.EntityModels.Streets
         public virtual ICollection<tblPermit_References> tblPermit_References { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPermit_Extensions> tblPermit_Extensions { get; set; }
+        public virtual tblContact tblContact { get; set; }
     }
 }

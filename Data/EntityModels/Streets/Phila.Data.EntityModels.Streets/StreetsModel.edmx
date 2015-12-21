@@ -5,14 +5,6 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="SCBPPSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="ContactRoles">
-          <Key>
-            <PropertyRef Name="ContactId" />
-            <PropertyRef Name="RoleId" />
-          </Key>
-          <Property Name="ContactId" Type="int" Nullable="false" />
-          <Property Name="RoleId" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="Documents">
           <Key>
             <PropertyRef Name="DocumentId" />
@@ -164,9 +156,6 @@ warning 6002: The table/view 'SCBPPS.dbo.tblCompanyTypes' does not have a primar
           <Property Name="RecCreateDate" Type="datetime" />
           <Property Name="RecEditUserId" Type="varchar" MaxLength="20" />
           <Property Name="RecEditDate" Type="datetime" />
-          <Property Name="SecurityToken" Type="int" />
-          <Property Name="SecurityTokenCreateDate" Type="datetime" />
-          <Property Name="LastLoginDate" Type="datetime" />
         </EntityType>
         <EntityType Name="tblDecisions">
           <Key>
@@ -546,30 +535,6 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <Property Name="CreatedUtc" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="UpdatedUtc" Type="datetime2" Precision="7" Nullable="false" />
         </EntityType>
-        <Association Name="FK_ContactRoles_Roles">
-          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
-          <End Role="ContactRoles" Type="Self.ContactRoles" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Roles">
-              <PropertyRef Name="RoleId" />
-            </Principal>
-            <Dependent Role="ContactRoles">
-              <PropertyRef Name="RoleId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ContactRoles_tblContact">
-          <End Role="tblContact" Type="Self.tblContact" Multiplicity="1" />
-          <End Role="ContactRoles" Type="Self.ContactRoles" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblContact">
-              <PropertyRef Name="ContactId" />
-            </Principal>
-            <Dependent Role="ContactRoles">
-              <PropertyRef Name="ContactId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PermitDocuments_Documents">
           <End Role="Documents" Type="Self.Documents" Multiplicity="1" />
           <End Role="PermitDocuments" Type="Self.PermitDocuments" Multiplicity="*" />
@@ -865,7 +830,6 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <Parameter Name="ReferenceValue" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="SCBPPSModelStoreContainer">
-          <EntitySet Name="ContactRoles" EntityType="Self.ContactRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Documents" EntityType="Self.Documents" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PermitDocuments" EntityType="Self.PermitDocuments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
@@ -1012,14 +976,6 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
     [tblStreets].[STNAME] AS [STNAME]
     FROM [dbo].[tblStreets] AS [tblStreets]</DefiningQuery>
           </EntitySet>
-          <AssociationSet Name="FK_ContactRoles_Roles" Association="Self.FK_ContactRoles_Roles">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="ContactRoles" EntitySet="ContactRoles" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ContactRoles_tblContact" Association="Self.FK_ContactRoles_tblContact">
-            <End Role="tblContact" EntitySet="tblContact" />
-            <End Role="ContactRoles" EntitySet="ContactRoles" />
-          </AssociationSet>
           <AssociationSet Name="FK_PermitDocuments_Documents" Association="Self.FK_PermitDocuments_Documents">
             <End Role="Documents" EntitySet="Documents" />
             <End Role="PermitDocuments" EntitySet="PermitDocuments" />
@@ -1094,7 +1050,6 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
     <edmx:ConceptualModels>
       <Schema Namespace="SCBPPSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="SCBPPSEntities" annotation:LazyLoadingEnabled="false">
-          <EntitySet Name="tblContacts" EntityType="SCBPPSModel.tblContact" />
           <EntitySet Name="tblDecisions" EntityType="SCBPPSModel.tblDecision" />
           <EntitySet Name="tblDistrictRegions" EntityType="SCBPPSModel.tblDistrictRegion" />
           <EntitySet Name="tblDistricts" EntityType="SCBPPSModel.tblDistrict" />
@@ -1111,10 +1066,6 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <EntitySet Name="tblPermitTypes" EntityType="SCBPPSModel.tblPermitType" />
           <EntitySet Name="tblProjectTypes" EntityType="SCBPPSModel.tblProjectType" />
           <EntitySet Name="tblPermit_Location_GIS" EntityType="SCBPPSModel.tblPermit_Location_GIS" />
-          <AssociationSet Name="FK_tblPermits_tblContact" Association="SCBPPSModel.FK_tblPermits_tblContact">
-            <End Role="tblContact" EntitySet="tblContacts" />
-            <End Role="tblPermit" EntitySet="tblPermits" />
-          </AssociationSet>
           <AssociationSet Name="FK_tblPermits_tblDecisions" Association="SCBPPSModel.FK_tblPermits_tblDecisions">
             <End Role="tblDecision" EntitySet="tblDecisions" />
             <End Role="tblPermit" EntitySet="tblPermits" />
@@ -1163,10 +1114,6 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <EntitySet Name="tblCompanyTypes" EntityType="SCBPPSModel.tblCompanyType" />
           <EntitySet Name="tblStatusCodes" EntityType="SCBPPSModel.tblStatusCode" />
           <EntitySet Name="Roles" EntityType="SCBPPSModel.Role" />
-          <AssociationSet Name="ContactRoles" Association="SCBPPSModel.ContactRoles">
-            <End Role="Role" EntitySet="Roles" />
-            <End Role="tblContact" EntitySet="tblContacts" />
-          </AssociationSet>
           <EntitySet Name="tblOccupancyTypes" EntityType="SCBPPSModel.tblOccupancyType" />
           <EntitySet Name="tblEncroachmentTypes" EntityType="SCBPPSModel.tblEncroachmentType" />
           <EntitySet Name="tblNodes" EntityType="SCBPPSModel.tblNode" />
@@ -1286,40 +1233,12 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
             <Parameter Name="ReferenceValue" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="tblStreets" EntityType="SCBPPSModel.tblStreet" />
+          <EntitySet Name="tblContacts" EntityType="SCBPPSModel.tblContact" />
+          <AssociationSet Name="FK_tblPermits_tblContact" Association="SCBPPSModel.FK_tblPermits_tblContact">
+            <End Role="tblContact" EntitySet="tblContacts" />
+            <End Role="tblPermit" EntitySet="tblPermits" />
+          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="tblContact">
-          <Key>
-            <PropertyRef Name="ContactId" />
-          </Key>
-          <Property Name="ContactId" Type="Int32" Nullable="false" />
-          <Property Name="CompanyId" Type="Int32" />
-          <Property Name="FirstName" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="MiddleName" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="LastName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="City" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="State" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
-          <Property Name="PostalCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Ext" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="Fax" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Pager" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Pager_PIN" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Cell_Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="EMailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Active" Type="Boolean" Nullable="false" />
-          <Property Name="RecCreateUserId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="RecCreateDate" Type="DateTime" Precision="3" />
-          <Property Name="RecEditUserId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="RecEditDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="tblPermits" Relationship="SCBPPSModel.FK_tblPermits_tblContact" FromRole="tblContact" ToRole="tblPermit" />
-          <Property Name="SecurityToken" Type="Int32" />
-          <Property Name="SecurityTokenCreateDate" Type="DateTime" Precision="3" />
-          <Property Name="LastLoginDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Roles" Relationship="SCBPPSModel.ContactRoles" FromRole="tblContact" ToRole="Role" />
-        </EntityType>
         <EntityType Name="tblDecision">
           <Key>
             <PropertyRef Name="DecisionID" />
@@ -1515,7 +1434,6 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <Property Name="PostalCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Fax" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="tblContact" Relationship="SCBPPSModel.FK_tblPermits_tblContact" FromRole="tblPermit" ToRole="tblContact" />
           <NavigationProperty Name="tblDecision" Relationship="SCBPPSModel.FK_tblPermits_tblDecisions" FromRole="tblPermit" ToRole="tblDecision" />
           <NavigationProperty Name="tblOwner" Relationship="SCBPPSModel.FK_tblPermits_tblOwner" FromRole="tblPermit" ToRole="tblOwner" />
           <NavigationProperty Name="tblPermit_CCs" Relationship="SCBPPSModel.FK_tblPermit_CCs_tblPermits" FromRole="tblPermit" ToRole="tblPermit_CCs" />
@@ -1528,6 +1446,7 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <NavigationProperty Name="Documents" Relationship="SCBPPSModel.PermitDocuments" FromRole="tblPermit" ToRole="Document" />
           <NavigationProperty Name="tblPermit_References" Relationship="SCBPPSModel.FK_tblPermit_References_tblPermits" FromRole="tblPermit" ToRole="tblPermit_References" />
           <NavigationProperty Name="tblPermit_Extensions" Relationship="SCBPPSModel.FK_tblPermit_Extensions_tblPermits" FromRole="tblPermit" ToRole="tblPermit_Extensions" />
+          <NavigationProperty Name="tblContact" Relationship="SCBPPSModel.FK_tblPermits_tblContact" FromRole="tblPermit" ToRole="tblContact" />
         </EntityType>
         <EntityType Name="tblPermitType">
           <Key>
@@ -1560,18 +1479,6 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <Property Name="Element_Id" Type="Int32" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Precision="3" />
         </EntityType>
-        <Association Name="FK_tblPermits_tblContact">
-          <End Type="SCBPPSModel.tblContact" Role="tblContact" Multiplicity="0..1" />
-          <End Type="SCBPPSModel.tblPermit" Role="tblPermit" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblContact">
-              <PropertyRef Name="ContactId" />
-            </Principal>
-            <Dependent Role="tblPermit">
-              <PropertyRef Name="ContactId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblPermits_tblDecisions">
           <End Type="SCBPPSModel.tblDecision" Role="tblDecision" Multiplicity="0..1" />
           <End Type="SCBPPSModel.tblPermit" Role="tblPermit" Multiplicity="*" />
@@ -1756,12 +1663,7 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           </Key>
           <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="tblContacts" Relationship="SCBPPSModel.ContactRoles" FromRole="Role" ToRole="tblContact" />
         </EntityType>
-        <Association Name="ContactRoles">
-          <End Type="SCBPPSModel.Role" Role="Role" Multiplicity="*" />
-          <End Type="SCBPPSModel.tblContact" Role="tblContact" Multiplicity="*" />
-        </Association>
         <EntityType Name="tblOccupancyType">
           <Key>
             <PropertyRef Name="OccupancyTypeID" />
@@ -2058,44 +1960,53 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <Property Name="MULTI_REP" Type="Double" />
           <Property Name="STNAME" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="tblContact">
+          <Key>
+            <PropertyRef Name="ContactId" />
+          </Key>
+          <Property Name="ContactId" Type="Int32" Nullable="false" />
+          <Property Name="CompanyId" Type="Int32" />
+          <Property Name="FirstName" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleName" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="PostalCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Ext" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Pager" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Pager_PIN" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Cell_Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="EMailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="RecCreateUserId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="RecCreateDate" Type="DateTime" Precision="3" />
+          <Property Name="RecEditUserId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="RecEditDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblPermits" Relationship="SCBPPSModel.FK_tblPermits_tblContact" FromRole="tblContact" ToRole="tblPermit" />
+        </EntityType>
+        <Association Name="FK_tblPermits_tblContact">
+          <End Type="SCBPPSModel.tblContact" Role="tblContact" Multiplicity="0..1" />
+          <End Type="SCBPPSModel.tblPermit" Role="tblPermit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblContact">
+              <PropertyRef Name="ContactId" />
+            </Principal>
+            <Dependent Role="tblPermit">
+              <PropertyRef Name="ContactId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="SCBPPSModelStoreContainer" CdmEntityContainer="SCBPPSEntities">
-          <EntitySetMapping Name="tblContacts">
-            <EntityTypeMapping TypeName="SCBPPSModel.tblContact">
-              <MappingFragment StoreEntitySet="tblContact">
-                <ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
-                <ScalarProperty Name="SecurityTokenCreateDate" ColumnName="SecurityTokenCreateDate" />
-                <ScalarProperty Name="SecurityToken" ColumnName="SecurityToken" />
-                <ScalarProperty Name="RecEditDate" ColumnName="RecEditDate" />
-                <ScalarProperty Name="RecEditUserId" ColumnName="RecEditUserId" />
-                <ScalarProperty Name="RecCreateDate" ColumnName="RecCreateDate" />
-                <ScalarProperty Name="RecCreateUserId" ColumnName="RecCreateUserId" />
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="EMailAddress" ColumnName="EMailAddress" />
-                <ScalarProperty Name="Cell_Phone" ColumnName="Cell_Phone" />
-                <ScalarProperty Name="Pager_PIN" ColumnName="Pager_PIN" />
-                <ScalarProperty Name="Pager" ColumnName="Pager" />
-                <ScalarProperty Name="Fax" ColumnName="Fax" />
-                <ScalarProperty Name="Ext" ColumnName="Ext" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Address2" ColumnName="Address2" />
-                <ScalarProperty Name="Address1" ColumnName="Address1" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
-                <ScalarProperty Name="ContactId" ColumnName="ContactId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tblDecisions">
             <EntityTypeMapping TypeName="SCBPPSModel.tblDecision">
               <MappingFragment StoreEntitySet="tblDecisions">
@@ -2369,14 +2280,6 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="ContactRoles" TypeName="SCBPPSModel.ContactRoles" StoreEntitySet="ContactRoles">
-            <EndProperty Name="tblContact">
-              <ScalarProperty Name="ContactId" ColumnName="ContactId" />
-            </EndProperty>
-            <EndProperty Name="Role">
-              <ScalarProperty Name="RoleId" ColumnName="RoleId" />
-            </EndProperty>
-          </AssociationSetMapping>
           <EntitySetMapping Name="tblOccupancyTypes">
             <EntityTypeMapping TypeName="SCBPPSModel.tblOccupancyType">
               <MappingFragment StoreEntitySet="tblOccupancyTypes">
@@ -2668,6 +2571,35 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
                 <ScalarProperty Name="LPOLY_" ColumnName="LPOLY_" />
                 <ScalarProperty Name="TNODE_" ColumnName="TNODE_" />
                 <ScalarProperty Name="FNODE_" ColumnName="FNODE_" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblContacts">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblContact">
+              <MappingFragment StoreEntitySet="tblContact">
+                <ScalarProperty Name="RecEditDate" ColumnName="RecEditDate" />
+                <ScalarProperty Name="RecEditUserId" ColumnName="RecEditUserId" />
+                <ScalarProperty Name="RecCreateDate" ColumnName="RecCreateDate" />
+                <ScalarProperty Name="RecCreateUserId" ColumnName="RecCreateUserId" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="EMailAddress" ColumnName="EMailAddress" />
+                <ScalarProperty Name="Cell_Phone" ColumnName="Cell_Phone" />
+                <ScalarProperty Name="Pager_PIN" ColumnName="Pager_PIN" />
+                <ScalarProperty Name="Pager" ColumnName="Pager" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Ext" ColumnName="Ext" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="ContactId" ColumnName="ContactId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

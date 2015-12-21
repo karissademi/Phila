@@ -5,7 +5,6 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="2e7d373557f14f91aa644a1ce805e7b2" Name="Diagram1" ZoomLevel="71">
-        <EntityTypeShape EntityType="SCBPPSModel.tblContact" Width="1.5" PointX="8.75" PointY="16.75" />
         <EntityTypeShape EntityType="SCBPPSModel.tblDecision" Width="1.5" PointX="0.75" PointY="8" />
         <EntityTypeShape EntityType="SCBPPSModel.tblDistrictRegion" Width="1.5" PointX="0.75" PointY="3.125" />
         <EntityTypeShape EntityType="SCBPPSModel.tblDistrict" Width="1.5" PointX="6" PointY="0.75" />
@@ -22,7 +21,6 @@
         <EntityTypeShape EntityType="SCBPPSModel.tblPermitType" Width="1.5" PointX="0.75" PointY="22.125" />
         <EntityTypeShape EntityType="SCBPPSModel.tblProjectType" Width="1.5" PointX="7.75" PointY="9.125" />
         <EntityTypeShape EntityType="SCBPPSModel.tblPermit_Location_GIS" Width="1.5" PointX="10" PointY="3.875" />
-        <AssociationConnector Association="SCBPPSModel.FK_tblPermits_tblContact" />
         <AssociationConnector Association="SCBPPSModel.FK_tblPermits_tblDecisions" />
         <AssociationConnector Association="SCBPPSModel.FK_tblDistricts_tblDistrictTypes" />
         <AssociationConnector Association="SCBPPSModel.FK_tblPermit_Districts_tblDistricts" />
@@ -38,7 +36,6 @@
         <EntityTypeShape EntityType="SCBPPSModel.tblCompanyType" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="SCBPPSModel.tblStatusCode" Width="2.625" PointX="12.125" PointY="4" />
         <EntityTypeShape EntityType="SCBPPSModel.Role" Width="1.5" PointX="11.75" PointY="18.125" />
-        <AssociationConnector Association="SCBPPSModel.ContactRoles" />
         <EntityTypeShape EntityType="SCBPPSModel.tblOccupancyType" Width="1.5" PointX="12.375" PointY="0.75" />
         <EntityTypeShape EntityType="SCBPPSModel.tblEncroachmentType" Width="1.5" PointX="10.375" PointY="12.75" />
         <EntityTypeShape EntityType="SCBPPSModel.tblNode" Width="1.5" PointX="14.375" PointY="0.75" />
@@ -56,6 +53,8 @@
         <EntityTypeShape EntityType="SCBPPSModel.tblSpecialNode" Width="1.5" PointX="16.375" PointY="0.75" />
         <AssociationConnector Association="SCBPPSModel.FK_tblPermit_Extensions_tblPermits" />
         <EntityTypeShape EntityType="SCBPPSModel.tblStreet" Width="1.5" PointX="18.375" PointY="0.75" />
+        <EntityTypeShape EntityType="SCBPPSModel.tblContact" Width="1.5" PointX="7.375" PointY="17.125" />
+        <AssociationConnector Association="SCBPPSModel.FK_tblPermits_tblContact" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

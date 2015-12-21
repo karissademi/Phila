@@ -136,7 +136,7 @@ namespace Phila.Web.Api.Streets.Controllers
                     //ToDo: check if location is valid
 
                     var lc = new LocationsController();
-                    StreetsViewModels.LocationDetails stCode = lc.GetLocationStCodeAndSegId(permitLocation.OnStreetName);
+                    StreetsViewModels.LocationDetails stCode = lc.LocationStCodeAndSegId(permitLocation.OnStreetName);
 
 
                     if (stCode.StreetCode != null)
@@ -908,7 +908,6 @@ namespace Phila.Web.Api.Streets.Controllers
 
             try
             {
-
                 await _db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -993,7 +992,7 @@ namespace Phila.Web.Api.Streets.Controllers
                 //ToDo: check if location is valid
 
                 var lc = new LocationsController();
-                StreetsViewModels.LocationDetails stCode = lc.GetLocationStCodeAndSegId(permitLocation.OnStreetName);
+                StreetsViewModels.LocationDetails stCode = lc.LocationStCodeAndSegId(permitLocation.OnStreetName);
 
 
                 if (stCode.StreetCode != null)

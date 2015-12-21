@@ -18,7 +18,6 @@ namespace Phila.Data.EntityModels.Streets
         public tblContact()
         {
             this.tblPermits = new HashSet<tblPermit>();
-            this.Roles = new HashSet<Role>();
         }
     
         public int ContactId { get; set; }
@@ -44,13 +43,8 @@ namespace Phila.Data.EntityModels.Streets
         public Nullable<System.DateTime> RecCreateDate { get; set; }
         public string RecEditUserId { get; set; }
         public Nullable<System.DateTime> RecEditDate { get; set; }
-        public Nullable<int> SecurityToken { get; set; }
-        public Nullable<System.DateTime> SecurityTokenCreateDate { get; set; }
-        public Nullable<System.DateTime> LastLoginDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPermit> tblPermits { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Role> Roles { get; set; }
     }
 }

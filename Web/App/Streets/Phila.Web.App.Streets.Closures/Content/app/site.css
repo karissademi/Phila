@@ -295,75 +295,6 @@ ul { padding: 0; }
 
 
 
-.mask {
-    display: none; /*This hides the mask*/
-}
-
-.mask .ajax {
-    background-image: url(~/Content/app/images/loading.png);
-    display: block;
-    height: 100%;
-    position: relative; /*required for z-index*/
-    width: 100%;
-    z-index: 1000; /*puts on top of everything*/
-}
-
-/*#esrimap {
-    width: 100%;
-    height: 400px;
-    display: block;
-    float: left;
-    position: relative;
-}*/
-
-.tooltip-icon{
-  display: inline-block;
-}
-#tooltip
-{
-    text-align: center;
-    color: #fff;
-    background: #111;
-    position: absolute;
-    z-index: 100;
-    padding: 15px;
-}
-
-    #tooltip:after /* triangle decoration */
-    {
-        width: 0;
-        height: 0;
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-        border-top: 10px solid black;
-        content: '';
-        position: absolute;
-        left: 50%;
-        bottom: -10px;
-        margin-left: -10px;
-    }
-
-        #tooltip.top:after
-        {
-            border-top-color: green;
-            border-bottom: 10px solid ;
-            top: -20px;
-            bottom: auto;
-        }
-
-        #tooltip.left:after
-        {
-            left: 10px;
-            margin: 0;
-        }
-
-        #tooltip.right:after
-        {
-            right: 10px;
-            left: auto;
-            margin: 0;
-        }
-
 
 
 
@@ -588,3 +519,50 @@ i {
     }
 }
 
+.tooltip-icon{
+  display: inline-block;
+}
+#tooltip
+{
+    text-align: center;
+    color: #fff;
+    background: #111;
+    position: absolute;
+    z-index: 100;
+    padding: 15px;
+}
+
+    #tooltip:after /* triangle decoration */
+    {
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid black;
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: -10px;
+        margin-left: -10px;
+    }
+
+        #tooltip.top:after
+        {
+            border-top-color: green;
+            border-bottom: 10px solid ;
+            top: -20px;
+            bottom: auto;
+        }
+
+        #tooltip.left:after
+        {
+            left: 10px;
+            margin: 0;
+        }
+
+        #tooltip.right:after
+        {
+            right: 10px;
+            left: auto;
+            margin: 0;
+        }

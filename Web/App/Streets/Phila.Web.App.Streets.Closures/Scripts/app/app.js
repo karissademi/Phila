@@ -44,7 +44,7 @@ function AppViewModel() {
 
 
     self.totalPermitsFound = ko.observable();
-    self.apiUrl = "https://phila.azurewebsites.net/"; // "http://localhost/Phila.Web.Api.Streets/";//  
+    self.apiUrl = "https://phila.azurewebsites.net/"; //  "http://localhost/Phila.Web.Api.Streets/";//  
     self.streetCode = "";
     self.fromStreets = ko.observableArray();
 
@@ -1017,7 +1017,7 @@ function AppViewModel() {
         var locs = [];
         for (var j = 0; j < self.editingPermitItem().Locations().length; j++) {
             //console.log(self.editingPermitItem().Locations()[j]());
-            var loc = new PermitLocation( //sequenceNumber, occupancyTypeId, locationType, onStreetName, fromStreetName, fromStreetCode, fromStreetNode, toStreetName, toStreetCode, toStreetNode
+            var loc = new PermitLocation(
                 j + 1,
                 self.editingPermitItem().Locations()[j].OccupancyTypeId().OccupancyTypeID,
                 self.editingPermitItem().Locations()[j].LocationType(),
@@ -1029,13 +1029,15 @@ function AppViewModel() {
                 null,
                 null
                 );
-            //console.log(self.editingPermitItem().Locations()[j].FromStreetName());
-            if (self.editingPermitItem().Locations()[j].LocationType().toLowerCase() === "intersection" || self.editingPermitItem().Locations()[j].LocationType().toLowerCase() === "street segment") {
+
+            var locType = self.editingPermitItem().Locations()[j].LocationType().toLowerCase();
+
+            if (locType == "intersection" || locType == "street segment") {
                 loc.FromStreetName = self.editingPermitItem().Locations()[j].FromStreetName().StreetName;
                 loc.FromStreetCode = self.editingPermitItem().Locations()[j].FromStreetName().StreetCode;
                 loc.FromStreetNode = self.editingPermitItem().Locations()[j].FromStreetName().NodeOrder;
 
-                if (self.editingPermitItem().Locations()[j].LocationType().toLowerCase() === "street segment") {
+                if (self.editingPermitItem().Locations()[j].LocationType().toLowerCase() == "street segment") {
                     loc.ToStreetName = self.editingPermitItem().Locations()[j].ToStreetName().StreetName;
                     loc.ToStreetCode = self.editingPermitItem().Locations()[j].ToStreetName().StreetCode;
                     loc.ToStreetNode = self.editingPermitItem().Locations()[j].ToStreetName().NodeOrder;
@@ -1437,16 +1439,12 @@ function AppViewModel() {
                     self.referenceTypes.push(new Reference(item.ReferenceTypeID, item.ReferenceTypeName, null));
                 });
 
-                //self.getEncroachmentTypes();
                 self.encroachmentTypes(data.EncroachmentTypes);
 
-                //self.getPermitTypes();
                 self.permitTypes(data.PermitTypeVms);
 
-                //self.getUtilityOwners();
                 self.utilityOwners(data.UtilityOwners);
 
-                //self.getOccupancyTypes();
                 self.occupancyTypes(data.OccupancyTypes);
 
                 $("#PageLoadingProgress").hide();
@@ -1459,45 +1457,7 @@ function AppViewModel() {
             //}
         });
 
-    };
-
-    //** required support for the PSD's legacy code
-
-    self.selectedProjectTypes =
-    {
-        projectTypes: ko.observableArray().extend({ required: true }),
-        sort: function () {
-            this.projectTypes(this.projectTypes.sort(function (a, b) { return a - b; }));
-        },
-        toBinary: function () {
-            var a = [];
-            for (var i = 0; i < self.projectTypes().length; i++)
-                a.push("0");
-
-            for (var j = 0; j < this.projectTypes().length; j++)
-                a[parseInt(this.projectTypes()[j]) - 1] = "1";
-
-            var b = "";
-
-            for (var k = 0; k < a.length; k++)
-                b += a[k];
-
-            return b;
-        },
-        binary2Decimal: function () {
-            return parseInt(this.toBinary(), 2);
-        },
-        decimal2Binary: function (dec) {
-            var bin = (dec >>> 0).toString(2);
-            var len = bin.length;
-            var dif = self.projectTypes().length - len;
-            for (var i = 0; i < dif; i++)
-                bin = "0" + bin;
-
-            return bin;
-        }
-    };
-
+    };  
 };
 
 /*----------------------------------------------------------------------*/
@@ -1547,12 +1507,6 @@ $(document).ready(function () {
             }
         });
 
-        //model.addLocation();
-
-        //var location = new Location();
-        //model.selectedLocation(location);
-        //model.editLocation(location);
-
     } else {
         var expiredToken = getUrlParameter("ExpiredToken");
         //console.log(expiredToken);
@@ -1572,15 +1526,9 @@ $(document).ready(function () {
         handles: "e"
     });
 
-    //$(document).ajaxStart(function() {
-    //    $(".mask").addClass("ajax");
-    //});
-    //$(document).ajaxComplete(function() {
-    //    $(".mask").removeClass("ajax");
-    //});
 
     $('#tabs').responsiveTabs({
-        active: 0,
+        //active: 0,
         //accordionTabElement: "<div data-bind='click: $root.selectStatusCode($data)'></div>",
         //scrollToAccordion: false
         //startCollapsed: 'accordion'

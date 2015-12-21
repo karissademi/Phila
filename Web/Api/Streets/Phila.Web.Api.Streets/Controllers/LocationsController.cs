@@ -314,7 +314,7 @@ namespace Phila.Web.Api.Streets.Controllers
         /// </summary>
         /// <param name="location">The location.</param>
         /// <returns></returns>
-        public StreetsViewModels.LocationDetails GetLocationStCodeAndSegId(string location)
+        public StreetsViewModels.LocationDetails LocationStCodeAndSegId(string location)
         {
             var numSts = new[]
             {

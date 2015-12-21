@@ -131,16 +131,16 @@
 
                                 <table id="permitsTable" class="ui-widget-content resize no-borders">
                                     <thead>
-                                    <tr>
-                                        <th>&nbsp;</th>
-                                        <th data-bind="click: sortPermits.bind($data, 'permitid')">Permit ID&nbsp;<i class="fa fa-sort"></i></th>
-                                        <th data-bind="click: sortPermits.bind($data, 'purpose')">Purpose&nbsp;<i class="fa fa-sort"></i></th>
-                                        <th data-bind="click: sortPermits.bind($data, 'permitlocation')">Start Date&nbsp;<i class="fa fa-sort"></i></th>
-                                        <th data-bind="click: sortPermits.bind($data, 'startdate')">Start Time&nbsp;<i class="fa fa-sort"></i></th>
-                                        <th data-bind="click: sortPermits.bind($data, 'enddate')">End Date&nbsp;<i class="fa fa-sort"></i></th>
-                                        <th data-bind="click: sortPermits.bind($data, 'startdate')">End Time&nbsp;<i class="fa fa-sort"></i></th>
-                                        <!--<th data-bind="click: sortPermits.bind($data, 'permitstatus')">Status&nbsp;<i class="fa fa-sort"></i></th>-->
-                                    </tr>
+                                        <tr>
+                                            <th>&nbsp;</th>
+                                            <th data-bind="click: sortPermits.bind($data, 'permitid')">Permit ID&nbsp;<i class="fa fa-sort"></i></th>
+                                            <th data-bind="click: sortPermits.bind($data, 'purpose')">Purpose&nbsp;<i class="fa fa-sort"></i></th>
+                                            <th data-bind="click: sortPermits.bind($data, 'permitlocation')">Start Date&nbsp;<i class="fa fa-sort"></i></th>
+                                            <th data-bind="click: sortPermits.bind($data, 'startdate')">Start Time&nbsp;<i class="fa fa-sort"></i></th>
+                                            <th data-bind="click: sortPermits.bind($data, 'enddate')">End Date&nbsp;<i class="fa fa-sort"></i></th>
+                                            <th data-bind="click: sortPermits.bind($data, 'startdate')">End Time&nbsp;<i class="fa fa-sort"></i></th>
+                                            <!--<th data-bind="click: sortPermits.bind($data, 'permitstatus')">Status&nbsp;<i class="fa fa-sort"></i></th>-->
+                                        </tr>
                                     </thead>
                                     <tbody data-bind="template: { name: 'closure-template', foreach: permits }"></tbody>
                                 </table>
@@ -150,7 +150,7 @@
                             <div data-bind="visible: $root.permits().length === 0 && $root.isPermitLoading() == false">
                                 <span>You don't have any permits with this status</span>
                             </div>
-                            <img id="loading-permits" data-bind="visible: $root.isPermitLoading() == true" alt="loading..." style="text-align: center" src="Content/app/images/loading.gif"/>
+                            <img id="loading-permits" data-bind="visible: $root.isPermitLoading() == true" alt="loading..." style="text-align: center" src="Content/app/images/loading.gif" />
 
                         </div>
 
@@ -400,7 +400,7 @@
                             <label class="read" data-bind="text: LocationType() ? LocationType() : '', visible: !$root.isLocationEditing($data)"></label>
 
                             <span style="color: red;" data-bind="visible: isLocationTypeValid() == false">required</span>
-                            
+
                             <span class="validationMessage" data-bind="validationMessage: isLocationTypeValid"></span>
 
                         </div>
@@ -432,7 +432,7 @@
 
                             <select id="FromStreet" class="ddFromStreet" data-bind="options: $root.fromStreets, optionsText: 'StreetName', value: FromStreetName.editValue, optionsCaption: $root.fromStreetCaption, visible: $root.isLocationEditing($data), event: { change: $root.getToStreets.bind($data, $data.OnStreetName.editValue, $data.FromStreetName.editValue) },  enable: $root.fromStreets() != undefined && $root.fromStreets().length > 0 ? true : false"></select>
 
-                            <label class="read" data-bind="text: FromStreetName() != undefined ? FromStreetName().StreetName : FromStreetName(), visible: !$root.isLocationEditing($data)"></label>
+                            <label class="read" data-bind="text: FromStreetName() != undefined && FromStreetName().StreetName != undefined ? FromStreetName().StreetName : FromStreetName(), visible: !$root.isLocationEditing($data)"></label>
 
                             <span style="color: red;" data-bind="visible: isFromStreetValid() === false">required</span>
                         </div>
@@ -440,9 +440,11 @@
                         <div id="ToStreetDiv" class="medium-12 columns" data-bind="visible: $data.LocationType.editValue() == 'Street Segment'">
                             <a href="#"></a>
                             <strong><label>To Street:</label></strong><span style="color: black;">*</span>
-                            <br />
+                            <br/>
+
                             <select class="ddToStreet" data-bind="options: $root.toStreets, optionsText: 'StreetName', value: $data.ToStreetName.editValue, optionsCaption: $root.toStreetCaption, visible: $root.isLocationEditing($data),  enable: $root.toStreets() != undefined && $root.toStreets().length > 0 ? true : false"></select>
-                            <label class="read" data-bind="text: ToStreetName() != undefined ? ToStreetName().StreetName : ToStreetName(), visible: $root.isLocationEditing($data) === false"></label>
+
+                            <label class="read" data-bind="text: ToStreetName() != undefined && ToStreetName().StreetName != undefined ? ToStreetName().StreetName : ToStreetName(), visible: $root.isLocationEditing($data) === false"></label>
 
                             <span style="color: red;" data-bind="visible: isToStreetValid() === false">required</span>
 
@@ -452,7 +454,7 @@
                     <div class="row" style="padding-top: 2.5px;">
                         <div class="columns">
                             <i class="fa fa-pencil fa-2x" data-bind="click: $root.editLocation.bind($data), visible: !$root.isLocationEditing($data)"></i>
-                           
+
                             <i class="fa fa-floppy-o fa-2x" data-bind="click: $root.applyLocation.bind($data), visible: $root.isLocationEditing($data)"></i>
                             <i class="fa fa-times fa-2x" data-bind="click: $root.cancelEditLocation.bind($data), visible: $root.isLocationEditing($data) && IsNewLocation() == false"></i>
 

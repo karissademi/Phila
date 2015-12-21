@@ -28,7 +28,6 @@ namespace Phila.Data.EntityModels.Streets
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<tblContact> tblContacts { get; set; }
         public virtual DbSet<tblDecision> tblDecisions { get; set; }
         public virtual DbSet<tblDistrictRegion> tblDistrictRegions { get; set; }
         public virtual DbSet<tblDistrict> tblDistricts { get; set; }
@@ -62,6 +61,7 @@ namespace Phila.Data.EntityModels.Streets
         public virtual DbSet<tblSpecialNode> tblSpecialNodes { get; set; }
         public virtual DbSet<STREETCL_ARC> STREETCL_ARC { get; set; }
         public virtual DbSet<tblStreet> tblStreets { get; set; }
+        public virtual DbSet<tblContact> tblContacts { get; set; }
     
         public virtual ObjectResult<Get_CrossStreetsAndOnStreetSegIDsFromStCode2_Result> Get_CrossStreetsAndOnStreetSegIDsFromStCode2(Nullable<int> st_Code)
         {
