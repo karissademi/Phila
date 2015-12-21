@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using Phila.Data.EntityModels.Streets;
+using Phila.Logic.Streets.Locations;
 using Phila.Web.Api.Streets.Models;
 
 namespace Phila.Web.Api.Streets.Controllers
@@ -89,7 +90,9 @@ namespace Phila.Web.Api.Streets.Controllers
         [Route("api/locations/GetFromStreets")]
         public async Task<IHttpActionResult> GetFromStreets(string onStreet)
         {
-            StreetsViewModels.LocationDetails onStreetCode = GetStreetCode(onStreet);
+            var sc = new StreetCode();
+            LocationDetails onStreetCode = sc.GetStreetCode(onStreet);
+
             if (onStreetCode.StreetCode == null)
                 return NotFound();
 
@@ -101,18 +104,16 @@ namespace Phila.Web.Api.Streets.Controllers
             }).ToList());
         }
 
-
         [EnableCors(origins: "*", headers: "*", methods: "*")]
         [AllowAnonymous]
         [Route("api/locations/GetToStreets")]
         public async Task<IHttpActionResult> GetToStreets(string onStreet, string fromStreet, int fromNodeNumber,
             bool trimLeadingNumbers = true)
         {
-            StreetsViewModels.LocationDetails onStreetDetails = GetStreetCode(onStreet);
-
-
-            StreetsViewModels.LocationDetails fromStreetDetails = GetStreetCode(fromStreet, trimLeadingNumbers);
-
+            var sc = new StreetCode();
+            LocationDetails onStreetDetails = sc.GetStreetCode(onStreet);
+            
+            LocationDetails fromStreetDetails = sc.GetStreetCode(fromStreet);
 
             if (onStreetDetails.StreetCode == null || fromStreetDetails.StreetCode == null)
                 return Ok("No results");
@@ -145,13 +146,13 @@ namespace Phila.Web.Api.Streets.Controllers
             }
         }
 
-
         [EnableCors(origins: "*", headers: "*", methods: "*")]
         [AllowAnonymous]
         [Route("api/locations/IsLocationAHighTrafficArea")]
         public async Task<IHttpActionResult> IsLocationAHighTrafficArea(string location, bool trimLeadingNumbers = true)
         {
-            StreetsViewModels.LocationDetails locationDetals = GetStreetCode(location, trimLeadingNumbers);
+            var sc = new StreetCode();
+            LocationDetails locationDetals = sc.GetStreetCode(location, trimLeadingNumbers);
 
             if (locationDetals.SegmentId == null)
                 return Ok();
@@ -289,111 +290,113 @@ namespace Phila.Web.Api.Streets.Controllers
             return Ok();
         }
 
-        /// <summary>
-        /// Gets the street code.
-        /// </summary>
-        /// <param name="location">The location.</param>
-        /// <param name="trimLeadingNumbers">if set to <c>true</c> [trim leading numbers].</param>
-        /// <returns></returns>
-        public StreetsViewModels.LocationDetails GetStreetCode(string location, bool trimLeadingNumbers = true)
-        {
-            if (trimLeadingNumbers)
-                location = location.TrimStart(new[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
-
-            location = location.Trim(new[] {' '});
-            StreetsViewModels.LocationDetails result =
-                _db.tblStreets.Where(x => x.STNAME == location || x.STNAME == location)
-                    .Select(x => new StreetsViewModels.LocationDetails {StreetCode = x.ST_CODE, SegmentId = x.SEG_ID})
-                    .FirstOrDefault();
-
-            return result;
-        }
-
-        /// <summary>
-        /// Gets the location st code and seg identifier.
-        /// </summary>
-        /// <param name="location">The location.</param>
-        /// <returns></returns>
-        public StreetsViewModels.LocationDetails LocationStCodeAndSegId(string location)
-        {
-            var numSts = new[]
-            {
-                "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"
-            };
-
-            var firstThreeChar = new string(location.ToLower().Take(3).ToArray());
-
-            bool sn = numSts.Any(x => x.StartsWith(firstThreeChar));
-
-            string streetNumberString = !sn ? new String(location.TakeWhile(Char.IsDigit).ToArray()) : "";
-
-            string streetName = location.TrimStart(new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' });
 
 
-            streetName = streetName.Trim(new[] { ' ' });
+        ///// <summary>
+        ///// Gets the street code.
+        ///// </summary>
+        ///// <param name="location">The location.</param>
+        ///// <param name="trimLeadingNumbers">if set to <c>true</c> [trim leading numbers].</param>
+        ///// <returns></returns>
+        //public StreetsViewModels.LocationDetails GetStreetCode(string location, bool trimLeadingNumbers = true)
+        //{
+        //    if (trimLeadingNumbers)
+        //        location = location.TrimStart(new[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
 
-            var result = new StreetsViewModels.LocationDetails();
+        //    location = location.Trim(new[] {' '});
+        //    StreetsViewModels.LocationDetails result =
+        //        _db.tblStreets.Where(x => x.STNAME == location || x.STNAME == location)
+        //            .Select(x => new StreetsViewModels.LocationDetails {StreetCode = x.ST_CODE, SegmentId = x.SEG_ID})
+        //            .FirstOrDefault();
 
-            // 1234 Market St
-            if (streetNumberString.Length > 0)
-            {
-                int streetNumber = Convert.ToInt32(streetNumberString);
+        //    return result;
+        //}
 
-                bool isEven = streetNumber % 2 == 0;
+        ///// <summary>
+        ///// Gets the location st code and seg identifier.
+        ///// </summary>
+        ///// <param name="location">The location.</param>
+        ///// <returns></returns>
+        //public StreetsViewModels.LocationDetails LocationStCodeAndSegId(string location)
+        //{
+        //    var numSts = new[]
+        //    {
+        //        "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"
+        //    };
 
-                if (isEven)
-                {
-                    result =
-                        _db.tblStreets.Where(
-                            x => (
-                                x.STNAME.StartsWith(streetName)
-                                ||
-                                x.ST_NAME.StartsWith(streetName)
-                                ||
-                                x.ST_NAME.StartsWith(location)
-                                ||
-                                x.ST_NAME.StartsWith(streetName)
-                                )
-                                 &&
-                                 x.R_F_ADD <= streetNumber
-                                 &&
-                                 x.R_T_ADD >= streetNumber
-                            )
-                            .Select(x => new StreetsViewModels.LocationDetails
-                            {
-                                StreetCode = x.ST_CODE,
-                                SegmentId = x.SEG_ID
-                            }).FirstOrDefault();
+        //    var firstThreeChar = new string(location.ToLower().Take(3).ToArray());
 
-                }
-                else
-                {
+        //    bool sn = numSts.Any(x => x.StartsWith(firstThreeChar));
 
-                    result = _db.tblStreets.Where(
-                        x => (
-                            x.STNAME.StartsWith(streetName)
-                            ||
-                            x.ST_NAME.StartsWith(streetName)
-                            ||
-                            x.ST_NAME.StartsWith(location)
-                            ||
-                            x.ST_NAME.StartsWith(streetName)
-                            )
-                             &&
-                             x.L_F_ADD <= streetNumber
-                             &&
-                             x.L_T_ADD >= streetNumber
-                        ).Select(x => new StreetsViewModels.LocationDetails
-                        {
-                            StreetCode = x.ST_CODE,
-                            SegmentId = x.SEG_ID
-                        }).FirstOrDefault();
+        //    string streetNumberString = !sn ? new String(location.TakeWhile(Char.IsDigit).ToArray()) : "";
+
+        //    string streetName = location.TrimStart(new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' });
+
+
+        //    streetName = streetName.Trim(new[] { ' ' });
+
+        //    var result = new StreetsViewModels.LocationDetails();
+
+        //    // 1234 Market St
+        //    if (streetNumberString.Length > 0)
+        //    {
+        //        int streetNumber = Convert.ToInt32(streetNumberString);
+
+        //        bool isEven = streetNumber % 2 == 0;
+
+        //        if (isEven)
+        //        {
+        //            result =
+        //                _db.tblStreets.Where(
+        //                    x => (
+        //                        x.STNAME.StartsWith(streetName)
+        //                        ||
+        //                        x.ST_NAME.StartsWith(streetName)
+        //                        ||
+        //                        x.ST_NAME.StartsWith(location)
+        //                        ||
+        //                        x.ST_NAME.StartsWith(streetName)
+        //                        )
+        //                         &&
+        //                         x.R_F_ADD <= streetNumber
+        //                         &&
+        //                         x.R_T_ADD >= streetNumber
+        //                    )
+        //                    .Select(x => new StreetsViewModels.LocationDetails
+        //                    {
+        //                        StreetCode = x.ST_CODE,
+        //                        SegmentId = x.SEG_ID
+        //                    }).FirstOrDefault();
+
+        //        }
+        //        else
+        //        {
+
+        //            result = _db.tblStreets.Where(
+        //                x => (
+        //                    x.STNAME.StartsWith(streetName)
+        //                    ||
+        //                    x.ST_NAME.StartsWith(streetName)
+        //                    ||
+        //                    x.ST_NAME.StartsWith(location)
+        //                    ||
+        //                    x.ST_NAME.StartsWith(streetName)
+        //                    )
+        //                     &&
+        //                     x.L_F_ADD <= streetNumber
+        //                     &&
+        //                     x.L_T_ADD >= streetNumber
+        //                ).Select(x => new StreetsViewModels.LocationDetails
+        //                {
+        //                    StreetCode = x.ST_CODE,
+        //                    SegmentId = x.SEG_ID
+        //                }).FirstOrDefault();
 
                    
-                }
-            } 
-            return result;
-        }
+        //        }
+        //    } 
+        //    return result;
+        //}
 
 
         protected override void Dispose(bool disposing)

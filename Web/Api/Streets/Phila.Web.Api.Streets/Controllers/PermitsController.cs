@@ -11,6 +11,7 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using Phila.Data.EntityModels.Streets;
+using Phila.Logic.Streets.Locations;
 using Phila.Web.Api.Streets.Helpers;
 using Phila.Web.Api.Streets.Models;
 
@@ -135,9 +136,8 @@ namespace Phila.Web.Api.Streets.Controllers
                 {
                     //ToDo: check if location is valid
 
-                    var lc = new LocationsController();
-                    StreetsViewModels.LocationDetails stCode = lc.LocationStCodeAndSegId(permitLocation.OnStreetName);
-
+                    var cs = new GetLocationStreetCodeAndSegId();
+                    LocationDetails stCode = cs.GetStCodeAndSegId(permitLocation.OnStreetName);
 
                     if (stCode.StreetCode != null)
                     {
@@ -991,9 +991,8 @@ namespace Phila.Web.Api.Streets.Controllers
             {
                 //ToDo: check if location is valid
 
-                var lc = new LocationsController();
-                StreetsViewModels.LocationDetails stCode = lc.LocationStCodeAndSegId(permitLocation.OnStreetName);
-
+                var cs = new GetLocationStreetCodeAndSegId();
+                LocationDetails stCode = cs.GetStCodeAndSegId(permitLocation.OnStreetName);
 
                 if (stCode.StreetCode != null)
                 {
