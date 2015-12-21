@@ -1,0 +1,28 @@
+[
+  {
+    "outputFileName": "Scripts/bundle.js",
+    "inputFiles": [
+      "Scripts/modernizr-2.8.3.js",
+      "Scripts/jquery-2.1.4.js",
+      "Scripts/jquery-ui-1.11.4.js",
+      "Scripts/jquery.animate-colors.js",
+      "Scripts/bootstrap.js",
+      "Scripts/jquery.bootpag.min.js",
+      "Scripts/bootstrap-paginator.js",
+      "Scripts/respond.js",
+      "Scripts/knockout-3.4.0.js",
+      "Scripts/knockout.validation.js",
+      "Scripts/knockout-jqAutocomplete.js",
+      "Scripts/app/ko.editable.js",
+      "Scripts/notify.js",
+      "Scripts/app/app-tooltips.js",
+      "Scripts/jquery.responsiveTabs.js",
+      "Scripts/jquery.inputmask/inputmask.js",
+      "Scripts/jquery.inputmask/inputmask.extensions.js",
+      "Scripts/jquery.inputmask/inputmask.regex.extensions.js",
+      "Scripts/jquery.inputmask/inputmask.date.extensions.js",
+      "Scripts/jquery.inputmask/jquery.inputmask.js",
+      "Scripts/app/ko.inputmask.js"
+    ]
+  }
+]

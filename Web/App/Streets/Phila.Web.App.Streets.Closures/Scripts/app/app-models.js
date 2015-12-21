@@ -8,15 +8,15 @@ function Contact(contactId, contactFirstName, contactLastName, username, contact
     self.Username = ko.observable(username).extend({ editable: true });
     self.ContactEmailAddress = ko.observable(contactEmailAddress).extend({ editable: true });
     self.ContactPhoneNumber = ko.observable(contactPhoneNumber).extend({ editable: true });
-    self.ContactFullName = ko.pureComputed(function () {
+    self.ContactFullName = ko.pureComputed(function() {
         return self.ContactFirstName() + " " + self.ContactLastName();
     });
 }
 
 
 function PermitLocation(sequenceNumber, occupancyTypeId, locationType, onStreetName,
-        fromStreetName, fromStreetCode, fromStreetNode,
-        toStreetName, toStreetCode, toStreetNode) {
+    fromStreetName, fromStreetCode, fromStreetNode,
+    toStreetName, toStreetCode, toStreetNode) {
     var self = this;
 
     self.SequenceNumber = sequenceNumber;
@@ -42,7 +42,7 @@ function PermitReference(referenceTypeId, referenceValue) {
     self.ReferenceValue = referenceValue;
 }
 
-Contact.prototype.beginEdit = function (transaction) {
+Contact.prototype.beginEdit = function(transaction) {
     this.ContactId.beginEdit(transaction);
     this.ContactFirstName.beginEdit(transaction);
     this.ContactLastName.beginEdit(transaction);
@@ -68,7 +68,7 @@ function Company(companyId, companyName, companyPhoneNumber, companyFaxNumber, w
     self.PhiladelphiaTaxId = ko.observable(philadelphiaTaxId).extend({ editable: true });
 }
 
-Company.prototype.beginEdit = function (transaction) {
+Company.prototype.beginEdit = function(transaction) {
     this.CompanyId.beginEdit(transaction);
     this.CompanyName.beginEdit(transaction);
     this.CompanyPhoneNumber.beginEdit(transaction);
@@ -106,7 +106,7 @@ Company.prototype.beginEdit = function (transaction) {
 //        validation: {
 //            validator: function (val, params) {
 //                console.log("from street validation: ", val, self.LocationType());
-                
+
 //                if (self.LocationType() == "Intersection" || self.LocationType() == "Street Segment" && (val == undefined || val.StreetName == "blank")) {
 //                    return false;
 //                }
@@ -162,7 +162,7 @@ Company.prototype.beginEdit = function (transaction) {
 //    this.LocationType.beginEdit(transaction);
 //};
 
-function PostedLocation(sequenceNumber, occumpanyTypeId, locationType, onStreetName, onStreetCode, fromStreetName, fromStreetCode, fromStreetNode, toStreetName, toStreetCode, toStreetNode) {
+function PostedLocation(sequenceNumber, occumpanyTypeId, locationType, onStreetName, onStreetCode, fromStreetName, fromStreetCode, fromStreetNode, toStreetName, toStreetCode, toStreetNode, isNewLocation) {
     var self = this;
 
     if (occumpanyTypeId == undefined) occumpanyTypeId = "";
@@ -170,53 +170,28 @@ function PostedLocation(sequenceNumber, occumpanyTypeId, locationType, onStreetN
     if (onStreetName == undefined) onStreetName = "";
     if (fromStreetName == undefined) fromStreetNode = "";
     if (toStreetName == undefined) toStreetName = "";
+    if (isNewLocation == undefined) isNewLocation = true;
 
     self.SequenceNumber = ko.observable(sequenceNumber).extend({ editable: true });
-    self.OccupancyTypeId = ko.observable(occumpanyTypeId).extend({ editable: true }).extend({ required: true });
-    self.LocationType = ko.observable(locationType).extend({ editable: true }).extend({
-        validation: {
-            validator: function (val, params) {
-                console.log(val, this.editValue);
-                if (val == undefined || val === "") {
-                    return false;
-                }
-
-                return true;
-            }
-        }
-    });
-    self.OnStreetName = ko.observable(onStreetName).extend({ editable: true }).extend({ required: true });
+    self.OccupancyTypeId = ko.observable(occumpanyTypeId).extend({ editable: true });
+    self.LocationType = ko.observable(locationType).extend({ editable: true });
+    self.OnStreetName = ko.observable(onStreetName).extend({ editable: true });
     self.OnStreetCode = ko.observable(onStreetCode).extend({ editable: true });
-    self.FromStreetName = ko.observable(fromStreetName).extend({ editable: true }).extend({
-                validation: {
-                    validator: function (val, params) {
-                        //console.log(val, self.LocationType.editValue());
-                        if ((self.LocationType.editValue()) === "Intersection" || self.LocationType.editValue() === "Street Segment" && (val == undefined || val.StreetName === "blank" || val === "")) {
-
-                            return false;
-                        }
-
-                        return true;
-                    },
-                    message: "Required"
-                }
-            });
+    self.FromStreetName = ko.observable(fromStreetName).extend({ editable: true });
     self.FromStreetCode = ko.observable(fromStreetCode).extend({ editable: true });
     self.FromStreetNode = ko.observable(fromStreetNode).extend({ editable: true });
-    self.ToStreetName = ko.observable(toStreetName).extend({ editable: true }).extend({
-                validation: {
-                    validator: function (val, params) {
-                        if (self.LocationType() === "Street Segment" && (val == undefined || val.StreetName === "blank")) {
-                            return false;
-                        }
-
-                        return true;
-                    },
-                    message: "Required",
-                }
-            });
+    self.ToStreetName = ko.observable(toStreetName).extend({ editable: true });
     self.ToStreetCode = ko.observable(toStreetCode).extend({ editable: true });
     self.ToStreetNode = ko.observable(toStreetNode).extend({ editable: true });
+
+    self.isOccupancyTypeValid = ko.observable(true);
+    self.isLocationTypeValid = ko.observable(true);
+    self.isOnStreetValid = ko.observable(true);
+    self.isFromStreetValid = ko.observable(true);
+    self.isToStreetValid = ko.observable(true);
+
+    self.IsNewLocation = ko.observable(isNewLocation);
+    self.IsLocationEditing = ko.observable(false);
 }
 
 PostedLocation.prototype.beginEdit = function(transaction) {
@@ -231,8 +206,7 @@ PostedLocation.prototype.beginEdit = function(transaction) {
     this.ToStreetName.beginEdit(transaction);
     this.ToStreetCode.beginEdit(transaction);
     this.ToStreetNode.beginEdit(transaction);
-}
-
+};
 
 function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, permitTypeId, projectTypes, encroachmentTypes, effectiveDateTime, expirationDateTime, purpose, comments, permitStatus, references, locations, isDraft) {
     var self = this;
@@ -244,7 +218,7 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
     self.PermitTypeId = ko.observable(permitTypeId).extend({ editable: true }).extend({ required: true });
     self.UtilityOwnerId = ko.observable(utilityOwnerId).extend({ editable: true }).extend({
         required: {
-            onlyIf: function () {
+            onlyIf: function() {
                 if (self.PermitTypeId() != undefined && self.PermitTypeId().PermitTypeId > 10) {
                     return true;
                 }
@@ -255,7 +229,7 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
     self.ProjectTypes = ko.observable(projectTypes).extend({ editable: true }).extend({ required: true });
     self.EncroachmentTypes = ko.observableArray(encroachmentTypes).extend({ editable: true }).extend({
         required: {
-            onlyIf: function () {
+            onlyIf: function() {
                 if (self.PermitTypeId() != undefined && (self.PermitTypeId().PermitTypeId < 4 || self.PermitTypeId().PermitTypeId === 9)) {
                     return true;
                 }
@@ -272,11 +246,11 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
     self.References = ko.observableArray(references).extend({ editable: true });
     self.Locations = ko.observableArray(locations).extend({ editable: true }).extend({ required: true });
 
-    self.StartDate = ko.observable(self.EffectiveDateTime() != undefined && self.EffectiveDateTime() !== "blank" ? self.EffectiveDateTime().substr(0, 10) : "").extend({ editable: true }).extend({ validPermitDate: [10, (new Date().addDays(11).getMonth() + 1) + "/" + new Date().addDays(11).getDate() + "/" + new Date().addDays(11).getFullYear()] });
+    self.StartDate = ko.observable(self.EffectiveDateTime() != undefined && self.EffectiveDateTime() != "blank" ? self.EffectiveDateTime().substr(0, 10) : "").extend({ editable: true }).extend({ validPermitDate: [10, (new Date().addDays(11).getMonth() + 1) + "/" + new Date().addDays(11).getDate() + "/" + new Date().addDays(11).getFullYear()] });
 
-    self.StartTime = ko.observable(self.EffectiveDateTime() != undefined && self.EffectiveDateTime() !== "blank" ? getShortTime(self.EffectiveDateTime()) : "").extend({ editable: true }).extend({
+    self.StartTime = ko.observable(self.EffectiveDateTime() != undefined && self.EffectiveDateTime() != "blank" ? getShortTime(self.EffectiveDateTime()) : "").extend({ editable: true }).extend({
         validation: {
-            validator: function (val, params) {
+            validator: function(val, params) {
 
                 if (val == undefined) return false;
 
@@ -291,7 +265,7 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
 
     self.EndDate = ko.observable(self.ExpirationDateTime() != undefined && self.ExpirationDateTime() !== "" ? self.ExpirationDateTime().substr(0, 10) : "").extend({ editable: true }).extend({
         validation: {
-            validator: function (val, params) {
+            validator: function(val, params) {
                 if (Date.parse(val) && Date.parse(self.StartDate())) {
                     return Date.parse(val) >= Date.parse(self.StartDate());
                 }
@@ -303,7 +277,7 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
 
     self.EndTime = ko.observable(self.ExpirationDateTime() != undefined && self.ExpirationDateTime() !== "" ? getShortTime(self.ExpirationDateTime()) : "").extend({ editable: true }).extend({
         validation: {
-            validator: function (val, params) {
+            validator: function(val, params) {
 
                 if (val == undefined) return false;
 
@@ -311,9 +285,10 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
 
                 var exDt = self.ExpirationDateTime();
                 var efDt = self.EffectiveDateTime();
-                //console.log(efDt, exDt);
 
-                if (exDt > efDt) return true;
+                //console.log(efDt.parseInt(), exDt.parseInt());
+
+                if (moment(exDt).isAfter(efDt)) return true;
 
                 return false;
             },
@@ -324,7 +299,7 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
     //this.setShortDatesAndTimes();
 };
 
-Permit.prototype.beginEdit = function (transaction) {
+Permit.prototype.beginEdit = function(transaction) {
     this.Token.beginEdit(transaction);
     this.PermitNumber.beginEdit(transaction);
     this.CompanyId.beginEdit(transaction);
@@ -352,7 +327,7 @@ function getShortTime(datetime) {
     //console.log("dt", dt.toUTCString());
 
     hours = dt.getUTCHours();
-   
+
     xm = " AM";
     if (hours > 11) {
         xm = " PM";
@@ -364,7 +339,7 @@ function getShortTime(datetime) {
         hours = 12;
 
     minutes = dt.getUTCMinutes();
-    
+
     //console.log("hours", hours);
     //console.log("minutes", minutes);
 
@@ -375,47 +350,8 @@ function getShortTime(datetime) {
     return time;
 };
 
-//Permit.prototype.setShortDatesAndTimes = function () {
 
-//    if (this.EffectiveDateTime() == null || this.ExpirationDateTime() == null) return;
-
-//    var hours, minutes, xm;
-
-//    // set start date
-//    this.StartDate(this.EffectiveDateTime().substr(0, 10));
-
-//    // set start time
-//    var efDateTime = new Date(this.EffectiveDateTime());
-//    hours = efDateTime.getHours();
-//    xm = " AM";
-//    if (hours > 12) {
-//        hours = hours - 12;
-//        xm = " PM";
-//    }
-//    minutes = efDateTime.getMinutes();
-//    if (minutes < 10) minutes = "0" + minutes;
-//    var st = hours + ":" + minutes + xm;
-
-//    this.StartTime(st);
-
-//    // set end date
-//    this.EndDate(this.ExpirationDateTime().substr(0, 10));
-
-//    // set end time
-//    var exDateTime = new Date(this.ExpirationDateTime());
-//    hours = exDateTime.getUTCHours();
-//    xm = " AM";
-//    if (hours > 12) {
-//        hours = hours - 12;
-//        xm = " PM";
-//    }
-//    minutes = exDateTime.getMinutes();
-//    if (minutes < 10) minutes = "0" + minutes;
-//    var et = hours + ":" + minutes + xm;
-//    this.EndTime(et);
-//};
-
-Permit.prototype.setLongDateTimes = function () {
+Permit.prototype.setLongDateTimes = function() {
     try {
 
         //var sdt = new Date(this.StartDate() + " " + this.StartTime());
@@ -433,10 +369,9 @@ Permit.prototype.setLongDateTimes = function () {
         var efHrs = parseInt(effectiveTime[1]);
         if (effectiveTime[3].toLowerCase() === "pm" && effectiveTime[1] !== 12) {
             effTimeHours = efHrs + 12;
-        }else if (effectiveTime[3].toLowerCase() === "am" && efHrs === 12) {
+        } else if (effectiveTime[3].toLowerCase() === "am" && efHrs === 12) {
             effTimeHours = 0;
-        }
-        else {
+        } else {
             effTimeHours = efHrs;
         }
 
@@ -457,8 +392,7 @@ Permit.prototype.setLongDateTimes = function () {
             expTimeHours = exHrs + 12;
         } else if (expirationTime[3].toLowerCase() === "am" && efHrs === 12) {
             expTimeHours = 0;
-        }
-        else {
+        } else {
             expTimeHours = exHrs;
         }
 
@@ -495,7 +429,7 @@ function Reference(referenceTypeId, referenceTypeName, referenceValue) {
     self.ReferenceValue = ko.observable(referenceValue).extend({ editable: true });
 };
 
-Reference.prototype.beginEdit = function (transaction) {
+Reference.prototype.beginEdit = function(transaction) {
     this.ReferenceTypeId.beginEdit(transaction);
     this.ReferenceTypeName.beginEdit(transaction);
     this.ReferenceValue.beginEdit(transaction);
@@ -503,7 +437,7 @@ Reference.prototype.beginEdit = function (transaction) {
 
 function setKoType(array, property, id) {
     //console.log(array, property, id);
-    
+
     var result = $.grep(array, function(obj) {
         if (typeof obj[property] === "function") {
             return obj[property]() === id;
@@ -522,16 +456,15 @@ function sortProjectTypes() {
 //** BEGIN required support for the PSD's legacy code
 function intArray2Binary(array, totalOptions) {
     /// <summary>
-    /// Converts an array to binary
+    ///     Converts an array to binary
     /// </summary>
     /// <param name="array" type="Array">
-    /// An array of project type ids
+    ///     An array of project type ids
     /// </param>
     /// <param name="length" type="Array">
-    /// Total number of project types
+    ///     Total number of project types
     /// </param>
     /// <returns type="String" />
-
     var a = [];
     for (var i = 0; i < totalOptions; i++)
         a.push("0");
@@ -564,7 +497,7 @@ function decimal2Binary(dec, totalOptions) {
 }
 
 function binary2Array(bin) {
-    
+
     var pts = bin.match(/[1]|[0]/g);
     var projectTypes = [];
     for (var i = 0; i < pts.length; i++) {
@@ -576,7 +509,7 @@ function binary2Array(bin) {
 }
 
 function decimal2Array(dec, totalProjectTypes) {
-    
+
     var bin = decimal2Binary(dec, totalProjectTypes);
     var result = binary2Array(bin);
     return result;
@@ -613,7 +546,6 @@ function PermitStatus(statusId, statusName, totalPermits) {
     /// <param name="statusName" type="string">
     ///     Name for try status type
     /// </param>
-
     var self = this;
 
     self.StatusId = statusId;

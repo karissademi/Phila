@@ -293,22 +293,7 @@ ul { padding: 0; }
     width: 25%;
 }
 
-@media screen and (max-width: 640px) {
-    table {
-        display: block;
-        overflow-x: auto;
-    }
 
-    .checkbox-grid li {
-        display: block;
-        float: left;
-        width: 100%;
-    }
-
-   .search-button {
-       display: inline;
-   }
-}
 
 .mask {
     display: none; /*This hides the mask*/
@@ -386,20 +371,27 @@ ul { padding: 0; }
 .r-tabs {
 	position: relative;
 
-	background-color: red;
+	/*background-color: white;
 
-	border-top: 1px solid red;
-	border-right: 1px solid red;
-	border-left: 1px solid red;
+	border-top: 1px solid gray;
+	border-right: 1px solid black;
+	border-left: 1px solid green;
 	border-bottom: 4px solid red;
-	border-radius: 4px;
+	border-radius: 4px;*/
 
 }
 
 /* Tab element */
 .r-tabs .r-tabs-nav .r-tabs-tab {
 	position: relative;
-	background-color: violet;
+	background-color: #f1f3f1;
+    
+     border-bottom: 1px solid grey;
+    border-right: 1px solid grey;
+    border-top: 1px solid grey;
+    border-left: 1px solid grey;
+	border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
 }
 
 /* Tab anchor */
@@ -419,17 +411,14 @@ ul { padding: 0; }
 /* Disabled tab */
 .r-tabs .r-tabs-nav .r-tabs-state-disabled {
 	opacity: 0.5;
-    background-color: gray;
-    border: 10px;
-    border-color: purple;
 }
 
 /* Active state tab anchor */
 .r-tabs .r-tabs-nav .r-tabs-state-active .r-tabs-anchor {
-	/*color: #00c5ad;*/
+	color: white;
 	text-shadow: none;
 
-	background-color: blue;
+	background-color: #027EA4;
 
 	border-top-right-radius: 4px;
 	border-top-left-radius: 4px;
@@ -437,10 +426,12 @@ ul { padding: 0; }
 
 /* Tab panel */
 .r-tabs .r-tabs-panel {
-	background-color: green;
+	background-color: #f1f3f1;
 
-	border-bottom: 4px solid black;
-    w
+	border-bottom: 4px solid grey;
+    border-right: 2px solid grey;
+    border-top: 1px solid grey;
+    border-left: 1px solid grey;
 	border-bottom-right-radius: 4px;
 	border-bottom-left-radius: 4px;
 
@@ -451,36 +442,51 @@ ul { padding: 0; }
 	display: block;
 	padding: 10px;
 
-	background-color: yellow;
+	background-color: #f1f3f1;
 	color: black;
 	font-weight: bold;
 	text-decoration: none;
 	text-shadow: 0 1px rgba(0, 0, 0, 0.4);
 	font-size: 14px;
 
+
+    border-bottom: 1px solid grey;
+    border-right: 1px solid grey;
+    border-top: 1px solid grey;
+    border-left: 1px solid grey;
 	border-top-right-radius: 4px;
 	border-top-left-radius: 4px;
 }
 
 /* Active accordion anchor */
 .r-tabs .r-tabs-accordion-title.r-tabs-state-active .r-tabs-anchor {
-	background-color: white;
-	color: #00c5ad;
+	background-color: #027EA4;
+	color: #f1f3f1;
 	text-shadow: none;
+
+
+}
+
+.r-tabs-accordion-title.r-tabs-state-active {
+    border-bottom: 1px solid #026583;
+    border-right: 1px solid #026583;
+    border-top: 1px solid #026583;
+    border-left: 1px solid #026583;
+    border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
 }
 
 /* Disabled accordion button */
 .r-tabs .r-tabs-accordion-title.r-tabs-state-disabled {
 	opacity: 0.5;
-    background-color: chocolate;
 }
 
 /* Buttons */
 button {
 	display:inline-block;
-	margin-top: 10px;
+	/*margin-top: 10px;
 	margin-right: 10px;
-	padding: 10px 20px;
+	padding: 10px 20px;*/
 	line-height: 100%;
 
 	color: green;
@@ -511,8 +517,8 @@ button {
 
 	font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
 	font-size: 14px;
-	/*color: #00c5ad;
-	border: 2px solid #00ab94;*/
+	color: red;
+	border: 2px solid red;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
@@ -520,3 +526,65 @@ button {
 
 	cursor: pointer;
 } 
+
+
+label { 
+   cursor: auto !important; 
+}
+
+i {
+    cursor: pointer !important;
+}
+
+/*td {
+  display: block; /* or inline-block */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}*/
+/*th {
+      display: block;
+   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+}*/
+
+.truncate-ellipsis {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    white-space: nowrap;
+}
+ 
+.truncate-ellipsis > * {
+    display: table-cell;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.button.icon.actions {
+    width: 225px;
+}
+
+@media screen and (max-width: 768px) {
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .checkbox-grid li {
+        display: block;
+        float: left;
+        width: 100%;
+    }
+
+   .search-button {
+       display: inline;
+   }
+
+   .button.icon.actions {
+    width: 100%;
+    }
+}
+

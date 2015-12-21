@@ -255,7 +255,8 @@ namespace Phila.Web.Api.Streets.Controllers
             var mailMessage = new MailMessage("francisco.galarza@phila.gov", "francisco.galarza@phila.gov",
                 "Request for new Company for Streets Closure Application", messageSb.ToString());
 
-            EmailHelper.SendEmail(mailMessage);
+            var emailHelper = new EmailHelper();
+            emailHelper.SendEmail(mailMessage);
 
             return Ok();
         }
@@ -292,7 +293,8 @@ namespace Phila.Web.Api.Streets.Controllers
             var mailMessage = new MailMessage("francisco.galarza@phila.gov", "francisco.galarza@phila.gov",
                 "Request for new Company for Streets Closure Application", messageSb.ToString());
 
-            EmailHelper.SendEmail(mailMessage);
+            var emailHelper = new EmailHelper();
+            emailHelper.SendEmail(mailMessage);
 
             return Ok();
         }

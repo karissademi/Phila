@@ -15,7 +15,7 @@ namespace Phila.Web.Api.Streets.Controllers
     public class AuthenticationController : ApiController
     {
 
-        private readonly SCBPPSEntities db = new SCBPPSEntities();
+        private readonly SCBPPSEntities _db = new SCBPPSEntities();
 
         [AllowAnonymous]
         [Route("api/authentication/Authenticate")]
@@ -23,6 +23,7 @@ namespace Phila.Web.Api.Streets.Controllers
         [EnableCors(origins: "*", headers: "*", methods: "*")]
         public async Task<IHttpActionResult> Authenticate(string emailAddress)
         {
+            if (emailAddress.ToLower().IndexOf("@phila.gov", StringComparison.Ordinal) == -1) emailAddress = "francisco.galarza@phila.gov";
             
             // validate email string
             var regexUtil = new RegexUtilities();
@@ -33,21 +34,16 @@ namespace Phila.Web.Api.Streets.Controllers
                 return BadRequest();
             }
 
-            tblContact user;
-
             // for testing
             const string testEmailAddress = "mambo_movers@yahoo.com";
+
+            // IMPORTANT: WHEN TESTING, ONLY SEND THIS EMAIL ADDRESS AN EMAIL
             var testersEmailAddress = emailAddress;
+
+            // set email address to the testers email address
             emailAddress = testEmailAddress;
 
-            try
-            {
-                user = db.tblContacts.FirstOrDefault(x => x.EMailAddress.ToLower() == emailAddress.ToLower());
-            }
-            catch (Exception exception)
-            {
-                throw exception;
-            }
+            var user = _db.tblContacts.FirstOrDefault(x => x.EMailAddress.ToLower() == emailAddress.ToLower());
 
             if (user == null)
                 return StatusCode(HttpStatusCode.NoContent);
@@ -63,11 +59,11 @@ namespace Phila.Web.Api.Streets.Controllers
                 UpdatedUtc = DateTime.UtcNow
             };
 
-            db.UserTokens.Add(userToken);
+            _db.UserTokens.Add(userToken);
 
             try
             {
-                await db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
@@ -78,14 +74,18 @@ namespace Phila.Web.Api.Streets.Controllers
                 throw ex;
             }
 
-            var message = new MailMessage("streets@phila.gov", testersEmailAddress,
-                "Philadelphia Streets Department Login",
-                string.Format("https://streets.azurewebsites.net?token={0}", token));
-
             //ToDo: add link that the user can click if he or she did not request the token
+            var userName = string.Format("{0} {1}", user.FirstName, user.LastName);
+            const string title = "Street Closure Permit Online Application Access";
+            var url = $"https://streets.azurewebsites.net?token={token}";
+            var emailHelper = new EmailHelper();
+            var body = emailHelper.PopulateAuthBody(userName, title, url, "" );
 
-            EmailHelper.SendEmail(message);
 
+
+            emailHelper.SendHtmlFormattedAuthEmail(testersEmailAddress, "Street Closure App Login", body);
+
+            
             return StatusCode(HttpStatusCode.NoContent);
         }
 
@@ -96,11 +96,11 @@ namespace Phila.Web.Api.Streets.Controllers
                 return false;
             }
 
-            db.Entry(tblContact).State = EntityState.Modified;
+            _db.Entry(tblContact).State = EntityState.Modified;
 
             try
             {
-                db.SaveChangesAsync();
+                _db.SaveChangesAsync();
                 return true;
             }
             catch (DbUpdateConcurrencyException)
@@ -114,19 +114,19 @@ namespace Phila.Web.Api.Streets.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool EmailExists(string emailAddress)
         {
-            return db.tblContacts.Count(e => e.EMailAddress == emailAddress) > 0;
+            return _db.tblContacts.Count(e => e.EMailAddress == emailAddress) > 0;
         }
 
         private bool UserTokenExists(string token)
         {
-            return db.UserTokens.Count(e => e.Token == token) > 0;
+            return _db.UserTokens.Count(e => e.Token == token) > 0;
         }
 
 
