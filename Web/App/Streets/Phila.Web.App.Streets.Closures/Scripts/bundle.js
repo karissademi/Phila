@@ -33377,6 +33377,7 @@ $(function () {
                 $accordionTab = $(_this.options.accordionTabElement).insertBefore($panel);
                 $accordionAnchor = $('<a></a>').attr('href', panelSelector).html($anchor.html()).appendTo($accordionTab);
                 
+                // calls getPermitsForCompany
                 $accordionAnchor.click(function (e) {
                     $anchor.click();
                 });

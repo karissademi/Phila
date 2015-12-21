@@ -37,6 +37,7 @@ function AppViewModel() {
     self.occupancyTypes = ko.observableArray();
     self.utilityOwners = ko.observableArray();
     self.selectedCompany = ko.observable("");
+    self.isPermitLoading = ko.observable(false);
 
     // data for the login email
     self.usersEmailAddress = ko.observable().extend({ email: true, required: true });
@@ -110,11 +111,11 @@ function AppViewModel() {
     };
 
 
-    self.radioSearchSelectedOptionValue.subscribe(function () { //}(data, event) {
-        $("#loading-table").show();
-        self.getPermitsForCompany();
+    //self.radioSearchSelectedOptionValue.subscribe(function () { //}(data, event) {
+    //    $("#loading-table").show();
+    //    self.getPermitsForCompany();
 
-    });
+    //});
 
     //*** methods
     //** contacts
@@ -717,8 +718,13 @@ function AppViewModel() {
         /// <summary>
         ///     Gets a list of permits for a company
         /// </summary>
-        var $loadingIndicator = $("#loading-indicator");
-        $loadingIndicator.show();
+        //var $loadingIndicator = $("#loading-indicator");
+        //$loadingIndicator.show();
+
+        // clear the permits observableArray
+        self.permits([]);
+        // show loading image
+        self.isPermitLoading(true);
 
         var searchText = self.permitSearch() + self.permitSearch() !== "" ? "&search=" + self.permitSearch() : "";
 
@@ -745,7 +751,7 @@ function AppViewModel() {
 
         self.filter = pageSizeFilter + "&filter=" + self.radioSearchSelectedOptionValue() + "&sort=" + self.sort + "&sortDir=" + self.sortDir + searchText + page + statusFilter + companyFilter;
 
-        $loadingIndicator.show();
+        //$loadingIndicator.show();
         var token = getUrlParameter("token");
         var pers = [];
         $.ajax({
@@ -849,14 +855,18 @@ function AppViewModel() {
                     });
                     self.permits(pers);
                 }
+
+                self.isPermitLoading(false);
             },
             error: function (xhr, ajaxOptions, thrownError) {
+                self.isPermitLoading(false);
+
                 console.log("getPermitsForCompany", thrownError);
             }
         });
 
-        $loadingIndicator.hide();
-        $("#loading-table").hide();
+        //$loadingIndicator.hide();
+        //$("#loading-table").hide();
     };
 
 
@@ -1237,6 +1247,7 @@ function AppViewModel() {
                     self.permitStatusCodes.push(s);
                 });
 
+                self.deactivateAllTabs();
                 $("#tabs").responsiveTabs("activate", 0);
 
             }
@@ -1244,6 +1255,12 @@ function AppViewModel() {
             //    //ToDo: handle error
             //}
         });
+    };
+
+    self.deactivateAllTabs = function () {
+        for (var i = 0; i < 7; i++) {
+            $("#tabs").responsiveTabs("deactivate", i);
+        }
     };
 
     self.selectStatusCode = function (data, event) {

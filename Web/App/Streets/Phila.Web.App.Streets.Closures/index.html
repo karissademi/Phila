@@ -95,7 +95,7 @@
 
                 <h2>Your Permits</h2>
             </div>
-            <div id="PermitSection" class="row" style="margin-left: 12.5px; margin-right: 12.5px; margin-bottom: 0px;">
+            <div id="PermitSection" class="row" style="margin-left: 12.5px; margin-right: 12.5px; margin-bottom: 0;">
                 <div id="tabs" style="padding-left: 0; padding-right: 0;" class="columns marg-bottom-20">
                     <ul>
                         <li><a href="#tab-permit-stats">Stats</a></li>
@@ -109,59 +109,61 @@
                         <li><a id="a5" data-statusId="5" href="#tab-5">Revoked</a></li>
                         <li><a id="a6" data-statusId="6" href="#tab-6">Suspended</a></li>
                     </ul>
-                    <div id="tab-permit-stats" style="padding-left: 0; padding-right: 0;">
+                    <div id="tab-permit-stats" style="padding-left: 0; padding-right: 0; min-height: 489px;">
                         <table>
                             <tbody data-bind="template: { name: 'status-template', foreach: permitStatusCodes }"></tbody>
                         </table>
                     </div>
-                    <div id="tab-1" name="tab-permits-approved" style="padding-left: 0; padding-right: 0;">
+                    <div id="tab-1" name="tab-permits-approved" style="padding-left: 0; padding-right: 0; min-height: 489px;">
                         <div id="PermitsTable" style="padding-left: 12.5px; padding-right: 12.5px;">
-                            <div data-bind="visible: $root.permits().length > 0">
-                                <div class="row" style="margin-bottom: 5px; margin-top: 5px;">
-                                    <div id="Search" class="columns">
-                                        <input placeholder="Filter list" type="text" data-bind="value: permitSearch, valueUpdate: 'afterkeydown', event: { 'keyup': $root.getPermitsForCompany.bind($data) }" />
-                                        <h4 style="margin-bottom: 3px">
-                                            Filtered results:&nbsp;<span data-bind="text: $root.totalPermitsFound"></span>&nbsp;permits
-                                        </h4>
-                                    </div>
-                                    <div class="medium-24 columns">
-                                        <select data-bind="options: pageSizes, value: $root.selectedPageSize, event:{ change: $root.getPermitsForCompany.bind($data) }"></select>
-                                    </div>
+                            <div class="row" style="margin-bottom: 5px; margin-top: 5px;">
+                                <div id="Search" class="columns">
+                                    <input placeholder="Filter list" type="text" data-bind="value: permitSearch, valueUpdate: 'afterkeydown', event: { 'keyup': $root.getPermitsForCompany.bind($data) }" />
+                                    <h4 style="margin-bottom: 3px">
+                                        Filtered results:&nbsp;<span data-bind="text: $root.totalPermitsFound"></span>&nbsp;permits
+                                    </h4>
                                 </div>
+                                <div class="medium-24 columns">
+                                    <select data-bind="options: pageSizes, value: $root.selectedPageSize, event:{ change: $root.getPermitsForCompany.bind($data) }"></select>
+                                </div>
+                            </div>
+                            <div data-bind="visible: $root.permits().length > 0">
+
                                 <table id="permitsTable" class="ui-widget-content resize no-borders">
                                     <thead>
-                                        <tr>
-                                            <th>&nbsp;</th>
-
-                                            <th data-bind="click: sortPermits.bind($data, 'permitid')">Permit ID&nbsp;<i class="fa fa-sort"></i></th>
-                                            <th data-bind="click: sortPermits.bind($data, 'purpose')">Purpose&nbsp;<i class="fa fa-sort"></i></th>
-                                            <th data-bind="click: sortPermits.bind($data, 'permitlocation')">Start Date&nbsp;<i class="fa fa-sort"></i></th>
-                                            <th data-bind="click: sortPermits.bind($data, 'startdate')">Start Time&nbsp;<i class="fa fa-sort"></i></th>
-                                            <th data-bind="click: sortPermits.bind($data, 'enddate')">End Date&nbsp;<i class="fa fa-sort"></i></th>
-                                            <th data-bind="click: sortPermits.bind($data, 'startdate')">End Time&nbsp;<i class="fa fa-sort"></i></th>
-                                            <!--<th data-bind="click: sortPermits.bind($data, 'permitstatus')">Status&nbsp;<i class="fa fa-sort"></i></th>-->
-                                        </tr>
+                                    <tr>
+                                        <th>&nbsp;</th>
+                                        <th data-bind="click: sortPermits.bind($data, 'permitid')">Permit ID&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th data-bind="click: sortPermits.bind($data, 'purpose')">Purpose&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th data-bind="click: sortPermits.bind($data, 'permitlocation')">Start Date&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th data-bind="click: sortPermits.bind($data, 'startdate')">Start Time&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th data-bind="click: sortPermits.bind($data, 'enddate')">End Date&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th data-bind="click: sortPermits.bind($data, 'startdate')">End Time&nbsp;<i class="fa fa-sort"></i></th>
+                                        <!--<th data-bind="click: sortPermits.bind($data, 'permitstatus')">Status&nbsp;<i class="fa fa-sort"></i></th>-->
+                                    </tr>
                                     </thead>
                                     <tbody data-bind="template: { name: 'closure-template', foreach: permits }"></tbody>
                                 </table>
                                 <div id="page-selection"></div>
                             </div>
-                            <div data-bind="visible: $root.permits().length === 0">
+
+                            <div data-bind="visible: $root.permits().length === 0 && $root.isPermitLoading() == false">
                                 <span>You don't have any permits with this status</span>
                             </div>
+                            <img id="loading-permits" data-bind="visible: $root.isPermitLoading() == true" alt="loading..." style="text-align: center" src="Content/app/images/loading.gif"/>
 
                         </div>
 
 
                     </div>
-                    <div id="tab-4" name="tab-permits-awaitinginfo" style="padding-left: 0; padding-right: 0;"></div>
-                    <div id="tab-9" name="tab-permits-cancelled" style="padding-left: 0; padding-right: 0;"></div>
-                    <div id="tab-2" name="tab-permits-denied" style="padding-left: 0; padding-right: 0;"></div>
-                    <div id="tab-8" name="tab-permits-draft" style="padding-left: 0; padding-right: 0;"></div>
-                    <div id="tab-7" name="tab-permits-afterwork" style="padding-left: 0; padding-right: 0;"></div>
-                    <div id="tab-3" name="tab-permits-pending" style="padding-left: 0; padding-right: 0;"></div>
-                    <div id="tab-5" name="tab-permits-revoked" style="padding-left: 0; padding-right: 0;"></div>
-                    <div id="tab-6" name="tab-permits-suspended" style="padding-left: 0; padding-right: 0;"></div>
+                    <div id="tab-4" name="tab-permits-awaitinginfo" style="padding-left: 0; padding-right: 0; min-height: 489px;"></div>
+                    <div id="tab-9" name="tab-permits-cancelled" style="padding-left: 0; padding-right: 0; min-height: 489px;"></div>
+                    <div id="tab-2" name="tab-permits-denied" style="padding-left: 0; padding-right: 0; min-height: 489px;"></div>
+                    <div id="tab-8" name="tab-permits-draft" style="padding-left: 0; padding-right: 0; min-height: 489px;"></div>
+                    <div id="tab-7" name="tab-permits-afterwork" style="padding-left: 0; padding-right: 0; min-height: 489px;"></div>
+                    <div id="tab-3" name="tab-permits-pending" style="padding-left: 0; padding-right: 0; min-height: 489px;"></div>
+                    <div id="tab-5" name="tab-permits-revoked" style="padding-left: 0; padding-right: 0; min-height: 489px;"></div>
+                    <div id="tab-6" name="tab-permits-suspended" style="padding-left: 0; padding-right: 0; min-height: 489px;"></div>
 
 
                 </div>
