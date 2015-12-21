@@ -51,7 +51,6 @@ namespace Phila.Data.EntityModels.Streets
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<tblOccupancyType> tblOccupancyTypes { get; set; }
         public virtual DbSet<tblEncroachmentType> tblEncroachmentTypes { get; set; }
-        public virtual DbSet<tblStreet> tblStreets { get; set; }
         public virtual DbSet<tblNode> tblNodes { get; set; }
         public virtual DbSet<Document> Documents { get; set; }
         public virtual DbSet<UserToken> UserTokens { get; set; }
@@ -62,6 +61,7 @@ namespace Phila.Data.EntityModels.Streets
         public virtual DbSet<tblPermit_Fees> tblPermit_Fees { get; set; }
         public virtual DbSet<tblSpecialNode> tblSpecialNodes { get; set; }
         public virtual DbSet<STREETCL_ARC> STREETCL_ARC { get; set; }
+        public virtual DbSet<tblStreet> tblStreets { get; set; }
     
         public virtual ObjectResult<Get_CrossStreetsAndOnStreetSegIDsFromStCode2_Result> Get_CrossStreetsAndOnStreetSegIDsFromStCode2(Nullable<int> st_Code)
         {

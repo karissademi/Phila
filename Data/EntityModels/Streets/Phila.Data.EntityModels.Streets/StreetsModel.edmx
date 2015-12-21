@@ -533,8 +533,6 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <Property Name="NEWSEGDATE" Type="datetime" />
           <Property Name="MULTI_REP" Type="float" />
           <Property Name="STNAME" Type="nvarchar" MaxLength="30" />
-          <Property Name="StreetName" Type="nvarchar" MaxLength="64" />
-          <Property Name="StreetNameShort" Type="nvarchar" MaxLength="64" />
         </EntityType>
         <EntityType Name="UserTokens">
           <Key>
@@ -1011,9 +1009,7 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
     [tblStreets].[UPDATE] AS [UPDATE], 
     [tblStreets].[NEWSEGDATE] AS [NEWSEGDATE], 
     [tblStreets].[MULTI_REP] AS [MULTI_REP], 
-    [tblStreets].[STNAME] AS [STNAME], 
-    [tblStreets].[StreetName] AS [StreetName], 
-    [tblStreets].[StreetNameShort] AS [StreetNameShort]
+    [tblStreets].[STNAME] AS [STNAME]
     FROM [dbo].[tblStreets] AS [tblStreets]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_ContactRoles_Roles" Association="Self.FK_ContactRoles_Roles">
@@ -1173,7 +1169,6 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           </AssociationSet>
           <EntitySet Name="tblOccupancyTypes" EntityType="SCBPPSModel.tblOccupancyType" />
           <EntitySet Name="tblEncroachmentTypes" EntityType="SCBPPSModel.tblEncroachmentType" />
-          <EntitySet Name="tblStreets" EntityType="SCBPPSModel.tblStreet" />
           <EntitySet Name="tblNodes" EntityType="SCBPPSModel.tblNode" />
           <EntitySet Name="Documents" EntityType="SCBPPSModel.Document" />
           <AssociationSet Name="PermitDocuments" Association="SCBPPSModel.PermitDocuments">
@@ -1290,6 +1285,7 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
             <Parameter Name="ReferenceTypeID" Mode="In" Type="Int32" />
             <Parameter Name="ReferenceValue" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="tblStreets" EntityType="SCBPPSModel.tblStreet" />
         </EntityContainer>
         <EntityType Name="tblContact">
           <Key>
@@ -1783,41 +1779,6 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <Property Name="EncroachmentTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Fields_Needed" Type="String" MaxLength="6" FixedLength="true" Unicode="false" />
         </EntityType>
-        <EntityType Name="tblStreet">
-          <Key>
-            <PropertyRef Name="SEG_ID" />
-          </Key>
-          <Property Name="FNODE_" Type="Int32" />
-          <Property Name="TNODE_" Type="Int32" />
-          <Property Name="LPOLY_" Type="Double" />
-          <Property Name="RPOLY_" Type="Double" />
-          <Property Name="LENGTH" Type="Double" />
-          <Property Name="STCL2_" Type="Double" />
-          <Property Name="STCL2_ID" Type="Double" />
-          <Property Name="PRE_DIR" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
-          <Property Name="ST_NAME" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="ST_TYPE" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="SUF_DIR" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
-          <Property Name="ZIP_LEFT" Type="Double" />
-          <Property Name="ZIP_RIGHT" Type="Double" />
-          <Property Name="L_F_ADD" Type="Double" />
-          <Property Name="L_T_ADD" Type="Double" />
-          <Property Name="R_F_ADD" Type="Double" />
-          <Property Name="R_T_ADD" Type="Double" />
-          <Property Name="ST_CODE" Type="Int32" />
-          <Property Name="L_HUNDRED" Type="Double" />
-          <Property Name="R_HUNDRED" Type="Double" />
-          <Property Name="SEG_ID" Type="Int32" Nullable="false" />
-          <Property Name="ONEWAY" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
-          <Property Name="CLASS" Type="Double" />
-          <Property Name="RESPONSIBL" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="UPDATE" Type="DateTime" Precision="3" />
-          <Property Name="NEWSEGDATE" Type="DateTime" Precision="3" />
-          <Property Name="MULTI_REP" Type="Double" />
-          <Property Name="STNAME" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="StreetName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="StreetNameShort" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="tblNode">
           <Key>
             <PropertyRef Name="NODE_ID" />
@@ -2064,6 +2025,39 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <Property Type="String" Name="TYPE" Nullable="true" MaxLength="4" />
           <Property Type="String" Name="SUF_DIR" Nullable="true" MaxLength="5" />
         </ComplexType>
+        <EntityType Name="tblStreet">
+          <Key>
+            <PropertyRef Name="SEG_ID" />
+          </Key>
+          <Property Name="FNODE_" Type="Int32" />
+          <Property Name="TNODE_" Type="Int32" />
+          <Property Name="LPOLY_" Type="Double" />
+          <Property Name="RPOLY_" Type="Double" />
+          <Property Name="LENGTH" Type="Double" />
+          <Property Name="STCL2_" Type="Double" />
+          <Property Name="STCL2_ID" Type="Double" />
+          <Property Name="PRE_DIR" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="ST_NAME" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ST_TYPE" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="SUF_DIR" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="ZIP_LEFT" Type="Double" />
+          <Property Name="ZIP_RIGHT" Type="Double" />
+          <Property Name="L_F_ADD" Type="Double" />
+          <Property Name="L_T_ADD" Type="Double" />
+          <Property Name="R_F_ADD" Type="Double" />
+          <Property Name="R_T_ADD" Type="Double" />
+          <Property Name="ST_CODE" Type="Int32" />
+          <Property Name="L_HUNDRED" Type="Double" />
+          <Property Name="R_HUNDRED" Type="Double" />
+          <Property Name="SEG_ID" Type="Int32" Nullable="false" />
+          <Property Name="ONEWAY" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="CLASS" Type="Double" />
+          <Property Name="RESPONSIBL" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="UPDATE" Type="DateTime" Precision="3" />
+          <Property Name="NEWSEGDATE" Type="DateTime" Precision="3" />
+          <Property Name="MULTI_REP" Type="Double" />
+          <Property Name="STNAME" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2402,42 +2396,6 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tblStreets">
-            <EntityTypeMapping TypeName="SCBPPSModel.tblStreet">
-              <MappingFragment StoreEntitySet="tblStreets">
-                <ScalarProperty Name="StreetNameShort" ColumnName="StreetNameShort" />
-                <ScalarProperty Name="StreetName" ColumnName="StreetName" />
-                <ScalarProperty Name="STNAME" ColumnName="STNAME" />
-                <ScalarProperty Name="MULTI_REP" ColumnName="MULTI_REP" />
-                <ScalarProperty Name="NEWSEGDATE" ColumnName="NEWSEGDATE" />
-                <ScalarProperty Name="UPDATE" ColumnName="UPDATE" />
-                <ScalarProperty Name="RESPONSIBL" ColumnName="RESPONSIBL" />
-                <ScalarProperty Name="CLASS" ColumnName="CLASS" />
-                <ScalarProperty Name="ONEWAY" ColumnName="ONEWAY" />
-                <ScalarProperty Name="SEG_ID" ColumnName="SEG_ID" />
-                <ScalarProperty Name="R_HUNDRED" ColumnName="R_HUNDRED" />
-                <ScalarProperty Name="L_HUNDRED" ColumnName="L_HUNDRED" />
-                <ScalarProperty Name="ST_CODE" ColumnName="ST_CODE" />
-                <ScalarProperty Name="R_T_ADD" ColumnName="R_T_ADD" />
-                <ScalarProperty Name="R_F_ADD" ColumnName="R_F_ADD" />
-                <ScalarProperty Name="L_T_ADD" ColumnName="L_T_ADD" />
-                <ScalarProperty Name="L_F_ADD" ColumnName="L_F_ADD" />
-                <ScalarProperty Name="ZIP_RIGHT" ColumnName="ZIP_RIGHT" />
-                <ScalarProperty Name="ZIP_LEFT" ColumnName="ZIP_LEFT" />
-                <ScalarProperty Name="SUF_DIR" ColumnName="SUF_DIR" />
-                <ScalarProperty Name="ST_TYPE" ColumnName="ST_TYPE" />
-                <ScalarProperty Name="ST_NAME" ColumnName="ST_NAME" />
-                <ScalarProperty Name="PRE_DIR" ColumnName="PRE_DIR" />
-                <ScalarProperty Name="STCL2_ID" ColumnName="STCL2_ID" />
-                <ScalarProperty Name="STCL2_" ColumnName="STCL2_" />
-                <ScalarProperty Name="LENGTH" ColumnName="LENGTH" />
-                <ScalarProperty Name="RPOLY_" ColumnName="RPOLY_" />
-                <ScalarProperty Name="LPOLY_" ColumnName="LPOLY_" />
-                <ScalarProperty Name="TNODE_" ColumnName="TNODE_" />
-                <ScalarProperty Name="FNODE_" ColumnName="FNODE_" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tblNodes">
             <EntityTypeMapping TypeName="SCBPPSModel.tblNode">
               <MappingFragment StoreEntitySet="tblNodes">
@@ -2679,6 +2637,40 @@ warning 6002: The table/view 'SCBPPS.dbo.tblStreets' does not have a primary key
           <FunctionImportMapping FunctionImportName="sp_SavePermitLocations" FunctionName="SCBPPSModel.Store.sp_SavePermitLocations" />
           <FunctionImportMapping FunctionImportName="sp_SavePermitLocGIS" FunctionName="SCBPPSModel.Store.sp_SavePermitLocGIS" />
           <FunctionImportMapping FunctionImportName="sp_SavePermitReferences" FunctionName="SCBPPSModel.Store.sp_SavePermitReferences" />
+          <EntitySetMapping Name="tblStreets">
+            <EntityTypeMapping TypeName="SCBPPSModel.tblStreet">
+              <MappingFragment StoreEntitySet="tblStreets">
+                <ScalarProperty Name="STNAME" ColumnName="STNAME" />
+                <ScalarProperty Name="MULTI_REP" ColumnName="MULTI_REP" />
+                <ScalarProperty Name="NEWSEGDATE" ColumnName="NEWSEGDATE" />
+                <ScalarProperty Name="UPDATE" ColumnName="UPDATE" />
+                <ScalarProperty Name="RESPONSIBL" ColumnName="RESPONSIBL" />
+                <ScalarProperty Name="CLASS" ColumnName="CLASS" />
+                <ScalarProperty Name="ONEWAY" ColumnName="ONEWAY" />
+                <ScalarProperty Name="SEG_ID" ColumnName="SEG_ID" />
+                <ScalarProperty Name="R_HUNDRED" ColumnName="R_HUNDRED" />
+                <ScalarProperty Name="L_HUNDRED" ColumnName="L_HUNDRED" />
+                <ScalarProperty Name="ST_CODE" ColumnName="ST_CODE" />
+                <ScalarProperty Name="R_T_ADD" ColumnName="R_T_ADD" />
+                <ScalarProperty Name="R_F_ADD" ColumnName="R_F_ADD" />
+                <ScalarProperty Name="L_T_ADD" ColumnName="L_T_ADD" />
+                <ScalarProperty Name="L_F_ADD" ColumnName="L_F_ADD" />
+                <ScalarProperty Name="ZIP_RIGHT" ColumnName="ZIP_RIGHT" />
+                <ScalarProperty Name="ZIP_LEFT" ColumnName="ZIP_LEFT" />
+                <ScalarProperty Name="SUF_DIR" ColumnName="SUF_DIR" />
+                <ScalarProperty Name="ST_TYPE" ColumnName="ST_TYPE" />
+                <ScalarProperty Name="ST_NAME" ColumnName="ST_NAME" />
+                <ScalarProperty Name="PRE_DIR" ColumnName="PRE_DIR" />
+                <ScalarProperty Name="STCL2_ID" ColumnName="STCL2_ID" />
+                <ScalarProperty Name="STCL2_" ColumnName="STCL2_" />
+                <ScalarProperty Name="LENGTH" ColumnName="LENGTH" />
+                <ScalarProperty Name="RPOLY_" ColumnName="RPOLY_" />
+                <ScalarProperty Name="LPOLY_" ColumnName="LPOLY_" />
+                <ScalarProperty Name="TNODE_" ColumnName="TNODE_" />
+                <ScalarProperty Name="FNODE_" ColumnName="FNODE_" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

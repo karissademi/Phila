@@ -41,7 +41,6 @@
         <AssociationConnector Association="SCBPPSModel.ContactRoles" />
         <EntityTypeShape EntityType="SCBPPSModel.tblOccupancyType" Width="1.5" PointX="12.375" PointY="0.75" />
         <EntityTypeShape EntityType="SCBPPSModel.tblEncroachmentType" Width="1.5" PointX="10.375" PointY="12.75" />
-        <EntityTypeShape EntityType="SCBPPSModel.tblStreet" Width="1.5" PointX="13.375" PointY="6.75" />
         <EntityTypeShape EntityType="SCBPPSModel.tblNode" Width="1.5" PointX="14.375" PointY="0.75" />
         <EntityTypeShape EntityType="SCBPPSModel.Document" Width="1.5" PointX="12.375" PointY="14.875" />
         <AssociationConnector Association="SCBPPSModel.PermitDocuments" />
@@ -56,6 +55,7 @@
         <EntityTypeShape EntityType="SCBPPSModel.STREETCL_NODE" Width="1.5" PointX="7.375" PointY="11.75" />
         <EntityTypeShape EntityType="SCBPPSModel.tblSpecialNode" Width="1.5" PointX="16.375" PointY="0.75" />
         <AssociationConnector Association="SCBPPSModel.FK_tblPermit_Extensions_tblPermits" />
+        <EntityTypeShape EntityType="SCBPPSModel.tblStreet" Width="1.5" PointX="18.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

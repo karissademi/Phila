@@ -42,7 +42,6 @@ namespace Phila.Web.Api.Streets.Controllers
 
             streetName = streetName.Trim(new[] {' '});
 
-
             // 1234 Market St
             if (streetNumberString.Length > 0)
             {
@@ -50,14 +49,14 @@ namespace Phila.Web.Api.Streets.Controllers
                 List<StreetsViewModels.Street> streets =
                     _db.tblStreets.Where(
                         x =>
-                            (x.StreetName.StartsWith(streetName) || x.StreetNameShort.StartsWith(streetName) ||
-                             x.StreetNameShort.StartsWith(onStreet)
-                             || x.StreetNameShort.StartsWith(streetName)) && x.L_F_ADD <= streetNumber &&
+                            (x.STNAME.StartsWith(streetName) || x.ST_NAME.StartsWith(streetName) ||
+                             x.ST_NAME.StartsWith(onStreet)
+                             || x.ST_NAME.StartsWith(streetName)) && x.L_F_ADD <= streetNumber &&
                             x.R_T_ADD >= streetNumber)
-                        .GroupBy(x => new {x.StreetName})
+                        .GroupBy(x => new {x.STNAME})
                         .Select(x => new StreetsViewModels.Street
                         {
-                            StreetName = streetNumber + " " + x.Key.StreetName
+                            StreetName = streetNumber + " " + x.Key.STNAME
                         })
                         .OrderBy(x => x.StreetName)
                         .Take(10)
@@ -70,12 +69,12 @@ namespace Phila.Web.Api.Streets.Controllers
                 var streets =
                     _db.tblStreets.Where(
                         x =>
-                            x.StreetName.StartsWith(streetName) || x.StreetNameShort.StartsWith(streetName) ||
-                            x.StreetNameShort.StartsWith(onStreet) || x.StreetNameShort.StartsWith(streetName))
-                        .GroupBy(x => new {x.StreetName})
+                            x.STNAME.StartsWith(streetName) || x.ST_NAME.StartsWith(streetName) ||
+                            x.ST_NAME.StartsWith(onStreet) || x.ST_NAME.StartsWith(streetName))
+                        .GroupBy(x => new {x.STNAME})
                         .Select(x => new
                         {
-                            x.Key.StreetName
+                            StreetName = x.Key.STNAME
                         })
                         .OrderBy(x => x.StreetName)
                         .Take(10)
@@ -207,13 +206,13 @@ namespace Phila.Web.Api.Streets.Controllers
                     var results =
                         _db.tblStreets.Where(
                             x => (
-                                x.StreetName.StartsWith(streetName)
+                                x.STNAME.StartsWith(streetName)
                                 ||
-                                x.StreetNameShort.StartsWith(streetName)
+                                x.ST_NAME.StartsWith(streetName)
                                 ||
-                                x.StreetNameShort.StartsWith(street)
+                                x.ST_NAME.StartsWith(street)
                                 ||
-                                x.StreetNameShort.StartsWith(streetName)
+                                x.ST_NAME.StartsWith(streetName)
                                 )
                                  &&
                                  x.R_F_ADD <= streetNumber
@@ -224,7 +223,7 @@ namespace Phila.Web.Api.Streets.Controllers
                                 x =>
                                     new
                                     {
-                                        x.StreetName,
+                                        StreetName = x.STNAME,
                                         StreetCode = x.ST_CODE,
                                         SegmentId = x.SEG_ID,
                                         FromAddress = x.R_F_ADD,
@@ -250,13 +249,13 @@ namespace Phila.Web.Api.Streets.Controllers
 
                     var results = _db.tblStreets.Where(
                         x => (
-                            x.StreetName.StartsWith(streetName)
+                            x.STNAME.StartsWith(streetName)
                             ||
-                            x.StreetNameShort.StartsWith(streetName)
+                            x.ST_NAME.StartsWith(streetName)
                             ||
-                            x.StreetNameShort.StartsWith(street)
+                            x.ST_NAME.StartsWith(street)
                             ||
-                            x.StreetNameShort.StartsWith(streetName)
+                            x.ST_NAME.StartsWith(streetName)
                             )
                              &&
                              x.L_F_ADD <= streetNumber
@@ -267,7 +266,7 @@ namespace Phila.Web.Api.Streets.Controllers
                             x =>
                                 new
                                 {
-                                    x.StreetName,
+                                    StreetName = x.STNAME,
                                     StreetCode = x.ST_CODE,
                                     SegmentId = x.SEG_ID,
                                     FromAddress = x.L_F_ADD,
@@ -303,7 +302,7 @@ namespace Phila.Web.Api.Streets.Controllers
 
             location = location.Trim(new[] {' '});
             StreetsViewModels.LocationDetails result =
-                _db.tblStreets.Where(x => x.StreetName == location || x.STNAME == location)
+                _db.tblStreets.Where(x => x.STNAME == location || x.STNAME == location)
                     .Select(x => new StreetsViewModels.LocationDetails {StreetCode = x.ST_CODE, SegmentId = x.SEG_ID})
                     .FirstOrDefault();
 
@@ -347,13 +346,13 @@ namespace Phila.Web.Api.Streets.Controllers
                     result =
                         _db.tblStreets.Where(
                             x => (
-                                x.StreetName.StartsWith(streetName)
+                                x.STNAME.StartsWith(streetName)
                                 ||
-                                x.StreetNameShort.StartsWith(streetName)
+                                x.ST_NAME.StartsWith(streetName)
                                 ||
-                                x.StreetNameShort.StartsWith(location)
+                                x.ST_NAME.StartsWith(location)
                                 ||
-                                x.StreetNameShort.StartsWith(streetName)
+                                x.ST_NAME.StartsWith(streetName)
                                 )
                                  &&
                                  x.R_F_ADD <= streetNumber
@@ -372,13 +371,13 @@ namespace Phila.Web.Api.Streets.Controllers
 
                     result = _db.tblStreets.Where(
                         x => (
-                            x.StreetName.StartsWith(streetName)
+                            x.STNAME.StartsWith(streetName)
                             ||
-                            x.StreetNameShort.StartsWith(streetName)
+                            x.ST_NAME.StartsWith(streetName)
                             ||
-                            x.StreetNameShort.StartsWith(location)
+                            x.ST_NAME.StartsWith(location)
                             ||
-                            x.StreetNameShort.StartsWith(streetName)
+                            x.ST_NAME.StartsWith(streetName)
                             )
                              &&
                              x.L_F_ADD <= streetNumber

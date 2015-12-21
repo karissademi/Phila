@@ -42,7 +42,5 @@ namespace Phila.Data.EntityModels.Streets
         public Nullable<System.DateTime> NEWSEGDATE { get; set; }
         public Nullable<double> MULTI_REP { get; set; }
         public string STNAME { get; set; }
-        public string StreetName { get; set; }
-        public string StreetNameShort { get; set; }
     }
 }

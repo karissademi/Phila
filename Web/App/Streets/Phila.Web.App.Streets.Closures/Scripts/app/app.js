@@ -43,7 +43,7 @@ function AppViewModel() {
 
 
     self.totalPermitsFound = ko.observable();
-    self.apiUrl = "https://phila.azurewebsites.net/"; // "http://localhost/Phila.Web.Api.Streets/";//  
+    self.apiUrl = "http://localhost/Phila.Web.Api.Streets/";//"https://phila.azurewebsites.net/"; //   
     self.streetCode = "";
     self.fromStreets = ko.observableArray();
 
