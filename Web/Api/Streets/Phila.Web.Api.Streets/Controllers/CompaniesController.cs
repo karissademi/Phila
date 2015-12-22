@@ -128,23 +128,6 @@ namespace Phila.Web.Api.Streets.Controllers
 
             var usersCompanies = UsersCompany(token);
 
-
-            //// get users company ids
-            //List<int?> companyIds =
-            //    db.tblContacts.Where(x => x.ContactId == contactId).Select(x => x.CompanyId).ToList();
-
-            //// is the user auth to get permits of companyId?
-            //if (companyIds.IndexOf((int?)companyId) == -1)
-            //{
-            //    return Unauthorized();
-            //}
-
-            //var companies = await db.tblCompanies.Where(x => x.Name.Contains(companyName)).Take(10).OrderBy(x => x.Name).Select(x => new StreetsViewModels.CompanyVm
-            //{
-            //    CompanyId = x.CompanyId,
-            //    CompanyName = x.Name
-            //}).ToListAsync();
-
             return Ok(usersCompanies);
         }
 
@@ -186,42 +169,6 @@ namespace Phila.Web.Api.Streets.Controllers
             return usersCompanies;
         }
 
-        //// PUT: api/Companies/5
-        //[ResponseType(typeof(void))]
-        //public async Task<IHttpActionResult> PuttblCompany(int id, tblCompany tblCompany)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    if (id != tblCompany.CompanyId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    db.Entry(tblCompany).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await db.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!tblCompanyExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return StatusCode(HttpStatusCode.NoContent);
-        //}
-
-        // POST: api/Companies        
         /// <summary>
         ///     Posts the company.
         /// </summary>
@@ -328,23 +275,6 @@ namespace Phila.Web.Api.Streets.Controllers
             messageSb.AppendLine("Cell Phone: " + contact.ContactMobilePhoneNumber);
             return messageSb;
         }
-
-
-        //// DELETE: api/Companies/5
-        //[ResponseType(typeof(tblCompany))]
-        //public async Task<IHttpActionResult> DeletetblCompany(int id)
-        //{
-        //    tblCompany tblCompany = await db.tblCompanies.FindAsync(id);
-        //    if (tblCompany == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    db.tblCompanies.Remove(tblCompany);
-        //    await db.SaveChangesAsync();
-
-        //    return Ok(tblCompany);
-        //}
 
         protected override void Dispose(bool disposing)
         {

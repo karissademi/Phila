@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phila.Logic.Streets.Locations
+namespace Phila.Logic.Streets.Location
 {
         public class LocationDetails
         {

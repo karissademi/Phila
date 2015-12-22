@@ -7,7 +7,7 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using Phila.Data.EntityModels.Streets;
-using Phila.Logic.Streets.Locations;
+using Phila.Logic.Streets.Location;
 using Phila.Web.Api.Streets.Models;
 
 namespace Phila.Web.Api.Streets.Controllers

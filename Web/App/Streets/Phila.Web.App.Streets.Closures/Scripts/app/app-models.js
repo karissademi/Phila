@@ -211,6 +211,8 @@ PostedLocation.prototype.beginEdit = function(transaction) {
 function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, permitTypeId, projectTypes, encroachmentTypes, effectiveDateTime, expirationDateTime, purpose, comments, permitStatus, references, locations, isDraft) {
     var self = this;
 
+    if (projectTypes == undefined) projectTypes = [];
+
     self.Token = ko.observable(token).extend({ editable: true });
     self.PermitNumber = ko.observable(permitNumber).extend({ editable: true });
     self.CompanyId = ko.observable(companyId).extend({ editable: true }).extend({ required: true });
@@ -226,7 +228,7 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
             }
         }
     });
-    self.ProjectTypes = ko.observable(projectTypes).extend({ editable: true });//.extend({ required: true });
+    self.ProjectTypes = ko.observable(projectTypes).extend({ editable: true }).extend({ required: true });
     self.EncroachmentTypes = ko.observableArray(encroachmentTypes).extend({ editable: true }).extend({
         required: {
             onlyIf: function() {

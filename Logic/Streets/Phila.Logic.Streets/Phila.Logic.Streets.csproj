@@ -48,9 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Locations\GetLocationStreetCodeAndSegId.cs" />
-    <Compile Include="Locations\LocationDetails.cs" />
-    <Compile Include="Locations\StreetCode.cs" />
+    <Compile Include="Company\CompanyDetails.cs" />
+    <Compile Include="Location\GetLocationStreetCodeAndSegId.cs" />
+    <Compile Include="Location\LocationDetails.cs" />
+    <Compile Include="Location\StreetCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -60,8 +61,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Permits\" />
-    <Folder Include="References\" />
+    <Folder Include="Contact\" />
+    <Folder Include="Permit\" />
+    <Folder Include="ReferenceItem\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

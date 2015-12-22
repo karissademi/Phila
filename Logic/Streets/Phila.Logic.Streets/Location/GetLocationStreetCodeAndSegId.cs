@@ -2,7 +2,7 @@
 using System.Linq;
 using Phila.Data.EntityModels.Streets;
 
-namespace Phila.Logic.Streets.Locations
+namespace Phila.Logic.Streets.Location
 {
     public class GetLocationStreetCodeAndSegId
     {

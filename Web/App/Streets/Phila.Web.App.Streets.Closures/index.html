@@ -109,12 +109,12 @@
                         <li><a id="a5" data-statusId="5" href="#tab-5">Revoked</a></li>
                         <li><a id="a6" data-statusId="6" href="#tab-6">Suspended</a></li>
                     </ul>
-                    <div id="tab-permit-stats" style="padding-left: 0; padding-right: 0; min-height: 489px;">
+                    <div id="tab-permit-stats" style="padding-left: 0; padding-right: 0">
                         <table>
                             <tbody data-bind="template: { name: 'status-template', foreach: permitStatusCodes }"></tbody>
                         </table>
                     </div>
-                    <div id="tab-1" name="tab-permits-approved" style="padding-left: 0; padding-right: 0; min-height: 489px;">
+                    <div id="tab-1" name="tab-permits-approved" style="padding-left: 0; padding-right: 0">
                         <div id="PermitsTable" style="padding-left: 12.5px; padding-right: 12.5px;">
                             <div class="row" style="margin-bottom: 5px; margin-top: 5px;">
                                 <div id="Search" class="columns">
@@ -123,12 +123,12 @@
                                         Filtered results:&nbsp;<span data-bind="text: $root.totalPermitsFound"></span>&nbsp;permits
                                     </h4>
                                 </div>
-                                <div class="medium-24 columns">
-                                    <select data-bind="options: pageSizes, value: $root.selectedPageSize, event:{ change: $root.getPermitsForCompany.bind($data) }"></select>
-                                </div>
+
                             </div>
                             <div data-bind="visible: $root.permits().length > 0">
-
+                                <div class="medium-24" style="margin-left: 0; margin-right: 0; margin-bottom: 5px;">
+                                    <select data-bind="options: pageSizes, value: $root.selectedPageSize, event:{ change: $root.getPermitsForCompany.bind($data) }"></select>
+                                </div>
                                 <table id="permitsTable" class="ui-widget-content resize no-borders">
                                     <thead>
                                         <tr>
@@ -148,7 +148,7 @@
                             </div>
 
                             <div data-bind="visible: $root.permits().length === 0 && $root.isPermitLoading() == false">
-                                <span>You don't have any permits with this status</span>
+                                <span><strong style="padding-top: 5px; padding-bottom: 5px;">You don't have any permits with this status</strong></span>
                             </div>
                             <img id="loading-permits" data-bind="visible: $root.isPermitLoading() == true" alt="loading..." style="text-align: center" src="Content/app/images/loading.gif" />
 
@@ -156,14 +156,14 @@
 
 
                     </div>
-                    <div id="tab-4" name="tab-permits-awaitinginfo" style="padding-left: 0; padding-right: 0; min-height: 489px;"></div>
-                    <div id="tab-9" name="tab-permits-cancelled" style="padding-left: 0; padding-right: 0; min-height: 489px;"></div>
-                    <div id="tab-2" name="tab-permits-denied" style="padding-left: 0; padding-right: 0; min-height: 489px;"></div>
-                    <div id="tab-8" name="tab-permits-draft" style="padding-left: 0; padding-right: 0; min-height: 489px;"></div>
-                    <div id="tab-7" name="tab-permits-afterwork" style="padding-left: 0; padding-right: 0; min-height: 489px;"></div>
-                    <div id="tab-3" name="tab-permits-pending" style="padding-left: 0; padding-right: 0; min-height: 489px;"></div>
-                    <div id="tab-5" name="tab-permits-revoked" style="padding-left: 0; padding-right: 0; min-height: 489px;"></div>
-                    <div id="tab-6" name="tab-permits-suspended" style="padding-left: 0; padding-right: 0; min-height: 489px;"></div>
+                    <div id="tab-4" name="tab-permits-awaitinginfo" style="padding-left: 0; padding-right: 0"></div>
+                    <div id="tab-9" name="tab-permits-cancelled" style="padding-left: 0; padding-right: 0"></div>
+                    <div id="tab-2" name="tab-permits-denied" style="padding-left: 0; padding-right: 0"></div>
+                    <div id="tab-8" name="tab-permits-draft" style="padding-left: 0; padding-right: 0"></div>
+                    <div id="tab-7" name="tab-permits-afterwork" style="padding-left: 0; padding-right: 0"></div>
+                    <div id="tab-3" name="tab-permits-pending" style="padding-left: 0; padding-right: 0"></div>
+                    <div id="tab-5" name="tab-permits-revoked" style="padding-left: 0; padding-right: 0"></div>
+                    <div id="tab-6" name="tab-permits-suspended" style="padding-left: 0; padding-right: 0"></div>
 
 
                 </div>
@@ -440,7 +440,7 @@
                         <div id="ToStreetDiv" class="medium-12 columns" data-bind="visible: $data.LocationType.editValue() == 'Street Segment'">
                             <a href="#"></a>
                             <strong><label>To Street:</label></strong><span style="color: black;">*</span>
-                            <br/>
+                            <br />
 
                             <select class="ddToStreet" data-bind="options: $root.toStreets, optionsText: 'StreetName', value: $data.ToStreetName.editValue, optionsCaption: $root.toStreetCaption, visible: $root.isLocationEditing($data),  enable: $root.toStreets() != undefined && $root.toStreets().length > 0 ? true : false"></select>
 
@@ -520,16 +520,36 @@
             <!-- Begin application actions div -->
             <div class="large-24 columns pad-25">
 
-                <a class="button icon actions" id="submitApp" style="cursor: pointer" href="#/" data-bind="click: $root.submitPermitApplication">Submit App<i class="fa fa-send fa-2x addNewButton"></i></a>
+                <a class="button icon actions" id="submitApp" style="cursor: pointer" href="#/" data-bind="click: $root.submitPermitApplication, enabled: $root.areActionsEnabled() == true">
+                    Submit App
+                    <i class="fa fa-cog fa-2x addNewButton" data-bind="visible: $root.areActionsEnabled() == false"></i>
+                    <i class="fa fa-send fa-2x addNewButton" data-bind="visible: $root.areActionsEnabled() == true"></i>
+                </a>
 
-                <a class="button icon actions" id="submitDraft" style="cursor: pointer" href="#/" data-bind="click: $root.submitPermitDraftApplication"><span data-bind="text: $root.isPermitNew() === true ? 'Save Draft' : 'Update Draft'"></span><i class="fa fa-floppy-o fa-2x addNewButton"></i></a>
+                <a class="button icon actions" id="submitDraft" style="cursor: pointer" href="#/" data-bind="click: $root.submitPermitDraftApplication, enabled: $root.areActionsEnabled() == true">
+                    <span data-bind="text: $root.isPermitNew() === true ? 'Save Draft' : 'Update Draft'"></span>
+                    <i class="fa fa-cog fa-2x addNewButton" data-bind="visible: $root.areActionsEnabled() == false"></i>
+                    <i class="fa fa-floppy-o fa-2x addNewButton" data-bind="visible: $root.areActionsEnabled() == true"></i>
+                </a>
 
-                <a class="button icon actions" id="cancelApp" style="cursor: pointer" href="#/" data-bind="click: $root.cancelPermitApplication"><span data-bind="text:  $root.isPermitNew() === true ? 'Delete App' : 'Cancel Changes'"></span><i class="fa fa-times fa-2x addNewButton"></i></a>
+                <a class="button icon actions" id="cancelApp" style="cursor: pointer" href="#/" data-bind="click: $root.cancelPermitApplication, enabled: $root.areActionsEnabled() == true">
+                    <span data-bind="text:  $root.isPermitNew() === true ? 'Delete App' : 'Cancel Changes'"></span>
+                    <i class="fa fa-cog fa-2x addNewButton" data-bind="visible: $root.areActionsEnabled() == false"></i>
+                    <i class="fa fa-times fa-2x addNewButton" data-bind="visible: $root.areActionsEnabled() == true"></i>
+                </a>
 
-                <a class="button icon actions" id="deleteApp" data-bind="visible: !$root.isPermitNew(), click: $root.submitPermitCancellation.bind($data, true, false)"><span>Delete Draft</span><i class="fa fa-trash fa-2x addNewButton"></i></a>
+                <a class="button icon actions" id="deleteApp" data-bind="visible: !$root.isPermitNew(), click: $root.submitPermitCancellation.bind($data, true, false), enabled: $root.areActionsEnabled() == true">
+                    <span>Delete Draft</span>
+                    <i class="fa fa-cog fa-2x addNewButton" data-bind="visible: $root.areActionsEnabled() == false"></i>
+                    <i class="fa fa-trash fa-2x addNewButton" data-bind="visible: $root.areActionsEnabled() == true"></i>
+                </a>
 
                 <!--<a class="button" id="deleteApp" data-bind="visible: !$root.isPermitNew(), click: $root.submitPermitCancellation.bind($data, true, false)">Delete Draft</a>-->
             </div>
+            <!--<div data-bind="visible: $root.areActionsEnabled() == false">
+                <img alt="loading..." style="text-align: center" src="Content/app/images/loading.gif" />
+                <span>processing...</span>
+            </div>-->
             <!-- End application actions div -->
         </div>
         <!-- End add new permit section-->
