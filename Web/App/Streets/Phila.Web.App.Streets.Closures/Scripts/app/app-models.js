@@ -217,7 +217,7 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
     self.PermitNumber = ko.observable(permitNumber).extend({ editable: true });
     self.CompanyId = ko.observable(companyId).extend({ editable: true }).extend({ required: true });
     self.CompanyName = ko.observable(companyName).extend({ editable: true });
-    self.PermitTypeId = ko.observable(permitTypeId).extend({ editable: true }).extend({ required: true });
+    self.PermitTypeId = ko.observable(permitTypeId).extend({ editable: true });//.extend({ required: true });
     self.UtilityOwnerId = ko.observable(utilityOwnerId).extend({ editable: true }).extend({
         required: {
             onlyIf: function() {
@@ -228,7 +228,7 @@ function Permit(token, permitNumber, companyId, companyName, utilityOwnerId, per
             }
         }
     });
-    self.ProjectTypes = ko.observable(projectTypes).extend({ editable: true }).extend({ required: true });
+    self.ProjectTypes = ko.observable(projectTypes).extend({ editable: true });//.extend({ required: true });
     self.EncroachmentTypes = ko.observableArray(encroachmentTypes).extend({ editable: true }).extend({
         required: {
             onlyIf: function() {

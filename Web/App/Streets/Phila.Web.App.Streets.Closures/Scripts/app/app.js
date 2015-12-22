@@ -1530,7 +1530,7 @@ $(document).ready(function() {
         //active: 0,
         //accordionTabElement: "<div data-bind='click: $root.selectStatusCode($data)'></div>",
         scrollToAccordionOffset:true,
-        animation: "slide",
+        //animation: "slide",
         //startCollapsed: 'accordion'
         startCollapsed: false,
         collapsible: false
