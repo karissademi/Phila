@@ -22,6 +22,16 @@
 
 </head>
 <body>
+  <!-- Google Tag Manager [phila.gov] -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MC6CR2"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-MC6CR2');</script>
+  <!-- End Google Tag Manager -->
+
 
     <!-- Begin main page div -->
     <div class="site" id="page">
@@ -132,13 +142,13 @@
                                 <table id="permitsTable" class="ui-widget-content resize no-borders">
                                     <thead>
                                         <tr>
-                                            <th>&nbsp;</th>
-                                            <th data-bind="click: sortPermits.bind($data, 'permitid')">Permit ID&nbsp;<i class="fa fa-sort"></i></th>
-                                            <th data-bind="click: sortPermits.bind($data, 'purpose')">Purpose&nbsp;<i class="fa fa-sort"></i></th>
-                                            <th data-bind="click: sortPermits.bind($data, 'permitlocation')">Start Date&nbsp;<i class="fa fa-sort"></i></th>
-                                            <th data-bind="click: sortPermits.bind($data, 'startdate')">Start Time&nbsp;<i class="fa fa-sort"></i></th>
-                                            <th data-bind="click: sortPermits.bind($data, 'enddate')">End Date&nbsp;<i class="fa fa-sort"></i></th>
-                                            <th data-bind="click: sortPermits.bind($data, 'startdate')">End Time&nbsp;<i class="fa fa-sort"></i></th>
+                                            <th scope="col">&nbsp;</th>
+                                            <th scope="col" data-bind="click: sortPermits.bind($data, 'permitid')">Permit ID&nbsp;<i class="fa fa-sort"></i></th>
+                                            <th scope="col" data-bind="click: sortPermits.bind($data, 'purpose')">Purpose&nbsp;<i class="fa fa-sort"></i></th>
+                                            <th scope="col" data-bind="click: sortPermits.bind($data, 'permitlocation')">Start Date&nbsp;<i class="fa fa-sort"></i></th>
+                                            <th scope="col" data-bind="click: sortPermits.bind($data, 'startdate')">Start Time&nbsp;<i class="fa fa-sort"></i></th>
+                                            <th scope="col" data-bind="click: sortPermits.bind($data, 'enddate')">End Date&nbsp;<i class="fa fa-sort"></i></th>
+                                            <th scope="col" data-bind="click: sortPermits.bind($data, 'startdate')">End Time&nbsp;<i class="fa fa-sort"></i></th>
                                             <!--<th data-bind="click: sortPermits.bind($data, 'permitstatus')">Status&nbsp;<i class="fa fa-sort"></i></th>-->
                                         </tr>
                                     </thead>
